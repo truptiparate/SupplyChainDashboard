@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from "react";
-
-const DATA = __CASES_JSON__;
+import DATA from "./data/cases.json";
 
 const ACCENT = "#D8503C"; // coral — disruption / risk
 const RESOLVE = "#2F9E73"; // teal — recovery / resolution
