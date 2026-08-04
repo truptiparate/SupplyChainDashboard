@@ -7243,6 +7243,1007 @@
         "Lee, H.L., Padmanabhan, V. & Whang, S. (1997). The Bullwhip Effect in Supply Chains. Harvard Business Review, 75(2). THEORETICAL ANCHOR \u2014 published same year as Aisin fire; Cisco 2001 is the canonical empirical case."
       ],
       "_sheet_name": "FIB-010"
+    },
+    {
+      "id": "FIB-011",
+      "name": "Rana Plaza Factory Collapse (Bangladesh, 2013)",
+      "industry": "Apparel / Ready-Made Garment (RMG) / Fashion Supply Chain",
+      "brand_group": "Multiple global fashion brands sourcing from Bangladeshi garment factories (e.g., Primark, Benetton, Mango, Walmart and others).",
+      "scale": "Bangladesh was the world's second-largest apparel exporter, supplying hundreds of global brands through thousands of garment factories employing over four million workers.",
+      "normal_flow_nodes": [
+        {
+          "label": "Node 1 \u2013 Raw Material Suppliers",
+          "description": "Cotton, polyester, fabrics, yarn, trims, buttons and accessories were sourced from domestic and international suppliers and delivered to garment manufacturers."
+        },
+        {
+          "label": "Node 2 \u2013 Garment Manufacturers",
+          "description": "Factories manufactured garments for international fashion brands under high production volumes, low production costs, and strict delivery schedules. Production was labour-intensive and heavily dependent on subcontracting."
+        },
+        {
+          "label": "Node 3 \u2013 Logistics & Export",
+          "description": "Finished garments were transported to ports and exported through global shipping networks to distribution centres across Europe and North America."
+        },
+        {
+          "label": "Node 4 \u2013 Retailers / Customers",
+          "description": "International fashion brands distributed garments through retail stores and e-commerce platforms to consumers worldwide under fast-fashion business models."
+        }
+      ],
+      "normal_flow_steps": [
+        {
+          "step": 1,
+          "process": "Raw material procurement",
+          "node": "Suppliers"
+        },
+        {
+          "step": 2,
+          "process": "Garment manufacturing",
+          "node": "Factories"
+        },
+        {
+          "step": 3,
+          "process": "Quality inspection & packaging",
+          "node": "Manufacturers"
+        },
+        {
+          "step": 4,
+          "process": "Export documentation",
+          "node": "Manufacturers"
+        },
+        {
+          "step": 5,
+          "process": "International shipping",
+          "node": "Logistics"
+        },
+        {
+          "step": 6,
+          "process": "Distribution centres",
+          "node": "Retail Logistics"
+        },
+        {
+          "step": 7,
+          "process": "Retail sales",
+          "node": "Retailers"
+        },
+        {
+          "step": 8,
+          "process": "Consumer purchase",
+          "node": "Customers"
+        }
+      ],
+      "kpis": [
+        {
+          "label": "Cost",
+          "value": "Low-cost manufacturing (FOB cost approximately US$2\u201315 per garment depending on product type)"
+        },
+        {
+          "label": "Lead Time",
+          "value": "30\u201390 days"
+        },
+        {
+          "label": "CO\u2082 Impact",
+          "value": "High (global sourcing and transportation)"
+        },
+        {
+          "label": "Waste",
+          "value": "12\u201318% fabric waste during production"
+        },
+        {
+          "label": "Customer Satisfaction",
+          "value": "High (approximately 88\u201392/100 before disruption due to competitive pricing and product availability)"
+        },
+        {
+          "label": "Risk",
+          "value": "Medium (high dependence on low-cost sourcing and weak supplier governance)"
+        },
+        {
+          "label": "Quality",
+          "value": "High (95\u201397% product quality meeting buyer specifications)"
+        },
+        {
+          "label": "Sustainability",
+          "value": "Low\u2013Medium (economic performance strong; social sustainability weak)"
+        },
+        {
+          "label": "Circular Economy",
+          "value": "Low (15\u201325%; predominantly linear production model)"
+        }
+      ],
+      "disruption": [
+        {
+          "label": "Trigger event",
+          "value": "The disruption was triggered by the collapse of the eight-story Rana Plaza building in Savar, Bangladesh, on 24 April 2013. The building housed several garment factories producing apparel for international fashion brands. The collapse resulted in over 1,100 fatalities and thousands of injuries, making it one of the deadliest industrial disasters in the history of the global apparel supply chain. 1,134 deaths (officially confirmed; note 1,129\u20131,138 range across sources)"
+        },
+        {
+          "label": "Root cause details",
+          "value": "The disaster resulted from a combination of structural failures, unauthorized building modifications, weak enforcement of building and labour regulations, excessive production pressure, and inadequate supplier oversight. Intense cost competition within the fast-fashion industry encouraged low-cost sourcing, compressed lead times, and insufficient investment in factory safety, increasing the vulnerability of the supply chain."
+        },
+        {
+          "label": "Affected nodes",
+          "value": "Garment manufacturers, subcontractors, international fashion brands, raw material suppliers, logistics providers, retailers, workers, regulatory authorities, and consumers were directly or indirectly affected by the disruption."
+        },
+        {
+          "label": "Effect on Supply chain",
+          "value": "The Rana Plaza collapse disrupted apparel production and export operations, leading to order delays, factory closures, increased compliance costs, and reputational damage for global brands. The disaster prompted stricter supplier audits, enhanced supply chain transparency, improved worker safety standards, stronger labour governance, and changes in sourcing strategies to reduce supply chain risks."
+        }
+      ],
+      "decision_blocks": [
+        {
+          "source": "Decision Analysis by the Company",
+          "decisions": [
+            {
+              "Decision No": 1,
+              "Description": "Establish the Accord on Fire and Building Safety in Bangladesh",
+              "Action": "Legally binding safety agreement between global brands and trade unions",
+              "Cost": "High",
+              "Lead Time": "Medium",
+              "CO\u2082 Impact": "Neutral",
+              "Risk": "\u2193\u2193\u2193",
+              "Quality": "High",
+              "Customer Satisfaction": "\u2191\u2191",
+              "Sustainability": "Very High",
+              "Circular Economy": "Low",
+              "Best When": "Improving structural safety across the garment industry",
+              "Decision": "Cost",
+              "D1 Factory Safety Audits": "Medium",
+              "D2 Accord Implementation": "High",
+              "D3 Alliance Programme": "High",
+              "D4 Supply Chain Transparency": "Medium",
+              "D5 Third-party Audits": "Medium",
+              "D6 Worker Safety Training": "Low",
+              "D7 Factory Remediation": "Very High",
+              "D8 Responsible Sourcing": "Medium",
+              "D9 Digital Traceability": "High",
+              "D10 ESG Supplier Evaluation": "Low"
+            },
+            {
+              "Decision No": 2,
+              "Description": "Create the Alliance for Bangladesh Worker Safety",
+              "Action": "Retailer-led initiative to improve factory safety",
+              "Cost": "High",
+              "Lead Time": "Medium",
+              "CO\u2082 Impact": "Neutral",
+              "Risk": "\u2193\u2193",
+              "Quality": "High",
+              "Customer Satisfaction": "\u2191",
+              "Sustainability": "High",
+              "Circular Economy": "Low",
+              "Best When": "Coordinating safety improvements among North American brands",
+              "Decision": "Lead Time",
+              "D1 Factory Safety Audits": "Medium",
+              "D2 Accord Implementation": "Long",
+              "D3 Alliance Programme": "Long",
+              "D4 Supply Chain Transparency": "Medium",
+              "D5 Third-party Audits": "Short",
+              "D6 Worker Safety Training": "Short",
+              "D7 Factory Remediation": "Long",
+              "D8 Responsible Sourcing": "Medium",
+              "D9 Digital Traceability": "Medium",
+              "D10 ESG Supplier Evaluation": "Short"
+            },
+            {
+              "Decision No": 3,
+              "Description": "Conduct Large-Scale Factory Safety Inspections",
+              "Action": "Inspect garment factories for structural, fire and electrical hazards",
+              "Cost": "Medium",
+              "Lead Time": "Short",
+              "CO\u2082 Impact": "Neutral",
+              "Risk": "\u2193\u2193\u2193",
+              "Quality": "High",
+              "Customer Satisfaction": "\u2191",
+              "Sustainability": "Very High",
+              "Circular Economy": "Low",
+              "Best When": "Identifying unsafe factories before accidents occur",
+              "Decision": "CO\u2082 Impact",
+              "D1 Factory Safety Audits": "Neutral",
+              "D2 Accord Implementation": "Neutral",
+              "D3 Alliance Programme": "Neutral",
+              "D4 Supply Chain Transparency": "Low",
+              "D5 Third-party Audits": "Neutral",
+              "D6 Worker Safety Training": "Neutral",
+              "D7 Factory Remediation": "Neutral",
+              "D8 Responsible Sourcing": "Low",
+              "D9 Digital Traceability": "Low",
+              "D10 ESG Supplier Evaluation": "Neutral"
+            },
+            {
+              "Decision No": 4,
+              "Description": "Suspend or Close Unsafe Factories",
+              "Action": "Stop production in factories that failed safety requirements until remediation",
+              "Cost": "High",
+              "Lead Time": "Medium",
+              "CO\u2082 Impact": "Neutral",
+              "Risk": "\u2193\u2193\u2193",
+              "Quality": "Medium",
+              "Customer Satisfaction": "\u2191",
+              "Sustainability": "High",
+              "Circular Economy": "Low",
+              "Best When": "Eliminating immediate safety risks",
+              "Decision": "Risk",
+              "D1 Factory Safety Audits": "\u2193\u2193\u2193",
+              "D2 Accord Implementation": "\u2193\u2193\u2193",
+              "D3 Alliance Programme": "\u2193\u2193",
+              "D4 Supply Chain Transparency": "\u2193\u2193",
+              "D5 Third-party Audits": "\u2193",
+              "D6 Worker Safety Training": "\u2193",
+              "D7 Factory Remediation": "\u2193\u2193\u2193",
+              "D8 Responsible Sourcing": "\u2193\u2193",
+              "D9 Digital Traceability": "\u2193\u2193",
+              "D10 ESG Supplier Evaluation": "\u2193\u2193"
+            },
+            {
+              "Decision No": 5,
+              "Description": "Strengthen Supplier Audits & Compliance Programs",
+              "Action": "Increase social compliance audits and supplier monitoring",
+              "Cost": "Medium",
+              "Lead Time": "Medium",
+              "CO\u2082 Impact": "Neutral",
+              "Risk": "\u2193\u2193",
+              "Quality": "High",
+              "Customer Satisfaction": "\u2191\u2191",
+              "Sustainability": "High",
+              "Circular Economy": "Low",
+              "Best When": "Maintaining long-term supplier compliance",
+              "Decision": "Quality",
+              "D1 Factory Safety Audits": "High",
+              "D2 Accord Implementation": "High",
+              "D3 Alliance Programme": "High",
+              "D4 Supply Chain Transparency": "High",
+              "D5 Third-party Audits": "High",
+              "D6 Worker Safety Training": "Medium",
+              "D7 Factory Remediation": "Very High",
+              "D8 Responsible Sourcing": "High",
+              "D9 Digital Traceability": "High",
+              "D10 ESG Supplier Evaluation": "High"
+            },
+            {
+              "Decision No": 6,
+              "Description": "Improve Worker Safety Training & Emergency Preparedness",
+              "Action": "Train workers on fire safety, evacuation and occupational health",
+              "Cost": "Medium",
+              "Lead Time": "Short",
+              "CO\u2082 Impact": "Neutral",
+              "Risk": "\u2193\u2193",
+              "Quality": "Medium",
+              "Customer Satisfaction": "\u2191",
+              "Sustainability": "High",
+              "Circular Economy": "Low",
+              "Best When": "Protecting workers through awareness and preparedness",
+              "Decision": "Customer Satisfaction",
+              "D1 Factory Safety Audits": "\u2191",
+              "D2 Accord Implementation": "\u2191\u2191",
+              "D3 Alliance Programme": "\u2191",
+              "D4 Supply Chain Transparency": "\u2191",
+              "D5 Third-party Audits": "\u2191",
+              "D6 Worker Safety Training": "\u2191",
+              "D7 Factory Remediation": "\u2191\u2191",
+              "D8 Responsible Sourcing": "\u2191",
+              "D9 Digital Traceability": "\u2191",
+              "D10 ESG Supplier Evaluation": "\u2191"
+            },
+            {
+              "Decision No": 7,
+              "Description": "Increase Supply Chain Transparency & Public Reporting",
+              "Action": "Publish supplier lists and improve traceability across the supply chain",
+              "Cost": "Low",
+              "Lead Time": "Short",
+              "CO\u2082 Impact": "Neutral",
+              "Risk": "\u2193\u2193",
+              "Quality": "High",
+              "Customer Satisfaction": "\u2191\u2191",
+              "Sustainability": "Very High",
+              "Circular Economy": "Low",
+              "Best When": "Building consumer trust and responsible sourcing",
+              "Decision": "Sustainability",
+              "D1 Factory Safety Audits": "High",
+              "D2 Accord Implementation": "Very High",
+              "D3 Alliance Programme": "High",
+              "D4 Supply Chain Transparency": "High",
+              "D5 Third-party Audits": "Medium",
+              "D6 Worker Safety Training": "High",
+              "D7 Factory Remediation": "Very High",
+              "D8 Responsible Sourcing": "High",
+              "D9 Digital Traceability": "High",
+              "D10 ESG Supplier Evaluation": "Very High"
+            }
+          ]
+        },
+        {
+          "source": "Decision Analysis  (Self Analysis)",
+          "decisions": [
+            {
+              "Decision No": 1,
+              "Description": "Deploy IoT-Based Structural Health Monitoring",
+              "Action": "Install IoT sensors to continuously monitor building stability and provide early warnings",
+              "Cost": "High",
+              "Lead Time": "Medium",
+              "CO\u2082 Impact": "Neutral",
+              "Risk": "\u2193\u2193\u2193",
+              "Quality": "High",
+              "Customer Satisfaction": "\u2191\u2191",
+              "Sustainability": "Very High",
+              "Circular Economy": "Low",
+              "Best When": "Monitoring structural safety in factories"
+            },
+            {
+              "Decision No": 2,
+              "Description": "Implement AI-Driven Supplier Risk Assessment",
+              "Action": "Use AI to identify high-risk suppliers based on labour, safety and compliance data",
+              "Cost": "Medium",
+              "Lead Time": "Medium",
+              "CO\u2082 Impact": "Neutral",
+              "Risk": "\u2193\u2193\u2193",
+              "Quality": "High",
+              "Customer Satisfaction": "\u2191",
+              "Sustainability": "Very High",
+              "Circular Economy": "Low",
+              "Best When": "Prioritizing supplier audits and risk management"
+            },
+            {
+              "Decision No": 3,
+              "Description": "Introduce Blockchain-Based Supply Chain Traceability",
+              "Action": "Record supplier transactions and factory certifications on a blockchain platform",
+              "Cost": "Medium",
+              "Lead Time": "Medium",
+              "CO\u2082 Impact": "Low",
+              "Risk": "\u2193\u2193",
+              "Quality": "High",
+              "Customer Satisfaction": "\u2191\u2191",
+              "Sustainability": "Very High",
+              "Circular Economy": "Medium",
+              "Best When": "Ensuring end-to-end supply chain transparency"
+            },
+            {
+              "Decision No": 4,
+              "Description": "Establish Predictive Compliance & ESG Risk Analytics",
+              "Action": "Use predictive analytics to identify factories likely to violate safety or labour standards",
+              "Cost": "Medium",
+              "Lead Time": "Medium",
+              "CO\u2082 Impact": "Neutral",
+              "Risk": "\u2193\u2193\u2193",
+              "Quality": "High",
+              "Customer Satisfaction": "\u2191",
+              "Sustainability": "Very High",
+              "Circular Economy": "Low",
+              "Best When": "Preventing compliance failures before they occur"
+            },
+            {
+              "Decision No": 5,
+              "Description": "Develop Digital Worker Safety & Incident Reporting Platform",
+              "Action": "Provide a mobile platform for workers to anonymously report safety issues and hazards",
+              "Cost": "Medium",
+              "Lead Time": "Short",
+              "CO\u2082 Impact": "Neutral",
+              "Risk": "\u2193\u2193",
+              "Quality": "Medium",
+              "Customer Satisfaction": "\u2191",
+              "Sustainability": "High",
+              "Circular Economy": "Low",
+              "Best When": "Empowering workers to report safety concerns"
+            },
+            {
+              "Decision No": 6,
+              "Description": "Adopt Supplier Sustainability Scorecards & Incentive Programs",
+              "Action": "Evaluate suppliers using ESG and sustainability KPIs and reward compliant suppliers",
+              "Cost": "Medium",
+              "Lead Time": "Medium",
+              "CO\u2082 Impact": "Low",
+              "Risk": "\u2193\u2193",
+              "Quality": "High",
+              "Customer Satisfaction": "\u2191",
+              "Sustainability": "Very High",
+              "Circular Economy": "Medium",
+              "Best When": "Promoting continuous supplier improvement"
+            },
+            {
+              "Decision No": 7,
+              "Description": "Create an Integrated Supply Chain Risk Management System",
+              "Action": "Integrate supplier, logistics, ESG and operational data into a centralized risk management platform",
+              "Cost": "High",
+              "Lead Time": "Long",
+              "CO\u2082 Impact": "Low",
+              "Risk": "\u2193\u2193\u2193",
+              "Quality": "High",
+              "Customer Satisfaction": "\u2191\u2191",
+              "Sustainability": "Very High",
+              "Circular Economy": "Medium",
+              "Best When": "Managing complex global supply chains with real-time risk visibility"
+            }
+          ]
+        }
+      ],
+      "decisions_impact_summary": [],
+      "kpi_change_summary": [
+        {
+          "label": "Normal",
+          "Cost": "FOB US$2\u201315 per garment",
+          "Lead Time": "30\u201390 days",
+          "CO\u2082 Impact": "Medium",
+          "Risk": "High",
+          "Quality": "High",
+          "Customer Satisfaction": "High",
+          "Sustainability": "Low",
+          "Circular Economy": "Low"
+        },
+        {
+          "label": "Disruption",
+          "Cost": "US$30 million compensation paid through the Rana Plaza Donors Trust Fund (excluding factory remediation and inspection costs).",
+          "Lead Time": "60\u2013120 days",
+          "CO\u2082 Impact": "High",
+          "Risk": "Very High",
+          "Quality": "Medium",
+          "Customer Satisfaction": "Very Low",
+          "Sustainability": "Very Low",
+          "Circular Economy": "Very Low"
+        },
+        {
+          "label": "Upgrade / Others (Self Analysis)",
+          "Cost": "More than 1,600 garment factories inspected under the Accord and Alliance, with remediation costs financed by factory owners and international brands (no single verified total cost publicly available). (2018: 1,600+; later: 2,000+); if a combined Accord+Alliance total is intended, use ~2,500+",
+          "Lead Time": "35\u201350 days",
+          "CO\u2082 Impact": "Low\u2013Medium",
+          "Risk": "Low",
+          "Quality": "Very High",
+          "Customer Satisfaction": "Very High",
+          "Sustainability": "Very High",
+          "Circular Economy": "Medium"
+        }
+      ],
+      "decision_scores": [
+        {
+          "label": "D1 \u2013 Deploy IoT-Based Structural Health Monitoring",
+          "Cost": 2,
+          "Resilience Gain": 5,
+          "Feasibility": 4,
+          "Speed": 3,
+          "Sustainability": 5,
+          "Overall": 3.8
+        },
+        {
+          "label": "D2 \u2013 Implement AI-Driven Supplier Risk Assessment",
+          "Cost": 4,
+          "Resilience Gain": 5,
+          "Feasibility": 5,
+          "Speed": 4,
+          "Sustainability": 5,
+          "Overall": 4.6
+        },
+        {
+          "label": "D3 \u2013 Introduce Blockchain-Based Supply Chain Traceability",
+          "Cost": 3,
+          "Resilience Gain": 5,
+          "Feasibility": 4,
+          "Speed": 3,
+          "Sustainability": 5,
+          "Overall": 4
+        },
+        {
+          "label": "D4 \u2013 Establish Predictive Compliance & ESG Risk Analytics",
+          "Cost": 4,
+          "Resilience Gain": 5,
+          "Feasibility": 4,
+          "Speed": 4,
+          "Sustainability": 5,
+          "Overall": 4.4
+        },
+        {
+          "label": "D5 \u2013 Develop Digital Worker Safety & Incident Reporting Platform",
+          "Cost": 4,
+          "Resilience Gain": 4,
+          "Feasibility": 5,
+          "Speed": 5,
+          "Sustainability": 5,
+          "Overall": 4.6
+        },
+        {
+          "label": "D6 \u2013 Adopt Supplier Sustainability Scorecards & Incentive Programs",
+          "Cost": 4,
+          "Resilience Gain": 4,
+          "Feasibility": 5,
+          "Speed": 4,
+          "Sustainability": 5,
+          "Overall": 4.4
+        },
+        {
+          "label": "D7 \u2013 Create an Integrated Supply Chain Risk Management System",
+          "Cost": 2,
+          "Resilience Gain": 5,
+          "Feasibility": 4,
+          "Speed": 2,
+          "Sustainability": 5,
+          "Overall": 3.6
+        }
+      ],
+      "sources": [],
+      "_sheet_name": "FIB-011"
+    },
+    {
+      "id": "FIB-012",
+      "name": "Nike Sweatshop Controversy (1990s\u20132000s)",
+      "industry": "Apparel / Footwear Manufacturing / Global Supply Chain",
+      "brand_group": "Nike Inc., Global Contract Manufacturers, Factory Owners, Suppliers in Indonesia, Vietnam, China and Cambodia, Workers, Retail Partners, Consumers, Fair Labor Association (FLA), International Labour Organization (ILO)",
+      "scale": "During the 1990s and early 2000s, Nike sourced products from more than 700 contract factories in over 50 countries, employing hundreds of thousands of workers. Allegations of child labour, low wages, excessive overtime, and unsafe working conditions affected Nike's global supply chain, resulting in significant reputational damage, consumer boycotts, stricter supplier monitoring, and long-term reforms in responsible sourcing and supply chain governance.",
+      "normal_flow_nodes": [
+        {
+          "label": "Node 1 (Supplier)",
+          "description": "Cotton, synthetic fibers, rubber, leather, and other raw materials were sourced globally and supplied to contract manufacturers."
+        },
+        {
+          "label": "Node 2 (Manufacturer)",
+          "description": "Independent supplier factories, primarily in Vietnam, Indonesia, China, Thailand, and other Asian countries, manufactured footwear and apparel according to Nike's specifications under strict cost and delivery requirements."
+        },
+        {
+          "label": "Node 3 (Logistics)",
+          "description": "Finished products were transported through global shipping and distribution networks to regional warehouses before being delivered to retailers and e-commerce channels."
+        },
+        {
+          "label": "Node 4 (Customer)",
+          "description": "Nike products were sold through company-owned stores, authorized retailers, distributors, and online platforms across global markets."
+        }
+      ],
+      "normal_flow_steps": [
+        {
+          "step": 1,
+          "process": "Raw material sourcing",
+          "node": "Suppliers"
+        },
+        {
+          "step": 2,
+          "process": "Component manufacturing",
+          "node": "Suppliers"
+        },
+        {
+          "step": 3,
+          "process": "Footwear/Apparel production",
+          "node": "Contract Manufacturers"
+        },
+        {
+          "step": 4,
+          "process": "Quality inspection & packaging",
+          "node": "Manufacturers"
+        },
+        {
+          "step": 5,
+          "process": "International transportation",
+          "node": "Logistics"
+        },
+        {
+          "step": 6,
+          "process": "Regional distribution",
+          "node": "Distribution Centres"
+        },
+        {
+          "step": 7,
+          "process": "Retail sales & E-commerce",
+          "node": "Retailers"
+        },
+        {
+          "step": 8,
+          "process": "Consumer purchase",
+          "node": "Customer"
+        }
+      ],
+      "kpis": [
+        {
+          "label": "Cost",
+          "value": "Low-cost outsourced manufacturing (average manufacturing cost approximately US$25\u201330 per pair of athletic shoes before shipping, marketing, and retail markup)."
+        },
+        {
+          "label": "Lead Time",
+          "value": "60\u2013120 days"
+        },
+        {
+          "label": "CO\u2082 Impact",
+          "value": "High (global manufacturing & transportation)"
+        },
+        {
+          "label": "Waste",
+          "value": "Medium\u2013High (manufacturing waste and excess inventory)"
+        },
+        {
+          "label": "Customer Satisfaction",
+          "value": "High (strong brand reputation and product quality)"
+        },
+        {
+          "label": "Risk",
+          "value": "Medium (high dependency on third-party suppliers)"
+        },
+        {
+          "label": "Quality",
+          "value": "High (strict product quality standards)"
+        },
+        {
+          "label": "Sustainability",
+          "value": "Low\u2013Medium (weak labour practices despite strong economic performance)"
+        },
+        {
+          "label": "Circular Economy",
+          "value": "Low (limited recycling and product recovery initiatives during the 1990s)"
+        }
+      ],
+      "disruption": [
+        {
+          "label": "Trigger event",
+          "value": "Public investigations during the 1990s exposed poor working conditions, child labour, excessive overtime, unsafe workplaces, and extremely low wages in several Nike supplier factories across Asia. The reports attracted global media attention and triggered widespread criticism from consumers, NGOs, and human rights organizations."
+        },
+        {
+          "label": "Root cause details",
+          "value": "Nike's highly outsourced manufacturing model prioritized low production costs and rapid global expansion while providing limited direct oversight of supplier factories. Weak supplier monitoring, insufficient labour compliance systems, excessive subcontracting, and intense cost pressure contributed to poor working conditions throughout the supply chain. the financial decline was multi-causal: labour controversy + 1997\u201398 Asian financial crisis + shift in consumer footwear preferences"
+        },
+        {
+          "label": "Affected nodes",
+          "value": "Raw Material Suppliers \u2192 Contract Manufacturers \u2192 Supplier Factories \u2192 Logistics Providers \u2192 Nike Headquarters \u2192 Retailers \u2192 Consumers \u2192 NGOs \u2192 Regulatory Authorities \u2192 Workers"
+        },
+        {
+          "label": "Effect on Supply chain",
+          "value": "The controversy damaged Nike's global reputation, reduced consumer trust, increased compliance costs, and forced significant reforms in supplier management. Nike introduced supplier audits, labour standards, transparency initiatives, factory monitoring programs, worker training, and stronger corporate social responsibility practices throughout its global supply chain."
+        }
+      ],
+      "decision_blocks": [
+        {
+          "source": "Decision Analysis by the Company",
+          "decisions": [
+            {
+              "Decision No": 1,
+              "Description": "Introduce Nike Code of Conduct",
+              "Action": "Establish labour standards covering wages, working hours, child labour and workplace safety for all suppliers",
+              "Cost": "Medium",
+              "Lead Time": "Short",
+              "CO\u2082 Impact": "Neutral",
+              "Risk": "\u2193\u2193",
+              "Quality": "High",
+              "Customer Satisfaction": "\u2191",
+              "Sustainability": "High",
+              "Circular Economy": "Low",
+              "Best When": "Establishing minimum labour standards across suppliers",
+              "Decision": "Cost",
+              "D1 \u2013 AI-Based Supplier Risk Prediction": "Medium",
+              "D2 \u2013 Blockchain Supply Chain Traceability": "Medium",
+              "D3 \u2013 IoT-Based Worker Health & Safety Monitoring": "High",
+              "D4 \u2013 Digital Worker Grievance & Whistleblower Platform": "Medium",
+              "D5 \u2013 ESG Performance Dashboard & Predictive Analytics": "Medium",
+              "D6 \u2013 Supplier Sustainability Scorecards & Incentive Programs": "Medium",
+              "D7 \u2013 Integrated Supply Chain Digital Twin for Risk Management": "High"
+            },
+            {
+              "Decision No": 2,
+              "Description": "Join the Fair Labor Association (FLA)",
+              "Action": "Become an FLA member and allow independent third-party factory assessments",
+              "Cost": "Medium",
+              "Lead Time": "Medium",
+              "CO\u2082 Impact": "Neutral",
+              "Risk": "\u2193\u2193\u2193",
+              "Quality": "High",
+              "Customer Satisfaction": "\u2191\u2191",
+              "Sustainability": "Very High",
+              "Circular Economy": "Low",
+              "Best When": "Ensuring independent labour compliance verification",
+              "Decision": "Lead Time",
+              "D1 \u2013 AI-Based Supplier Risk Prediction": "Medium",
+              "D2 \u2013 Blockchain Supply Chain Traceability": "Medium",
+              "D3 \u2013 IoT-Based Worker Health & Safety Monitoring": "Medium",
+              "D4 \u2013 Digital Worker Grievance & Whistleblower Platform": "Short",
+              "D5 \u2013 ESG Performance Dashboard & Predictive Analytics": "Medium",
+              "D6 \u2013 Supplier Sustainability Scorecards & Incentive Programs": "Medium",
+              "D7 \u2013 Integrated Supply Chain Digital Twin for Risk Management": "Long"
+            },
+            {
+              "Decision No": 3,
+              "Description": "Increase Factory Audits & Monitoring",
+              "Action": "Conduct regular internal and external supplier audits with corrective action plans",
+              "Cost": "High",
+              "Lead Time": "Medium",
+              "CO\u2082 Impact": "Neutral",
+              "Risk": "\u2193\u2193\u2193",
+              "Quality": "High",
+              "Customer Satisfaction": "\u2191",
+              "Sustainability": "High",
+              "Circular Economy": "Low",
+              "Best When": "Continuously monitoring supplier performance",
+              "Decision": "CO\u2082 Impact",
+              "D1 \u2013 AI-Based Supplier Risk Prediction": "Low",
+              "D2 \u2013 Blockchain Supply Chain Traceability": "Low",
+              "D3 \u2013 IoT-Based Worker Health & Safety Monitoring": "Neutral",
+              "D4 \u2013 Digital Worker Grievance & Whistleblower Platform": "Neutral",
+              "D5 \u2013 ESG Performance Dashboard & Predictive Analytics": "Low",
+              "D6 \u2013 Supplier Sustainability Scorecards & Incentive Programs": "Low",
+              "D7 \u2013 Integrated Supply Chain Digital Twin for Risk Management": "Low"
+            },
+            {
+              "Decision No": 4,
+              "Description": "Publish Global Supplier Factory List",
+              "Action": "Publicly disclose contract factories to improve supply chain transparency",
+              "Cost": "Low",
+              "Lead Time": "Short",
+              "CO\u2082 Impact": "Neutral",
+              "Risk": "\u2193\u2193",
+              "Quality": "High",
+              "Customer Satisfaction": "\u2191\u2191",
+              "Sustainability": "Very High",
+              "Circular Economy": "Low",
+              "Best When": "Improving supply chain transparency and stakeholder trust",
+              "Decision": "Risk",
+              "D1 \u2013 AI-Based Supplier Risk Prediction": "\u2193\u2193\u2193",
+              "D2 \u2013 Blockchain Supply Chain Traceability": "\u2193\u2193",
+              "D3 \u2013 IoT-Based Worker Health & Safety Monitoring": "\u2193\u2193\u2193",
+              "D4 \u2013 Digital Worker Grievance & Whistleblower Platform": "\u2193\u2193",
+              "D5 \u2013 ESG Performance Dashboard & Predictive Analytics": "\u2193\u2193\u2193",
+              "D6 \u2013 Supplier Sustainability Scorecards & Incentive Programs": "\u2193\u2193",
+              "D7 \u2013 Integrated Supply Chain Digital Twin for Risk Management": "\u2193\u2193\u2193"
+            },
+            {
+              "Decision No": 5,
+              "Description": "Improve Worker Health & Safety Standards",
+              "Action": "Improve occupational health, fire safety and working conditions in supplier factories (Nike's own 2005 report acknowledged continuing issues (forced overtime, restricted water access) even after this initiative)",
+              "Cost": "Medium",
+              "Lead Time": "Medium",
+              "CO\u2082 Impact": "Neutral",
+              "Risk": "\u2193\u2193",
+              "Quality": "High",
+              "Customer Satisfaction": "\u2191",
+              "Sustainability": "High",
+              "Circular Economy": "Low",
+              "Best When": "Protecting worker health and safety",
+              "Decision": "Quality",
+              "D1 \u2013 AI-Based Supplier Risk Prediction": "High",
+              "D2 \u2013 Blockchain Supply Chain Traceability": "High",
+              "D3 \u2013 IoT-Based Worker Health & Safety Monitoring": "High",
+              "D4 \u2013 Digital Worker Grievance & Whistleblower Platform": "Medium",
+              "D5 \u2013 ESG Performance Dashboard & Predictive Analytics": "High",
+              "D6 \u2013 Supplier Sustainability Scorecards & Incentive Programs": "High",
+              "D7 \u2013 Integrated Supply Chain Digital Twin for Risk Management": "Very High"
+            },
+            {
+              "Decision No": 6,
+              "Description": "Strengthen Supplier Compliance & Capacity Building",
+              "Action": "Train suppliers, monitor performance and terminate non-compliant factories when necessary",
+              "Cost": "Medium",
+              "Lead Time": "Long",
+              "CO\u2082 Impact": "Low",
+              "Risk": "\u2193\u2193\u2193",
+              "Quality": "High",
+              "Customer Satisfaction": "\u2191",
+              "Sustainability": "Very High",
+              "Circular Economy": "Medium",
+              "Best When": "Achieving long-term supplier performance improvement",
+              "Decision": "Customer Satisfaction",
+              "D1 \u2013 AI-Based Supplier Risk Prediction": "\u2191\u2191",
+              "D2 \u2013 Blockchain Supply Chain Traceability": "\u2191\u2191",
+              "D3 \u2013 IoT-Based Worker Health & Safety Monitoring": "\u2191",
+              "D4 \u2013 Digital Worker Grievance & Whistleblower Platform": "\u2191",
+              "D5 \u2013 ESG Performance Dashboard & Predictive Analytics": "\u2191\u2191",
+              "D6 \u2013 Supplier Sustainability Scorecards & Incentive Programs": "\u2191",
+              "D7 \u2013 Integrated Supply Chain Digital Twin for Risk Management": "\u2191\u2191"
+            },
+            {
+              "Decision No": 7,
+              "Description": "Enhance Corporate Sustainability & Transparency Reporting",
+              "Action": "Publish annual sustainability and corporate responsibility reports with measurable labour and environmental performance indicators",
+              "Cost": "Medium",
+              "Lead Time": "Short",
+              "CO\u2082 Impact": "Low",
+              "Risk": "\u2193\u2193",
+              "Quality": "High",
+              "Customer Satisfaction": "\u2191\u2191",
+              "Sustainability": "Very High",
+              "Circular Economy": "Medium",
+              "Best When": "Demonstrating accountability and ESG performance to stakeholders",
+              "Decision": "Sustainability",
+              "D1 \u2013 AI-Based Supplier Risk Prediction": "Very High",
+              "D2 \u2013 Blockchain Supply Chain Traceability": "Very High",
+              "D3 \u2013 IoT-Based Worker Health & Safety Monitoring": "High",
+              "D4 \u2013 Digital Worker Grievance & Whistleblower Platform": "High",
+              "D5 \u2013 ESG Performance Dashboard & Predictive Analytics": "Very High",
+              "D6 \u2013 Supplier Sustainability Scorecards & Incentive Programs": "Very High",
+              "D7 \u2013 Integrated Supply Chain Digital Twin for Risk Management": "Very High"
+            }
+          ]
+        },
+        {
+          "source": "Decision Analysis  (Self Analysis)",
+          "decisions": [
+            {
+              "Decision No": 1,
+              "Description": "AI-Based Supplier Risk Prediction",
+              "Action": "Use AI to identify high-risk suppliers based on labour, safety and ESG indicators before violations occur",
+              "Cost": "Medium",
+              "Lead Time": "Medium",
+              "CO\u2082 Impact": "Low",
+              "Risk": "\u2193\u2193\u2193",
+              "Quality": "High",
+              "Customer Satisfaction": "\u2191\u2191",
+              "Sustainability": "Very High",
+              "Circular Economy": "Medium",
+              "Best When": "Identifying supplier risks before labour violations occur"
+            },
+            {
+              "Decision No": 2,
+              "Description": "Blockchain Supply Chain Traceability",
+              "Action": "Record supplier certifications, audits and sourcing data on a blockchain platform to ensure transparency",
+              "Cost": "Medium",
+              "Lead Time": "Medium",
+              "CO\u2082 Impact": "Low",
+              "Risk": "\u2193\u2193",
+              "Quality": "High",
+              "Customer Satisfaction": "\u2191\u2191",
+              "Sustainability": "Very High",
+              "Circular Economy": "Medium",
+              "Best When": "Ensuring complete supply chain transparency and traceability"
+            },
+            {
+              "Decision No": 3,
+              "Description": "IoT-Based Worker Health & Safety Monitoring",
+              "Action": "Install IoT devices to monitor workplace conditions such as temperature, air quality and occupancy",
+              "Cost": "High",
+              "Lead Time": "Medium",
+              "CO\u2082 Impact": "Neutral",
+              "Risk": "\u2193\u2193\u2193",
+              "Quality": "High",
+              "Customer Satisfaction": "\u2191",
+              "Sustainability": "High",
+              "Circular Economy": "Low",
+              "Best When": "Continuously monitoring workplace safety conditions"
+            },
+            {
+              "Decision No": 4,
+              "Description": "Digital Worker Grievance & Whistleblower Platform",
+              "Action": "Develop a secure mobile platform allowing workers to anonymously report labour violations and unsafe conditions",
+              "Cost": "Medium",
+              "Lead Time": "Short",
+              "CO\u2082 Impact": "Neutral",
+              "Risk": "\u2193\u2193",
+              "Quality": "Medium",
+              "Customer Satisfaction": "\u2191",
+              "Sustainability": "High",
+              "Circular Economy": "Low",
+              "Best When": "Encouraging workers to report issues without fear of retaliation"
+            },
+            {
+              "Decision No": 5,
+              "Description": "ESG Performance Dashboard & Predictive Analytics",
+              "Action": "Monitor supplier ESG performance using real-time dashboards and predictive analytics",
+              "Cost": "Medium",
+              "Lead Time": "Medium",
+              "CO\u2082 Impact": "Low",
+              "Risk": "\u2193\u2193\u2193",
+              "Quality": "High",
+              "Customer Satisfaction": "\u2191\u2191",
+              "Sustainability": "Very High",
+              "Circular Economy": "Medium",
+              "Best When": "Supporting data-driven ESG decision-making"
+            },
+            {
+              "Decision No": 6,
+              "Description": "Supplier Sustainability Scorecards with Incentive Programs",
+              "Action": "Evaluate suppliers using sustainability KPIs and reward high-performing suppliers through preferred sourcing",
+              "Cost": "Medium",
+              "Lead Time": "Medium",
+              "CO\u2082 Impact": "Low",
+              "Risk": "\u2193\u2193",
+              "Quality": "High",
+              "Customer Satisfaction": "\u2191",
+              "Sustainability": "Very High",
+              "Circular Economy": "Medium",
+              "Best When": "Driving continuous supplier improvement through incentives"
+            },
+            {
+              "Decision No": 7,
+              "Description": "Integrated Supply Chain Digital Twin for Risk Management",
+              "Action": "Create a digital twin of the global supply chain to simulate disruptions and support proactive decision-making",
+              "Cost": "High",
+              "Lead Time": "Long",
+              "CO\u2082 Impact": "Low",
+              "Risk": "\u2193\u2193\u2193",
+              "Quality": "Very High",
+              "Customer Satisfaction": "\u2191\u2191",
+              "Sustainability": "Very High",
+              "Circular Economy": "High",
+              "Best When": "Managing global supply chain risks using real-time simulation and predictive analysis"
+            }
+          ]
+        }
+      ],
+      "decisions_impact_summary": [],
+      "kpi_change_summary": [
+        {
+          "label": "Normal",
+          "Cost": "~US$15\u201320 per pair (1990s-era estimate); note $25\u201330 reflects modern/present-day cost benchmarks, not the 1990s baseline",
+          "Lead Time": "30\u201345 days",
+          "CO\u2082 Impact": "Medium",
+          "Risk": "High",
+          "Quality": "High",
+          "Customer Satisfaction": "High",
+          "Sustainability": "Medium",
+          "Circular Economy": "Low"
+        },
+        {
+          "label": "Disruption",
+          "Cost": "Nike's stock price and revenues declined by approximately 50% during FY1998, amid the labour controversy combined with the Asian financial crisis and shifting consumer preferences.",
+          "Lead Time": "60\u201390 days",
+          "CO\u2082 Impact": "High",
+          "Risk": "Very High",
+          "Quality": "Medium",
+          "Customer Satisfaction": "Low",
+          "Sustainability": "Low",
+          "Circular Economy": "Very Low"
+        },
+        {
+          "label": "Upgrade / Others (Self Analysis)",
+          "Cost": "Ongoing investment in supplier audits, worker training, factory remediation, and supply chain monitoring (cost not publicly disclosed by Nike).",
+          "Lead Time": "35\u201350 days",
+          "CO\u2082 Impact": "Low",
+          "Risk": "Low",
+          "Quality": "Very High",
+          "Customer Satisfaction": "Very High",
+          "Sustainability": "Very High",
+          "Circular Economy": "High"
+        }
+      ],
+      "decision_scores": [
+        {
+          "label": "D1 \u2013 AI-Based Supplier Risk Prediction",
+          "Cost": 4,
+          "Resilience Gain": 5,
+          "Feasibility": 5,
+          "Speed": 4,
+          "Sustainability": 5,
+          "Overall": 4.6
+        },
+        {
+          "label": "D2 \u2013 Blockchain Supply Chain Traceability",
+          "Cost": 3,
+          "Resilience Gain": 5,
+          "Feasibility": 4,
+          "Speed": 3,
+          "Sustainability": 5,
+          "Overall": 4
+        },
+        {
+          "label": "D3 \u2013 IoT-Based Worker Health & Safety Monitoring",
+          "Cost": 2,
+          "Resilience Gain": 5,
+          "Feasibility": 4,
+          "Speed": 3,
+          "Sustainability": 5,
+          "Overall": 3.8
+        },
+        {
+          "label": "D4 \u2013 Digital Worker Grievance & Whistleblower Platform",
+          "Cost": 4,
+          "Resilience Gain": 4,
+          "Feasibility": 5,
+          "Speed": 5,
+          "Sustainability": 5,
+          "Overall": 4.6
+        },
+        {
+          "label": "D5 \u2013 ESG Performance Dashboard & Predictive Analytics",
+          "Cost": 4,
+          "Resilience Gain": 5,
+          "Feasibility": 5,
+          "Speed": 4,
+          "Sustainability": 5,
+          "Overall": 4.6
+        },
+        {
+          "label": "D6 \u2013 Supplier Sustainability Scorecards & Incentive Programs",
+          "Cost": 4,
+          "Resilience Gain": 4,
+          "Feasibility": 5,
+          "Speed": 4,
+          "Sustainability": 5,
+          "Overall": 4.4
+        },
+        {
+          "label": "D7 \u2013 Integrated Supply Chain Digital Twin for Risk Management",
+          "Cost": 2,
+          "Resilience Gain": 5,
+          "Feasibility": 4,
+          "Speed": 2,
+          "Sustainability": 5,
+          "Overall": 3.6
+        }
+      ],
+      "sources": [],
+      "_sheet_name": "FIB-012"
     }
   ],
   "errors": []
