@@ -1,16 +1,16 @@
 import React, { useState, useMemo } from "react";
 import DATA from "./data/cases.json";
 
-const ACCENT = "#D8503C"; // coral — disruption / risk
-const RESOLVE = "#2F9E73"; // teal — recovery / resolution
-const INK = "#12151A";
-const CARD = "#1B1F26";
-const CARD_HOVER = "#222732";
-const BORDER = "rgba(255,255,255,0.08)";
-const BORDER_STRONG = "rgba(255,255,255,0.16)";
-const TEXT = "#ECEAE3";
-const TEXT_SUB = "#9B9C97";
-const TEXT_MUTE = "#6C6D68";
+const ACCENT = "#C1452F"; 
+const RESOLVE = "#1F8A5F";
+const INK = "#F7F5F0";
+const CARD = "#FFFFFF";
+const CARD_HOVER = "#F2EFE8";
+const BORDER = "rgba(18,21,26,0.10)";
+const BORDER_STRONG = "rgba(18,21,26,0.20)";
+const TEXT = "#191B1F";
+const TEXT_SUB = "#5C5D58";
+const TEXT_MUTE = "#8A8B85";
 
 function ratingTone(raw) {
   if (raw == null) return null;
@@ -31,10 +31,10 @@ function ratingTone(raw) {
 
 function toneColor(tone) {
   switch (tone) {
-    case "good": return { fg: "#7FD9AE", bg: "rgba(47,158,115,0.14)" };
-    case "bad": return { fg: "#F0958E", bg: "rgba(216,80,60,0.14)" };
-    case "warn": return { fg: "#E8B968", bg: "rgba(232,185,104,0.12)" };
-    default: return { fg: TEXT_SUB, bg: "rgba(255,255,255,0.05)" };
+    case "good": return { fg: "#1F8A5F", bg: "rgba(31,138,95,0.12)" };
+    case "bad": return { fg: "#C1452F", bg: "rgba(193,69,47,0.10)" };
+    case "warn": return { fg: "#A2720C", bg: "rgba(162,114,12,0.12)" };
+    default: return { fg: TEXT_SUB, bg: "rgba(18,21,26,0.05)" };
   }
 }
 
@@ -67,8 +67,8 @@ function IndustryPill({ industry, onClick, active }) {
         padding: "6px 12px",
         borderRadius: 999,
         border: `1px solid ${active ? ACCENT : BORDER}`,
-        background: active ? "rgba(216,80,60,0.14)" : "transparent",
-        color: active ? "#F0958E" : TEXT_SUB,
+        background: active ? "rgba(193,69,47,0.10)" : "transparent",
+        color: active ? ACCENT : TEXT_SUB,
         cursor: "pointer",
         whiteSpace: "nowrap",
       }}
@@ -97,6 +97,7 @@ function CaseCard({ c, onOpen }) {
         flexDirection: "column",
         gap: 10,
         transition: "background 120ms, border-color 120ms",
+        boxShadow: hover ? "0 2px 10px rgba(18,21,26,0.06)" : "0 1px 2px rgba(18,21,26,0.03)",
       }}
     >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -180,8 +181,8 @@ function ScoreRanking({ scores }) {
       {sorted.map((s, i) => (
         <div key={i} style={{ display: "grid", gridTemplateColumns: "1fr 220px 42px", alignItems: "center", gap: 12 }}>
           <span style={{ fontSize: 13, color: TEXT }}>{s.label}</span>
-          <div style={{ height: 8, background: "rgba(255,255,255,0.06)", borderRadius: 4, overflow: "hidden" }}>
-            <div style={{ height: "100%", width: `${(s.Overall / max) * 100}%`, background: i === 0 ? RESOLVE : ACCENT, opacity: i === 0 ? 1 : 0.65 }} />
+          <div style={{ height: 8, background: "rgba(18,21,26,0.07)", borderRadius: 4, overflow: "hidden" }}>
+            <div style={{ height: "100%", width: `${(s.Overall / max) * 100}%`, background: i === 0 ? RESOLVE : ACCENT, opacity: i === 0 ? 1 : 0.7 }} />
           </div>
           <span style={{ fontSize: 12.5, color: TEXT_SUB, fontFamily: "ui-monospace, monospace", textAlign: "right" }}>{s.Overall.toFixed(1)}</span>
         </div>
@@ -290,8 +291,8 @@ function CaseDetail({ c, onBack }) {
               padding: "7px 14px",
               borderRadius: 7,
               border: `1px solid ${section === s.key ? ACCENT : BORDER}`,
-              background: section === s.key ? "rgba(216,80,60,0.12)" : "transparent",
-              color: section === s.key ? "#F0958E" : TEXT_SUB,
+              background: section === s.key ? "rgba(193,69,47,0.09)" : "transparent",
+              color: section === s.key ? ACCENT : TEXT_SUB,
               cursor: "pointer",
             }}
           >
