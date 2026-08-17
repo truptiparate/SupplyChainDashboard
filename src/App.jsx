@@ -220,7 +220,7 @@ function ScoreRanking({ scores }) {
         const val = s[overallKey(s)];
         return (
           <div key={i} style={{ display: "grid", gridTemplateColumns: "1fr 220px 42px", alignItems: "center", gap: 12 }}>
-            <span style={{ fontSize: 13, color: TEXT }}>{s.label}</span>
+            <span style={{ fontSize: 13, color: TEXT }}>Decision #{s.decision_no}</span>
             <div style={{ height: 8, background: "rgba(18,21,26,0.07)", borderRadius: 4, overflow: "hidden" }}>
               <div style={{ height: "100%", width: `${(val / max) * 100}%`, background: i === 0 ? RESOLVE : ACCENT, opacity: i === 0 ? 1 : 0.7 }} />
             </div>
@@ -258,7 +258,7 @@ function ScenarioTimeline({ rows }) {
 function ImpactTable({ rows }) {
   const cols = useMemo(() => {
     const set = new Set();
-    rows.forEach((r) => Object.keys(r).forEach((k) => k !== "label" && set.add(k)));
+    rows.forEach((r) => Object.keys(r).forEach((k) => k !== "decision_no" && set.add(k)));
     return Array.from(set);
   }, [rows]);
   return (
@@ -275,7 +275,7 @@ function ImpactTable({ rows }) {
         <tbody>
           {rows.map((r, i) => (
             <tr key={i}>
-              <td style={{ padding: "8px 10px", color: TEXT, borderBottom: `1px solid ${BORDER}`, whiteSpace: "nowrap" }}>{r.label}</td>
+              <td style={{ padding: "8px 10px", color: TEXT, borderBottom: `1px solid ${BORDER}`, whiteSpace: "nowrap" }}>#{r.decision_no}</td>
               {cols.map((c) => {
                 const tone = ratingTone(r[c]);
                 const col = toneColor(tone);

@@ -158,12 +158,49 @@ def read_kv_section(ws, start_row, stop_labels=(), stop_contains=()):
     return items, r
 
 
-def read_generic_table(ws, header_row, label_col=B, max_row=None):
+def coerce_int(v):
+    """Best-effort coercion of a cell value to int. Sheet authors mix types
+    inconsistently for what should be a plain integer -- e.g. '1\\n' (string
+    with a trailing newline) sitting right next to plain ints like 2, 3, 4 in
+    the same header row. Non-numeric values (including None) pass through
+    unchanged so callers can distinguish "really not a number" from "a
+    number that needed cleanup"."""
+    if isinstance(v, str):
+        s = v.strip()
+        if s.lstrip("-").isdigit():
+            return int(s)
+        return v
+    if isinstance(v, float) and v.is_integer():
+        return int(v)
+    return v
+
+
+def read_generic_table(ws, header_row, label_col=B, max_row=None, label_key="label", numeric_labels_only=True):
     """Reads a row-oriented table: header row has metric names starting at
     label_col+1; each data row below has a value in label_col (e.g. a decision
     number) plus one value per metric column. Stops at a blank-run of 2, or at
     max_row if given (used to avoid overrunning into the next anchored table
-    when sections are separated by only a single blank row)."""
+    when sections are separated by only a single blank row).
+
+    `label_key` names the row-identifier field in the output dicts. This
+    function is shared by tables whose row identifier means different things:
+    for decisions_impact_summary/decision_scores the label column literally
+    holds the decision number (pass label_key="decision_no" to match the
+    decision_no field used in decision_blocks), whereas for
+    kpi_change_summary it holds a scenario number -- so the default stays
+    "label" and callers opt into "decision_no" explicitly.
+
+    `numeric_labels_only` (default True) drops any row whose label isn't a
+    number after coerce_int. Every current caller of this function reads a
+    table whose real data rows are numbered (decision # or scenario #), so
+    a non-numeric label row is never real data -- it's a section title or
+    a stray duplicate header row that got swept in because `max_row`
+    couldn't be computed tightly enough (e.g. an unrelated section, like
+    "KPI Change Summary", sitting between this table and the next anchored
+    "Decision"/"Decision No" table with no anchor of its own to bound
+    against). This filter is a second line of defense on top of `max_row`:
+    even when the bound is loose, garbage rows can't leak into the output
+    as if they were real numbered entries."""
     headers = []
     c = label_col + 1
     while True:
@@ -185,7 +222,11 @@ def read_generic_table(ws, header_row, label_col=B, max_row=None):
             r += 1
             continue
         blank_streak = 0
-        entry = {"label": row_label}
+        row_label = coerce_int(row_label)
+        if numeric_labels_only and not isinstance(row_label, (int, float)):
+            r += 1
+            continue
+        entry = {label_key: row_label}
         for c, hname in headers:
             v = cell(ws, r, c)
             if v is not None:
@@ -219,15 +260,7 @@ def read_decision_block(ws, label_col, decision_no_row, max_row=None):
             break
 
     def decision_no_value(dc):
-        v = cell(ws, decision_no_row, dc)
-        if isinstance(v, str):
-            v = v.strip()
-            if v.isdigit():
-                return int(v)
-            return v
-        if isinstance(v, float) and v.is_integer():
-            return int(v)
-        return v
+        return coerce_int(cell(ws, decision_no_row, dc))
 
     decisions = [{"decision_no": decision_no_value(dc)} for dc in decision_cols]
     r = decision_no_row
@@ -424,18 +457,24 @@ def extract_case(ws):
     decision_scores = []
     for i, anchor in enumerate(anchors):
         row, col = anchor["header_row"], anchor["col"]
-        next_anchor_row = anchors[i + 1]["header_row"] if i + 1 < len(anchors) else None
+        # bound against the START of the next anchor's region (title_lookup_row,
+        # not header_row) -- for a duplicate-header anchor (see
+        # find_all_decision_table_anchors) header_row is the SECOND of the two
+        # duplicate rows, so bounding on header_row would let the preceding
+        # table's read swallow the first duplicate row as if it were one more
+        # of its own data rows.
+        next_anchor_row = anchors[i + 1]["title_lookup_row"] if i + 1 < len(anchors) else None
         candidates = [r for r in (next_anchor_row, sources_row, ws.max_row + 1) if r]
         bound = min(candidates) - 1
 
         title, _ = nearest_title_above(ws, anchor["title_lookup_row"], col)
         title_l = (title or "").lower()
         if "impact summary" in title_l:
-            _, rows, _ = read_generic_table(ws, row, label_col=col, max_row=bound)
-            rows = [r for r in rows if len(r) > 1]  # drop stray section-title rows with no metric data
+            _, rows, _ = read_generic_table(ws, row, label_col=col, max_row=bound, label_key="decision_no")
+            rows = [r for r in rows if len(r) > 1]  # drop numbered rows with no metric data
             impact_summary.extend(rows)
         elif "score" in title_l:
-            _, rows, _ = read_generic_table(ws, row, label_col=col, max_row=bound)
+            _, rows, _ = read_generic_table(ws, row, label_col=col, max_row=bound, label_key="decision_no")
             rows = [r for r in rows if len(r) > 1]
             decision_scores.extend(compute_overall(rows))
         else:
@@ -445,7 +484,18 @@ def extract_case(ws):
     kpi_change_row = find_row_contains(ws, "KPI Change Summary")
     kpi_change_summary = []
     if kpi_change_row:
-        _, kpi_change_summary, _ = read_generic_table(ws, kpi_change_row + 1)
+        # Bound against the next decision-table anchor (or SOURCES) the same
+        # way decision/impact/score tables are bounded above. Without this,
+        # the read had no stop condition of its own and ran straight through
+        # a trailing Score table, silently applying the KPI Change Summary's
+        # column headers (Cost, Lead Time, ...) to the score table's real
+        # data rows -- not just adding junk rows, but mislabeling real score
+        # values under the wrong field names.
+        next_rows = [a["title_lookup_row"] for a in anchors if a["title_lookup_row"] > kpi_change_row]
+        if sources_row:
+            next_rows.append(sources_row)
+        kpi_bound = (min(next_rows) - 1) if next_rows else ws.max_row
+        _, kpi_change_summary, _ = read_generic_table(ws, kpi_change_row + 1, max_row=kpi_bound)
 
     sources = read_sources(ws)
 
