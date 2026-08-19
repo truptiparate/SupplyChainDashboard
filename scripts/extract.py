@@ -184,11 +184,10 @@ def read_generic_table(ws, header_row, label_col=B, max_row=None, label_key="lab
 
     `label_key` names the row-identifier field in the output dicts. This
     function is shared by tables whose row identifier means different things:
-    for decisions_impact_summary/decision_scores the label column literally
-    holds the decision number (pass label_key="decision_no" to match the
-    decision_no field used in decision_blocks), whereas for
-    kpi_change_summary it holds a scenario number -- so the default stays
-    "label" and callers opt into "decision_no" explicitly.
+    the decision number for decisions_impact_summary/decision_scores (pass
+    label_key="decision_no" to match the decision_no field used in
+    decision_blocks) -- currently the only caller, so the default stays
+    "label" for any future non-decision use of this reader.
 
     `numeric_labels_only` (default True) drops any row whose label isn't a
     number after coerce_int. Every current caller of this function reads a
@@ -446,10 +445,33 @@ def extract_case(ws):
     improvement = [d for d in improvement if d["value"] is not None]
 
     # --- Decision-related tables: every 'Decision No' anchor, classified by its title.
-    # Each table's read is bounded by the row of the NEXT anchor (or SOURCES, if that
-    # comes first) so it can't overrun into a neighboring table when sections are
-    # separated by only a single blank row.
+    # Each table's read is bounded by the row of the NEXT anchor, SOURCES, or a
+    # "KPI Change Summary" header -- whichever comes first -- so it can't
+    # overrun into a neighboring table when sections are separated by only a
+    # single blank row.
+    #
+    # "KPI Change Summary" needs special handling: unlike every other section
+    # here, it has no "Decision"/"Decision No" header cell of its own, so it's
+    # invisible to find_all_decision_table_anchors. It typically sits BETWEEN
+    # the second Impact Summary table and the Score table. Without walling it
+    # off explicitly, the Impact Summary table's bound reaches straight past
+    # it to the next real anchor (the Score table), and since KPI Change
+    # Summary is ALSO numbered 1, 2, 3... the numeric_labels_only filter can't
+    # tell its rows apart from genuine decision rows -- they get read in as
+    # if they were more of the Impact Summary table's own data, producing
+    # duplicate decision_no entries with mismatched (KPI-scenario, not
+    # per-decision) values. We don't extract KPI Change Summary's contents
+    # (see below), but its row position still has to act as a wall.
     sources_row = find_row_with_label(ws, "SOURCES", col=B)
+    kpi_change_rows = []
+    _scan_from = 1
+    while True:
+        r = find_row_contains(ws, "KPI Change Summary", start=_scan_from)
+        if r is None:
+            break
+        kpi_change_rows.append(r)
+        _scan_from = r + 1
+
     anchors = [a for a in find_all_decision_table_anchors(ws) if a["header_row"] >= after_improvement_row]
 
     decision_blocks_out = []
@@ -465,6 +487,7 @@ def extract_case(ws):
         # of its own data rows.
         next_anchor_row = anchors[i + 1]["title_lookup_row"] if i + 1 < len(anchors) else None
         candidates = [r for r in (next_anchor_row, sources_row, ws.max_row + 1) if r]
+        candidates += [kr for kr in kpi_change_rows if kr > row]
         bound = min(candidates) - 1
 
         title, _ = nearest_title_above(ws, anchor["title_lookup_row"], col)
@@ -481,21 +504,11 @@ def extract_case(ws):
             decisions, _ = read_decision_block(ws, col, row, max_row=bound)
             decision_blocks_out.append({"source": title or "Decisions", "decisions": decisions})
 
-    kpi_change_row = find_row_contains(ws, "KPI Change Summary")
-    kpi_change_summary = []
-    if kpi_change_row:
-        # Bound against the next decision-table anchor (or SOURCES) the same
-        # way decision/impact/score tables are bounded above. Without this,
-        # the read had no stop condition of its own and ran straight through
-        # a trailing Score table, silently applying the KPI Change Summary's
-        # column headers (Cost, Lead Time, ...) to the score table's real
-        # data rows -- not just adding junk rows, but mislabeling real score
-        # values under the wrong field names.
-        next_rows = [a["title_lookup_row"] for a in anchors if a["title_lookup_row"] > kpi_change_row]
-        if sources_row:
-            next_rows.append(sources_row)
-        kpi_bound = (min(next_rows) - 1) if next_rows else ws.max_row
-        _, kpi_change_summary, _ = read_generic_table(ws, kpi_change_row + 1, max_row=kpi_bound)
+    # NOTE: "KPI Change Summary" is intentionally not extracted -- its
+    # columns (Cost, Lead Time, CO₂ Impact, Risk, Quality, Customer
+    # Satisfaction, Sustainability, Circular Economy...) duplicate the
+    # Decisions Impact Summary tables, so it's redundant with
+    # decisions_impact_summary rather than adding new information.
 
     sources = read_sources(ws)
 
@@ -508,7 +521,6 @@ def extract_case(ws):
         "improvement": improvement,
         "decision_blocks": decision_blocks_out,
         "decisions_impact_summary": impact_summary,
-        "kpi_change_summary": kpi_change_summary,
         "decision_scores": decision_scores,
         "sources": sources,
     }

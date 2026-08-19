@@ -232,29 +232,6 @@ function ScoreRanking({ scores }) {
   );
 }
 
-function ScenarioTimeline({ rows }) {
-  const metricKeys = rows.length ? Object.keys(rows[0]).filter((k) => k !== "label") : [];
-  return (
-    <div style={{ display: "flex", overflowX: "auto", gap: 12, paddingBottom: 6 }}>
-      {rows.map((r, i) => (
-        <div key={i} style={{ minWidth: 220, background: CARD, border: `1px solid ${BORDER}`, borderRadius: 10, padding: 14 }}>
-          <div style={{ fontSize: 12.5, fontWeight: 500, color: i === 0 ? TEXT_SUB : i === rows.length - 1 ? RESOLVE : ACCENT, marginBottom: 10 }}>{r.label}</div>
-          <div style={{ display: "grid", gap: 6 }}>
-            {metricKeys.map((k) => (
-              r[k] != null && (
-                <div key={k} style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
-                  <span style={{ fontSize: 11, color: TEXT_MUTE }}>{k}</span>
-                  <span style={{ fontSize: 11.5, color: TEXT, textAlign: "right" }}>{String(r[k])}</span>
-                </div>
-              )
-            ))}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
 function ImpactTable({ rows }) {
   const cols = useMemo(() => {
     const set = new Set();
@@ -406,12 +383,6 @@ function CaseDetail({ c, onBack }) {
 
       {section === "outcome" && (
         <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
-          {c.kpi_change_summary.length > 0 && (
-            <div>
-              <SectionLabel>How it evolved</SectionLabel>
-              <ScenarioTimeline rows={c.kpi_change_summary} />
-            </div>
-          )}
           {c.sources.length > 0 && (
             <div>
               <SectionLabel>Sources</SectionLabel>
@@ -424,8 +395,8 @@ function CaseDetail({ c, onBack }) {
           )}
         </div>
       )}
-    </div>
-  );
+          </div>
+        );
 }
 
 export default function App() {
