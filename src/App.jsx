@@ -107,6 +107,27 @@ function IndustryPill({ industry, onClick, active }) {
   );
 }
 
+function NaturePill({ label, color, onClick, active }) {
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        fontSize: 12.5,
+        padding: "6px 12px",
+        borderRadius: 999,
+        border: `1px solid ${active ? color : BORDER}`,
+        background: active ? `${color}1A` : "transparent",
+        color: active ? color : TEXT_SUB,
+        cursor: "pointer",
+        whiteSpace: "nowrap",
+        fontWeight: active ? 600 : 400,
+      }}
+    >
+      {label}
+    </button>
+  );
+}
+
 function CaseCard({ c, onOpen }) {
   const [hover, setHover] = useState(false);
   const improvement = isImprovement(c);
@@ -183,13 +204,13 @@ function FlowStrip({ nodes }) {
 }
 
 function DecisionCard({ d }) {
-  const skip = new Set(["decision_no", "Description", "Action", "Best when"]);
+  const skip = new Set(["Decision No", "Description", "Action", "Best when"]);
   const ratingKeys = Object.keys(d).filter((k) => !skip.has(k));
   return (
     <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 10, padding: 16, display: "flex", flexDirection: "column", gap: 10 }}>
       <div style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
-        <h4 style={{ fontSize: 14, fontWeight: 500, color: TEXT, margin: 0 }}>{d["Description"] || `Decision ${d.decision_no ?? ""}`}</h4>
-        {d.decision_no != null && <span style={{ fontFamily: "ui-monospace, monospace", fontSize: 11, color: TEXT_MUTE }}>#{d.decision_no}</span>}
+        <h4 style={{ fontSize: 14, fontWeight: 500, color: TEXT, margin: 0 }}>{d["Description"] || `Decision ${d["Decision No"] || ""}`}</h4>
+        {d["Decision No"] && <span style={{ fontFamily: "ui-monospace, monospace", fontSize: 11, color: TEXT_MUTE }}>#{String(d["Decision No"]).trim()}</span>}
       </div>
       {d["Action"] && <p style={{ fontSize: 13, color: TEXT_SUB, margin: 0, lineHeight: 1.55 }}>{d["Action"]}</p>}
       {ratingKeys.length > 0 && (
@@ -220,7 +241,7 @@ function ScoreRanking({ scores }) {
         const val = s[overallKey(s)];
         return (
           <div key={i} style={{ display: "grid", gridTemplateColumns: "1fr 220px 42px", alignItems: "center", gap: 12 }}>
-            <span style={{ fontSize: 13, color: TEXT }}>Decision #{s.decision_no}</span>
+            <span style={{ fontSize: 13, color: TEXT }}>{s.label}</span>
             <div style={{ height: 8, background: "rgba(18,21,26,0.07)", borderRadius: 4, overflow: "hidden" }}>
               <div style={{ height: "100%", width: `${(val / max) * 100}%`, background: i === 0 ? RESOLVE : ACCENT, opacity: i === 0 ? 1 : 0.7 }} />
             </div>
@@ -232,10 +253,33 @@ function ScoreRanking({ scores }) {
   );
 }
 
+function ScenarioTimeline({ rows }) {
+  const metricKeys = rows.length ? Object.keys(rows[0]).filter((k) => k !== "label") : [];
+  return (
+    <div style={{ display: "flex", overflowX: "auto", gap: 12, paddingBottom: 6 }}>
+      {rows.map((r, i) => (
+        <div key={i} style={{ minWidth: 220, background: CARD, border: `1px solid ${BORDER}`, borderRadius: 10, padding: 14 }}>
+          <div style={{ fontSize: 12.5, fontWeight: 500, color: i === 0 ? TEXT_SUB : i === rows.length - 1 ? RESOLVE : ACCENT, marginBottom: 10 }}>{r.label}</div>
+          <div style={{ display: "grid", gap: 6 }}>
+            {metricKeys.map((k) => (
+              r[k] != null && (
+                <div key={k} style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
+                  <span style={{ fontSize: 11, color: TEXT_MUTE }}>{k}</span>
+                  <span style={{ fontSize: 11.5, color: TEXT, textAlign: "right" }}>{String(r[k])}</span>
+                </div>
+              )
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function ImpactTable({ rows }) {
   const cols = useMemo(() => {
     const set = new Set();
-    rows.forEach((r) => Object.keys(r).forEach((k) => k !== "decision_no" && set.add(k)));
+    rows.forEach((r) => Object.keys(r).forEach((k) => k !== "label" && set.add(k)));
     return Array.from(set);
   }, [rows]);
   return (
@@ -252,7 +296,7 @@ function ImpactTable({ rows }) {
         <tbody>
           {rows.map((r, i) => (
             <tr key={i}>
-              <td style={{ padding: "8px 10px", color: TEXT, borderBottom: `1px solid ${BORDER}`, whiteSpace: "nowrap" }}>#{r.decision_no}</td>
+              <td style={{ padding: "8px 10px", color: TEXT, borderBottom: `1px solid ${BORDER}`, whiteSpace: "nowrap" }}>{r.label}</td>
               {cols.map((c) => {
                 const tone = ratingTone(r[c]);
                 const col = toneColor(tone);
@@ -383,6 +427,12 @@ function CaseDetail({ c, onBack }) {
 
       {section === "outcome" && (
         <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+          {c.kpi_change_summary.length > 0 && (
+            <div>
+              <SectionLabel>How it evolved</SectionLabel>
+              <ScenarioTimeline rows={c.kpi_change_summary} />
+            </div>
+          )}
           {c.sources.length > 0 && (
             <div>
               <SectionLabel>Sources</SectionLabel>
@@ -395,14 +445,15 @@ function CaseDetail({ c, onBack }) {
           )}
         </div>
       )}
-          </div>
-        );
+    </div>
+  );
 }
 
 export default function App() {
   const [selected, setSelected] = useState(null);
   const [query, setQuery] = useState("");
   const [industry, setIndustry] = useState(null);
+  const [nature, setNature] = useState(null); // null | "Disruption" | "Improvement"
 
   const industries = useMemo(() => {
     const set = new Set();
@@ -418,9 +469,10 @@ export default function App() {
         c.industry.toLowerCase().includes(query.toLowerCase()) ||
         c.brand_group.toLowerCase().includes(query.toLowerCase());
       const matchesIndustry = !industry || c.industry.split(";")[0].split("/")[0].trim() === industry;
-      return matchesQuery && matchesIndustry;
+      const matchesNature = !nature || (nature === "Improvement" ? isImprovement(c) : !isImprovement(c));
+      return matchesQuery && matchesIndustry && matchesNature;
     });
-  }, [query, industry]);
+  }, [query, industry, nature]);
 
   const selectedCase = selected ? DATA.cases.find((c) => c.id === selected) : null;
 
@@ -455,6 +507,12 @@ export default function App() {
               outline: "none",
             }}
           />
+
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
+            <NaturePill label="All types" color={ACCENT} active={!nature} onClick={() => setNature(null)} />
+            <NaturePill label="Disruption" color={ACCENT} active={nature === "Disruption"} onClick={() => setNature("Disruption")} />
+            <NaturePill label="Improvement" color={RESOLVE} active={nature === "Improvement"} onClick={() => setNature("Improvement")} />
+          </div>
 
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 32 }}>
             <IndustryPill industry="All" active={!industry} onClick={() => setIndustry(null)} />
