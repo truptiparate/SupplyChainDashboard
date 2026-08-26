@@ -2631,32 +2631,12 @@
           "value": "27 June 2017: NotPetya wiper deployed via a compromised M.E.Doc software update. One infected computer in Odessa, Ukraine spread to Maersk's entire global network within hours."
         },
         {
-          "label": "Root cause (proximate)",
-          "value": "Weak network segmentation allowed a single infection to propagate globally via EternalBlue + credential harvesting. All domain controllers wiped. All backups (also in-network) wiped."
-        },
-        {
-          "label": "Root cause (structural)",
-          "value": "Three structural gaps: (1) no network segmentation; (2) no isolated offline backups; (3) unpatched Windows vulnerability (EternalBlue patch existed since March 2017 \u2014 3 months before the attack); (4) no third-party software security assessment for M.E.Doc."
-        },
-        {
-          "label": "Speed of destruction",
-          "value": "Within hours of the initial infection, the entire global IT estate was gone. 600+ offices, 76 terminals, 130 countries \u2014 all simultaneously."
-        },
-        {
           "label": "Affected nodes",
           "value": "ALL nodes: domain controllers (wiped), TOS (76 ports offline), booking/tracking (unavailable), email/phones (dead), ship loading (halted), customer-facing systems (gone)."
         },
         {
-          "label": "Financial impact",
-          "value": "~$250\u2013300M (Maersk Q2 2017); ~$350M including recovery. Total NotPetya damages across all victims exceeded $10B."
-        },
-        {
           "label": "Effect on supply chain",
           "value": "Global shipping halt: port facilities shut down worldwide, tens of thousands of truckloads turned away. Maersk maintained ~80% of volume manually during 10-day outage \u2014 only a ~20% volume drop. Without the Ghana backup, recovery would have taken months, not days."
-        },
-        {
-          "label": "Comparator companies",
-          "value": "Merck (~$870M, Vaccine (Gardasil 9) supply disruption extended for months; Merck took ~18 months to replenish the borrowed CDC pediatric stockpile); FedEx/TNT (~$300M+, some permanent data loss admitted). Maersk's 10-day rebuild was relatively fast by comparison."
         }
       ],
       "improvement": [],
@@ -3243,24 +3223,8 @@
           "value": "Exposed JIT's fatal fragility to rare, large-scale shocks. Forced a fundamental rethink of Toyota's entire supply-chain philosophy. Also compounded by the 2011 Thailand floods (~240,000 additional vehicles lost in FY2012)."
         },
         {
-          "label": "Problem (Root Cause)",
-          "value": "JIT near-zero buffers + sub-tier invisibility + single-sourcing + Japan geographic concentration = catastrophic vulnerability to a large regional disaster."
-        },
-        {
-          "label": "Proposed Solutions",
-          "value": "(1) RESCUE: multi-tier supplier database. (2) BCP: mandated 2\u20136 month buffers for ~500 priority parts. (3) Multi-sourcing and design flexibility. (4) Supplier forecast-sharing (3-year plans). (5) BCP target: recovery in 2 weeks not 6 months. (6) Regular supplier RESCUE drills."
-        },
-        {
-          "label": "How to integrated the solution/system/technology and affected nodes",
-          "value": "Toyota asked all suppliers to map their own tier-2+ supply chains and feed data into RESCUE. BCP inventory requirements written into supplier contracts. Semiconductor review and alternative-assessment process embedded in procurement. Regular disaster-response exercises run with supplier network."
-        },
-        {
           "label": "Effect on supply chain",
           "value": "Toyota can now assess a disaster's impact on its entire supplier network in half a day. The RESCUE + BCP combination gave Toyota a measurable advantage during the 2021 chip shortage."
-        },
-        {
-          "label": "Results after intregration of technology/solution/system",
-          "value": "Early 2021: Toyota maintained production while GM and VW paused plants. Feb 2021 Fukushima aftershock: 'significantly lower impact than in 2011.' Full chip shortage: 40% Aug/Sept 2021 cut driven jointly by semiconductor shortage and COVID-19-related parts disruptions in Southeast Asia (Vietnam, Malaysia) \u2014 but bought ~6 months of uninterrupted advantage over rivals."
         }
       ],
       "improvement": [],
@@ -4606,26 +4570,6 @@
         {
           "label": "Trigger event",
           "value": "Media investigation: In early 2000, Houston TV station KHOU ran an investigative report on Firestone tire failures and Explorer rollovers. The Chicago Sun-Times and New York Times followed. Media pressure forced NHTSA to open a formal investigation (PE00-020) on May 2, 2000 \u2014 the actual trigger was journalism, not company or regulator action."
-        },
-        {
-          "label": "Root cause (technical)",
-          "value": "Tread separation: belt-edge rubber compound in ATX/Wilderness AT tires separated under heat, load and speed. Heat (hot climates, high speed, heavy load) accelerated belt-edge oxidation. Firestone's 1993 Wilderness AT design had a Grade C heat rating \u2014 the minimum allowed. The Decatur plant's manufacturing process produced tires with higher internal defect rates than sister plants. Decatur defect rate spike coincides with 1994\u20131996 labor dispute period (replacement workers); tires from that period were ~15x more likely to generate a claim than tires from other plants."
-        },
-        {
-          "label": "Root cause (structural \u2014 Firestone)",
-          "value": "Warranty-claims data suppressed (attributed to consumer misuse). No proactive investigation. Overseas warning signs (1996 Arizona; 1998 Ford overseas complaints; 1998 State Farm insurance data) ignored. Firestone sent engineers to Arizona in 1996, concluded 'normal passenger tires being used in heavy conditions' \u2014 a coverup conclusion."
-        },
-        {
-          "label": "Root cause (structural \u2014 Ford)",
-          "value": "Ford recommended 26 psi vs Firestone's 30 psi \u2014 increasing thermal stress on the tire. Ford began replacing Firestone tires in overseas markets (Venezuela, Saudi Arabia, Thailand) in late 1999 without notifying NHTSA \u2014 a legal violation. Ford used Firestone as sole-source original equipment without independent quality verification."
-        },
-        {
-          "label": "Root cause (systemic)",
-          "value": "System-level interaction: the Explorer's rollover tendency (high CoG) + Firestone tread separation = fatalities. Neither failure mode alone was necessarily lethal; together they were. Neither company tested the system-level interaction."
-        },
-        {
-          "label": "Suppression mechanism",
-          "value": "Plaintiff attorneys stopped using the NHTSA hotline (feared investigation would compromise lawsuits). Firestone suppressed warranty data. Ford did not disclose overseas replacements. NHTSA was blind from multiple directions simultaneously. Of 271 US deaths, 258 occurred after 1996 \u2014 after the problem was already known."
         },
         {
           "label": "Effect on supply chain",
@@ -6491,22 +6435,6 @@
       ],
       "disruption": [
         {
-          "label": "Wave 1 trigger (2015)",
-          "value": "H5N2 HPAI detected in Iowa and Minnesota commercial poultry flocks spring 2015. 50.5 million birds culled in under 7 months \u2014 the largest animal disease outbreak in US history at that time. Egg prices +250%; turkey prices surged at Thanksgiving."
-        },
-        {
-          "label": "Wave 2 trigger (February 2022)",
-          "value": "H5N1 HPAI detected in US commercial poultry February 2022. Spread across all 50 states and Puerto Rico. By May 2025: 1,704 positive flocks, 173 million birds affected. USDA declared the \"largest and longest outbreak in the history of the United States.\" Novel: H5N1 also detected in dairy cattle (March 2024) and 200+ mammal species."
-        },
-        {
-          "label": "Root cause \u2014 structural",
-          "value": "No approved commercial HPAI vaccine for US poultry. Vaccine prohibition driven by export market trade restrictions: EU, Japan, South Korea ban imports from vaccinated flocks. US poultry industry resists vaccination to protect ~$5B/year in exports. Culling is therefore the ONLY containment measure. 300\u2013500M hens concentrated in Midwest HPAI flyway corridor."
-        },
-        {
-          "label": "Financial impact",
-          "value": "Egg prices: +250% Wave 1; all-time high $6.23/dozen March 2025; 230% 5-year increase. USDA compensation: >$500M paid to poultry producers in 2023. Downstream food manufacturers: significant margin compression across hundreds of product categories. 44 trading partners implemented regional US poultry trade restrictions."
-        },
-        {
           "label": "Effect on supply chain",
           "value": "Shell egg retail shortages and foodservice disruptions. Ingredient cost shocks across baked goods, mayonnaise, protein bars, breakfast menus. Emergency imports from EU and T\u00fcrkiye. Food manufacturers reformulated products or absorbed margin impact. Restaurant chains modified menus and absorbed cost increases."
         }
@@ -7021,32 +6949,7 @@
           "value": "Low \u2014 limited recovery of perishable product during supply disruptions."
         }
       ],
-      "disruption": [
-        {
-          "label": "February 2022 trigger",
-          "value": "USDA inspector in Uruapan, Michoac\u00e1n received a threatening cell phone message. USDA immediately suspended all Mexican avocado inspections for approximately 1 week \u2014 occurring days before the Super Bowl (~120M avocados consumed). Prices spiked nationally. Mexico deployed 1,500 troops to Michoac\u00e1n."
-        },
-        {
-          "label": "June 2024 trigger",
-          "value": "Two USDA APHIS inspectors were assaulted and detained at a police roadblock in Aranza, Michoac\u00e1n during a protest. USDA suspended all avocado AND mango inspections for 1+ week. Carton prices rose 40% within days (RaboResearch). Mexican government deployed security forces."
-        },
-        {
-          "label": "August 2026 trigger",
-          "value": "A cartel leader's arrest in Los Reyes area prompted security threats and protests. USDA suspended inspection activities. 300 security personnel deployed. US Embassy Mexico announced partial resumption August 8, 2026."
-        },
-        {
-          "label": "Structural root cause",
-          "value": "Michoac\u00e1n produces ~73% of Mexico's avocados. Mexico supplies ~80\u201390% of US avocados. USDA inspection requires agents physically present in cartel-controlled territory. Any credible threat to those agents immediately and legally halts all US exports. No alternative supply chain at sufficient scale exists to substitute Michoac\u00e1n volume."
-        },
-        {
-          "label": "Cartel FTO designation (Jan 2025)",
-          "value": "Trump administration designated Mexican cartels as Foreign Terrorist Organisations. Any contract with a supplier, permitting authority, subcontractor in Mexico may open potential charges related to terrorist financing. Grocery chains and restaurants now face a sanctions compliance risk on their standard avocado supply chain."
-        },
-        {
-          "label": "Climate compounding",
-          "value": "Michoac\u00e1n drought stress in 2025\u20132026 running at ~125% of 2024 drought intensity that disrupted flowering. Mexican Hass wholesale prices already expected +8\u201314% before any security disruption. Climate risk and security risk are compounding simultaneously on the same concentrated supply node."
-        }
-      ],
+      "disruption": [],
       "improvement": [],
       "decision_blocks": [
         {
@@ -7557,32 +7460,7 @@
           "value": "Low historically \u2014 diamonds not recycled into new stones. Estate/second-hand market exists but small. Lab-grown creates a potential circular model as production costs approach zero."
         }
       ],
-      "disruption": [
-        {
-          "label": "Engineered scarcity model (1888\u20131990s)",
-          "value": "De Beers controlled 80\u201390% of global rough diamond supply. By releasing limited quantities while stockpiling excess, maintained artificial scarcity. \"A Diamond is Forever\" (1947) manufactured consumer demand to match controlled supply. A supply chain engineered to create the APPEARANCE of scarcity where geological scarcity alone was insufficient."
-        },
-        {
-          "label": "Monopoly weakening (1990s\u20132010s)",
-          "value": "Russia (ALROSA), Australia (Argyle), Canada entered production outside De Beers control. Antitrust pressure \u2014 De Beers settled US antitrust case early 2000s, paying $10M and altering business practices. De Beers share fell from 90% to ~33%. Pricing power reduced but oligopoly maintained."
-        },
-        {
-          "label": "Russia-Ukraine sanctions (2022)",
-          "value": "ALROSA \u2014 Russia's state diamond company producing ~30% of global rough supply \u2014 sanctioned by US and EU following Ukraine invasion. Antwerp trading complex had to restructure sourcing away from Russian stones. Significant rough supply disruption to the global cutting industry."
-        },
-        {
-          "label": "Lab-grown diamond disruption (2015\u20132026)",
-          "value": "CVD technology matured to produce gem-quality diamonds at scale. Lab-grown wholesale prices falling ~20%/year. Surveys 2023: nearly half of US engagement rings set with lab-grown stones. De Beers launched own lab-grown brand (Lightbox) in 2018 \u2014 pricing at $800 vs $5,000+ for natural equivalents. Natural diamond wholesale prices declining sharply."
-        },
-        {
-          "label": "De Beers sale (2024)",
-          "value": "Anglo American announced intention to divest De Beers 2024, citing strategic portfolio review. De Beers put up for sale after 130+ years of Oppenheimer family and Anglo control. Reflects the fundamental challenge to natural diamond economics from lab-grown disruption and falling wholesale prices."
-        },
-        {
-          "label": "Supply chain lesson (unique)",
-          "value": "De Beers is NOT a disruption case in the traditional sense \u2014 it is the INVERSE: a company that engineered its supply chain to create artificial disruption (scarcity) as a value-creation strategy. The lesson is that supply chain monopoly collapses when technology removes the underlying scarcity entirely. Lab-grown diamonds did not compete with mined diamonds \u2014 they made the concept of diamond scarcity structurally impossible."
-        }
-      ],
+      "disruption": [],
       "improvement": [],
       "decision_blocks": [
         {
@@ -8072,26 +7950,6 @@
         {
           "label": "Trigger event",
           "value": "August 2016: Galaxy Note 7 launched to record pre-orders. Within days of consumer delivery, reports of battery overheating and fire. 92 reports in US including 26 burn injuries and 55 property damage events before first recall announcement (September 2, 2016)."
-        },
-        {
-          "label": "First recall (Sept 2016)",
-          "value": "2.5 million units recalled globally. Samsung identified Samsung SDI as defective supplier. SDI defect: insufficient insulation tape at positive electrode corner causing short-circuit under physical compression. Samsung replaced with ATL batteries and restarted sales of \"safe\" replacement Note 7 units."
-        },
-        {
-          "label": "Second recall + discontinuation (Oct 2016)",
-          "value": "Replacement Note 7 units (with ATL batteries) ALSO caught fire. ATL defect: welding burrs on positive electrode and missing insulation tape in a different location \u2014 a separate defect from SDI's. Samsung permanently discontinued the Note 7 on October 11, 2016. Both the primary AND the backup battery supplier had independently failed."
-        },
-        {
-          "label": "Root cause \u2014 design",
-          "value": "The Note 7's battery cavity was designed too small for the desired battery capacity, leaving insufficient manufacturing tolerance for either supplier. Both suppliers independently failed for different reasons caused by the same underlying design constraint: the batteries were too large for the space they were fitted into. Media coverage showed how a rush to meet demand and beat competitors stressed the supply chain."
-        },
-        {
-          "label": "Root cause \u2014 process",
-          "value": "Competitive time pressure \u2014 Samsung deliberately launched before Apple iPhone 7 \u2014 compressed both the design validation and the supplier qualification timeline. The additional fact that Samsung's battery supplier services other phone makers like Apple, who have not experienced similar issues, places further blame on Samsung for the problems."
-        },
-        {
-          "label": "Aviation ban impact",
-          "value": "Global airline ban on Note 7 \u2014 first in cabin, then in checked luggage \u2014 meant Note 7 owners could not fly with their device. Operationally and legally unprecedented for a consumer electronic device and permanently ended the product's commercial viability even if safety could theoretically have been fixed."
         }
       ],
       "improvement": [],
@@ -8608,22 +8466,6 @@
         {
           "label": "Trigger event",
           "value": "17 October 2016: explosion in an above-ground pipeline at the northern port area of BASF's Ludwigshafen complex during maintenance work. Two workers killed, six injured. Large fire required multi-agency response from Ludwigshafen and regional fire departments."
-        },
-        {
-          "label": "Scope of destruction",
-          "value": "Northern port terminal completely destroyed. Rhine river access to that terminal point closed. BASF's internal feedstock supply via the terminal pipeline interrupted. The Rhine itself temporarily closed to shipping at the explosion location."
-        },
-        {
-          "label": "Verbund cascade risk",
-          "value": "The Verbund model (2,850 km of internal pipelines; each plant's output feeds the next) means a feedstock supply interruption can cascade through multiple production units simultaneously. Without BCP, this cascade could have disrupted 8,000+ product lines and thousands of customers."
-        },
-        {
-          "label": "BCP activation \u2014 the defining response",
-          "value": "BASF activated pre-existing business continuity plans immediately. Logistics was temporarily shifted from ships and pipelines to trucks and trains. BASF was prepared for an incident and was in close contact with its customers to keep them informed about the current availability of products to minimize the impact on customer deliveries, which resulted in smaller than expected economic consequences from the accident."
-        },
-        {
-          "label": "Why this matters",
-          "value": "This case is the POSITIVE counterexample in supply chain disruption research. Every other case in this register shows inadequate preparation. BASF shows what adequate preparation looks like \u2014 and how dramatically it limits the commercial impact of a physical catastrophe. The 2 workers killed remain the primary human lesson."
         }
       ],
       "improvement": [],
@@ -9597,32 +9439,7 @@
           "value": "Low relevance \u2014 pharmaceutical supply chains do not involve significant circular economy considerations for this case."
         }
       ],
-      "disruption": [
-        {
-          "label": "Regulatory trigger",
-          "value": "UK June 2016 Brexit referendum \u2192 political commitment to leave EU Single Market \u2192 pharmaceutical industry begins assessing impact of losing frictionless supply chain. DHSC formal letter to pharmaceutical companies (2018): mandatory 6-week additional stockpile requirement over normal buffers, to be in place by March 2019."
-        },
-        {
-          "label": "Structural vulnerability",
-          "value": "The UK imports approximately 37 million medicine packs per month from the EU. Under EU single-market rules: no customs, no approvals, rapid Dover\u2013Calais transit (2 hours). Brexit converts this to a customs border with declaration requirements and potential delays at Dover \u2014 the world's busiest short sea crossing \u2014 for medicines that require continuous temperature control."
-        },
-        {
-          "label": "BCP stockpile response (successful short-term)",
-          "value": "Industry-wide 6-week additional stockpile mandate. Sanofi: 14-week total buffer. Novartis, AstraZeneca, MSD also announced stockpiling plans. The pharmaceutical industry itself paid for six weeks' worth of stockpiles. UK government procured express freight service (24\u201372 hour emergency air freight). NHS leaders confirmed acute crisis was avoided at actual Brexit transition (January 2021)."
-        },
-        {
-          "label": "COVID depletion of stockpiles",
-          "value": "Post-Brexit stockpiles built in 2019 were consumed by COVID-19 demands for critical care and respiratory medicines. Pharmaceutical industry warned stockpiles could not be rebuilt before end of transition period (December 31, 2020). The two crises (Brexit transition + COVID) overlapped in timing, depleting the buffer built for one before it could serve the other."
-        },
-        {
-          "label": "Long-term structural damage (2021\u20132026)",
-          "value": "NHS England paid \u00a3220M extra in medicine procurement costs in one year (2022\u201323). Shortage notifications rose from 20/month to 199/month by late 2022 and remained elevated. UK drug pricing system makes some medicines less profitable to supply than EU market \u2014 companies prioritise EU allocation. New medicines increasingly launch in EU before UK as companies prioritise EMA regulatory pathway."
-        },
-        {
-          "label": "Lesson (unique dimension)",
-          "value": "The acute crisis was prevented \u2014 an impressive collective achievement by pharmaceutical companies and DHSC working together. The long-term damage is structural and accumulating: the UK has permanently moved from inside the EU pharmaceutical supply chain to a smaller, less attractive, separate market that is harder and more expensive to serve."
-        }
-      ],
+      "disruption": [],
       "improvement": [],
       "decision_blocks": [
         {
@@ -10141,30 +9958,6 @@
         {
           "label": "Trigger event",
           "value": "23 March 2021, ~07:40 local time: Ever Given (400m, 220,000 tonnes, 20,124 TEU capacity, operated by Evergreen Marine) loses directional control in the single-lane southern section of the Suez Canal. Cause: sandstorm with 40\u201345 knot crosswinds, reduced visibility, and ship travelling at ~13.5 knots (normal: 7.5\u20138.5 knots). Bow embeds in eastern bank; stern approaches western bank. Total blockage of all northbound and southbound traffic."
-        },
-        {
-          "label": "Root cause (proximate)",
-          "value": "Combination of excessive transit speed, strong crosswinds from sandstorm, and reduced visibility caused loss of steerage. SCA pilots were in mandatory command during canal transit (not the ship's captain). Mega-ships now regularly transit a canal designed in 1869 for much smaller vessels \u2014 the southern section is only 265m wide, and the Ever Given is 400m long."
-        },
-        {
-          "label": "Root cause (structural)",
-          "value": "The southern Suez Canal section is a single lane. A 400m ship wedged diagonally across it creates a total blockage in both directions with ZERO bypass. No single-lane section means no redundancy. One ship in the wrong position stops 12% of global trade entirely."
-        },
-        {
-          "label": "Top 2 industries hit \u2014 Retail/Consumer Goods (#1)",
-          "value": "LARGEST LOSS SECTOR. March is the critical delivery window for European spring/summer seasonal inventory. Fashion, outdoor, garden and consumer electronics from Asian factories must arrive by March\u2013April to sell at full price. The 6-day blockage + 90-day port congestion aftermath meant: (a) spring seasonal goods arrived late \u2192 sold at markdown or destroyed; (b) UK retail losses: \u00a31.3B; (c) freight rates spiked 400\u2013500% on Asia-Europe routes; (d) port congestion at Rotterdam, Hamburg and Felixstowe lasted 90 days post-reopening. Seasonal goods cannot be stored and sold next year \u2014 the revenue loss is permanent."
-        },
-        {
-          "label": "Top 2 industries hit \u2014 Automotive (#2)",
-          "value": "SECOND-LARGEST LOSS SECTOR. The automotive industry was already in crisis from the 2020\u20132021 semiconductor chip shortage that would ultimately cost the industry ~$210B in 2021. The Ever Given blockage layered additional component and finished-vehicle delays on top of an already critical situation. VW, BMW, Mercedes and Toyota all had Asia-Europe component flows dependent on the Suez Canal. JIT manufacturing means one missing part stops an assembly line entirely. Freight prices on Mediterranean routes spiked 500% in March 2021 ($7,485 vs $1,478 in March 2020). Automotive components also include petroleum-based materials (plastics, rubber, synthetic fibres) from energy tankers also transiting the canal."
-        },
-        {
-          "label": "Salvage operation",
-          "value": "Boskalis led 6-day salvage. Removed 30,000 cubic metres of sand/mud from around bow. Eight tugboats applied continuous pulling force. A spring tide on Day 6 (29 March 2021) provided the additional buoyancy needed. Ship refloated. Canal re-opened 29 March 2021 \u2014 but the backlog of 430+ ships took weeks to fully clear at European ports."
-        },
-        {
-          "label": "Financial impact",
-          "value": "$9.6B of global trade disrupted per day \u00d7 6 days = ~$57.6B. Total direct loss estimate: $2\u20132.5B EUR (GrECo/Prof. Sebastian Kummer). Allianz estimate: up to $10B/week. Insurance claims estimate: ~$2B. Maersk Line specific loss: ~$89M (University of Gothenburg, 2025, published International Journal of Production Economics). Suez Canal Authority lost $5.9M from ship detours. Ever Given detained by Egypt for 106 days in legal dispute; settlement estimate ~$500M."
         },
         {
           "label": "Effect on supply chain",
@@ -10757,22 +10550,6 @@
           "value": "2014-2015: After years of isolated recalls (starting 2008), NHTSA opened a formal investigation and ordered a nationwide US recall covering all Takata ammonium-nitrate inflators without desiccant. By 2015: 52.8M PSDI inflators, 7.7M SPI inflators, and additional types recalled via equipment recall orders. Recall expanded to 67M US vehicles by 2016."
         },
         {
-          "label": "Root cause (technical)",
-          "value": "Ammonium nitrate (NH4NO3) propellant without a chemical drying agent (desiccant). NH4NO3 is hygroscopic \u2014 absorbs moisture. Repeated heat/humidity cycles cause crystalline structure change, altering burn rate. Under certain conditions the inflator detonates rather than burning at controlled rate: the metal canister ruptures and ejects shrapnel at high velocity into the vehicle cabin."
-        },
-        {
-          "label": "Root cause (commercial)",
-          "value": "Takata chose ammonium nitrate because it was significantly cheaper than alternative propellants (sodium azide, tetrazole-based). Cost saving: fractions of a dollar per unit. This cost-cutting decision was not disclosed to OEMs or regulators as a trade-off against long-term chemical stability."
-        },
-        {
-          "label": "Root cause (fraud)",
-          "value": "In 2017, Takata pleaded guilty to federal wire fraud charges for providing falsified safety test data to automakers. Takata's engineers had known about propellant degradation issues from internal testing as early as 2000-2001. Data was falsified to conceal defect. First death potentially linked to a Takata airbag: 2006 (a decade before the full recall scope was acknowledged)."
-        },
-        {
-          "label": "Scale of recall",
-          "value": "100M+ inflators recalled worldwide; 67M US vehicles across 19 OEM brands. Spans model years 1998-2018. Previous largest US recall (GM ignition switch): ~30M vehicles. Takata was 3-4\u00d7 larger. Parts shortage: at peak, only 38% of US inflators under recall had been repaired. Owners waited months-to-years for replacement parts."
-        },
-        {
           "label": "Effect on supply chain",
           "value": "OEM assembly holds: vehicles on recall could not be sold as new \u2014 sitting in dealer lots unsellable for months. Production planning disrupted as OEMs had to prioritise recall parts over new-vehicle components. Joyson Safety Systems rebuilt inflator manufacturing post-bankruptcy acquisition. Recall still requires ~5 million repairs as of 2026 (vehicles aging out of fleet)."
         }
@@ -11273,36 +11050,7 @@
           "value": "Very Low: cocoa pods are largely single-use; processing generates cocoa husks/shells used for animal feed or soil amendment. No significant circular economy dimension in current industry structure."
         }
       ],
-      "disruption": [
-        {
-          "label": "Wave 1 \u2014 Poor 2022/23 season (first warning)",
-          "value": "Global cocoa deficit 2022/23: -74,000 metric tonnes (ICCO). Prices rose from ~$2,200 to ~$3,000/tonne by end 2023. Industry noted as \"below-average season\" but manufacturers absorbed within hedging programmes. COCOBOD pre-sold 70-80% of projected 2023/24 crop at forward prices around $2,661/tonne before the season opened."
-        },
-        {
-          "label": "Wave 2 \u2014 Catastrophic 2023/24 harvest collapse",
-          "value": "Ivory Coast port shipments Oct 2023\u2013Jun 2024: 1.5M metric tonnes \u2014 30% decline YoY, 8-year low. Ghana actual production: 432,145 tonnes vs 800,000t forecast \u2014 45% miss, 22-year low. ICCO revised global deficit to -374,000 metric tonnes (from -74,000t). Ivory Coast halted all forward sales for 2024/25 season (January 2024). Nigeria Jan 2024 cocoa exports down 15% YoY."
-        },
-        {
-          "label": "Price explosion (December 2023 \u2013 June 2024)",
-          "value": "Prices: $4,200/tonne (Dec 2023) \u2192 $6,000 (Feb 2024) \u2192 $9,000 (Mar 2024) \u2192 $11,000 (mid-April 2024) \u2192 peak $11,530 (13 June 2024). Commodity futures market +163% in Q1 2024 alone. Freightos Baltic Index: cocoa-shipping rates surged. ICE-monitored US cocoa inventories fell to 3-year low."
-        },
-        {
-          "label": "COCOBOD governance failure and $1.3B loss",
-          "value": "COCOBOD had pre-sold 333,767 tonnes it could not deliver at $2,661/tonne average while spot prices hit $11,530/tonne. The simultaneous surge in world prices did not benefit Ghanaian farmers \u2014 COCOBOD's losses compounded. Ghana Cocoa Board entered 2025/26 season carrying GH\u20b560 billion in total liabilities. The perverse outcome: the country that caused the shortage by under-producing could not benefit from the price surge it created."
-        },
-        {
-          "label": "Controlled burn \u2014 unnecessary vent and burn was wrong description; delete this row and use instead: Impact on confectionery manufacturers",
-          "value": "Wave 1 hedging expired into new record prices by 2024/25. Manufacturers faced brutal squeeze: Hershey Q1 2025 confectionery segment -26.6%. Mondel\u0113z North American chocolate volume -21% (13 weeks to Sept 2025). Nestl\u00e9 implemented 10% price increase triggering -1.1% volume decline. Barry Callebaut FY2024/25 volumes -6.1%. 22% of manufacturers reformulated at least one product line. Nestl\u00e9's Toffee Crisp and Blue Riband reformulated so severely they can no longer legally be called \"chocolate.\""
-        },
-        {
-          "label": "Shrinkflation as industry-wide supply chain response",
-          "value": "Cadbury Dairy Milk: 200g \u2192 180g. Galaxy bars: 110g \u2192 100g. Mars/Twix/Snickers multipacks: 5 \u2192 4 bars. Mars milk chocolate egg: 252g \u2192 201g at same \u00a33 price. Average chocolate price per unit: +7.6% YoY (Circana, Dec 2024). Chocolate confectionery prices +27.5% YoY (US government data, Sept 2024). General food inflation ~7%; chocolate inflation 30\u00d7 higher. Cadbury Freddo: +150% in 2024 (UK)."
-        },
-        {
-          "label": "Farmers' paradox \u2014 the people closest to the source benefited least",
-          "value": "West African farmers receive only 40-50% of world prices (vs 90% in South America) due to government-fixed farm gate prices. When spot prices hit $11,530/tonne, growers still earned the fixed COCOBOD/CCC rate \u2014 equivalent to ~$3,000/tonne. Then when prices crashed 75% to $3,000 by April 2026, the same farmers faced income collapse while their governments were managing the consequences of forward contract losses. More than 700,000 metric tonnes of cocoa were stuck with Ivorian farmers with no buyers by 2026."
-        }
-      ],
+      "disruption": [],
       "improvement": [],
       "decision_blocks": [
         {
@@ -11849,36 +11597,7 @@
           "value": "Low \u2014 not material to this case."
         }
       ],
-      "disruption": [
-        {
-          "label": "Root cause \u2014 overheated wheel bearing (preventable)",
-          "value": "A roller bearing on one of the derailed cars began overheating. Camera footage showed the bearing on fire for 20+ miles before derailment. Hot box detectors (HBDs) measured elevated temperatures but: (1) the alarm threshold was set too high to trigger an emergency stop; (2) NS had inadequate staffing to monitor and communicate HBD data to train crews; (3) the bearing temperature data was available but the system did not act on it. The derailment was preventable if the HBD threshold had been set correctly and the communication protocol had been adequate."
-        },
-        {
-          "label": "Failure 1 \u2014 Train classification exemption",
-          "value": "11 of the derailed cars carried hazardous chemicals, but the train was NOT officially classified as a hazmat train. This classification would have required: notification to first responders of cargo contents; display of hazmat placarding; enhanced safety protocols for the entire train. Because it was not classified as hazmat, the volunteer fire department had no advance notice of the chemicals aboard."
-        },
-        {
-          "label": "Failure 2 \u2014 First responder information gap",
-          "value": "East Palestine volunteer firefighters arrived without access to AskRail \u2014 the mobile app that allows first responders to identify what chemicals are on a derailed train. Almost 1 hour elapsed before first responders knew they were dealing with vinyl chloride, butyl acrylate and other hazardous chemicals. This delay meant early containment decisions were made without chemical identification."
-        },
-        {
-          "label": "Failure 3 \u2014 The unnecessary controlled burn",
-          "value": "On 6 February 2023, NS contractors advised the fire chief to vent and burn the vinyl chloride from 5 tank cars to prevent an explosion. The fire chief authorised the burn. CRITICAL: OxyChem (the vinyl chloride manufacturer) had informed Norfolk Southern that the tank cars were NOT at risk of exploding. This safety assessment was NOT passed to the fire chief. NTSB Chair Jennifer Homendy stated the controlled burn was \"likely unnecessary.\" The burn released 116,000 gallons of carcinogenic vinyl chloride and caused most of the subsequent 16-state contamination."
-        },
-        {
-          "label": "Failure 4 \u2014 Evidence tampering / preservation failure",
-          "value": "Norfolk Southern had only 20 minutes of voice recordings from the derailed train's cab available weeks later, despite the NTSB's chief investigator demanding evidence preservation immediately after the accident. The NTSB chair stated that Norfolk Southern interfered with the investigation. Activist investor Ancora Holdings subsequently launched an unsuccessful proxy fight to remove NS board members."
-        },
-        {
-          "label": "Financial impact",
-          "value": "Norfolk Southern total costs as of end 2024: $2.2B. Breakdown: environmental cleanup ~$780M; EPA/DOJ settlement $310M (inc. $15M civil penalty); class action settlement $600M (residents within 20-mile radius); rail safety enhancements >$200M; village of East Palestine settlement $22M (2025). Most expensive freight rail accident in US history. NS must also install additional hot box detectors under the EPA consent decree."
-        },
-        {
-          "label": "Contamination scale",
-          "value": "Pollution spread confirmed by Environmental Research Letters study (June 2024): 16 US states; 540,000 square miles; ~110 million Americans (1/3 of US population) impacted. Chloride and pH levels in northern Pennsylvania and US-Canada border: highest recorded in prior 12 years. 43,000+ aquatic animals killed in first month. Researchers: \"I didn't expect to see an impact this far out.\" Long-term health implications for East Palestine residents (vinyl chloride is a known human carcinogen for liver cancer) will take years to assess."
-        }
-      ],
+      "disruption": [],
       "improvement": [],
       "decision_blocks": [
         {
