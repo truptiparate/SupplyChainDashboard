@@ -3,7 +3,7 @@
     {
       "id": "FIB-001",
       "name": "Philips Albuquerque RF-Chip Fire (2000) \u2014 Nokia vs. Ericsson",
-      "industry": "Electronics & Semiconductors; Telecom / Mobile Handsets",
+      "industry": "Electronics",
       "brand_group": "Supplier: Royal Philips Electronics (Fab 22). Customers: Nokia & Ericsson.",
       "nature": "Disruption",
       "scale": "Plant served ~30 customers; Nokia & Ericsson together ~40% of output. In 2000 Nokia was #1 handset maker (~30.6% share), Ericsson #3 (~9.7%).",
@@ -589,7 +589,7 @@
     {
       "id": "FIB-002",
       "name": "Zara (Inditex) \u2014 item-level RFID + AI demand/allocation across the full digital stack",
-      "industry": "Retail / Apparel \u2014 Fast Fashion",
+      "industry": "Retail",
       "brand_group": "Zara is the flagship BRAND; Inditex (Industria de Dise\u00f1o Textil, S.A.) is the listed PARENT GROUP.",
       "nature": "Improvement",
       "scale": "Group sales \u20ac38.6bn (+7.5%); 5,563 stores; Zara >70% of group sales; ~840M+ garments RFID-tagged/yr.",
@@ -1250,7 +1250,7 @@
     {
       "id": "FIB-003",
       "name": "Tesla \u2014 vertical integration + software-defined, AI-driven supply chain",
-      "industry": "Automotive / Energy (EVs + energy storage)",
+      "industry": "Automotive",
       "brand_group": "Tesla, Inc. \u2014 deep but SELECTIVE vertical integrator (~80% of supply chain controlled).",
       "nature": "Improvement",
       "scale": "2023: 1.85M produced (+35%), 1.81M delivered (+38%); Q4-2024 record ~495,570 delivered; 11.0 GWh storage Q4-2024.",
@@ -1906,7 +1906,7 @@
     {
       "id": "FIB-004",
       "name": "Ryanair \u2014 ultra-low-cost carrier supply chain & digital operations",
-      "industry": "Aviation / Air Transport \u2014 Low-Cost Carrier (SERVICE supply chain)",
+      "industry": "Aviation",
       "brand_group": "Ryanair Holdings \u2192 Ryanair DAC, Buzz, Malta Air, Lauda Europe (multi-AOC).",
       "nature": "Improvement",
       "scale": "200.2m (FY25), 208.4m (FY26); FY27 guidance ~216m; target 300m FY34",
@@ -2516,7 +2516,7 @@
     {
       "id": "FIB-005",
       "name": "Maersk NotPetya Cyberattack (2017) \u2014 global shipping infrastructure wiped",
-      "industry": "Logistics & Transportation / Maritime Shipping / Cybersecurity",
+      "industry": "Logistics",
       "brand_group": "A.P. M\u00f8ller-Maersk \u2014 world's largest container shipping line",
       "nature": "Disruption",
       "scale": "Handles ~20% of global maritime container trade; 130 countries; 600+ offices; 76 container terminals; 45,000 employees affected",
@@ -3063,7 +3063,7 @@
     {
       "id": "FIB-006",
       "name": "Toyota \u2014 Great East Japan Earthquake (2011) & the RESCUE/BCP resilience programme",
-      "industry": "Automotive Manufacturing / Supply Chain Resilience",
+      "industry": "Automotive",
       "brand_group": "Toyota Motor Corporation \u2014 world's largest or second-largest automaker by volume",
       "nature": "Disruption",
       "scale": "Global output down 78% YoY in April 2011 (Matsuo 2015, citing Toyota data); net income down 77% for fiscal year ending March 2012",
@@ -3731,7 +3731,7 @@
     {
       "id": "FIB-007",
       "name": "KFC UK \u2014 2018 Chicken Shortage: Single-DC logistics failure and crisis recovery",
-      "industry": "Food & QSR (Quick Service Restaurant) / Logistics & Distribution",
+      "industry": "Food",
       "brand_group": "KFC (Kentucky Fried Chicken) is a global fast-food chain owned by Yum! Brands. The UK is KFC's fifth largest market globally, contributing ~6% of its US$24.5bn global sales (2017). The UK has the largest fast-food chicken market in Europe. KFC UK operates ~900 restaurants, ~95% franchised.",
       "nature": "Disruption",
       "scale": "~900 UK/Ireland restaurants; ~500 fresh-chicken farmers supplying the UK network; UK turnover \u00a3445.7M (2017 pre-crisis).",
@@ -4408,7 +4408,7 @@
     {
       "id": "FIB-008",
       "name": "Firestone/Ford \u2014 ATX & Wilderness AT tire recall (2000): tread separation, fatalities and the TREAD Act",
-      "industry": "Automotive / Tire Manufacturing / Consumer Product Safety",
+      "industry": "Automotive",
       "brand_group": "Firestone (Bridgestone/Firestone Inc.) \u2014 one of the largest tire makers in the world; acquired by Japan's Bridgestone in 1988. Ford Motor Company \u2014 one of the world's largest automakers. The two companies had a near-century-old relationship dating to Harvey Firestone and Henry Ford's personal friendship in 1906.",
       "nature": "Disruption",
       "scale": "Firestone Radial ATX, ATX II and Wilderness AT tires (primarily P235/75R15 size). Mounted as original equipment on Ford Explorer, Ford Ranger, Ford F-150, Mercury Mountaineer, Mazda Navajo and Mazda B-series.",
@@ -5114,7 +5114,7 @@
     {
       "id": "FIB-009",
       "name": "1997 Aisin Seiki Fire \u2014 Toyota network resilience and self-organised supplier recovery",
-      "industry": "Automotive Manufacturing / Supplier Network Resilience",
+      "industry": "Automotive",
       "brand_group": "Aisin Seiki Co. (Tier-1 supplier, Toyota Group) \u00b7 Toyota Motor Corporation \u00b7 ~200 Toyota-group suppliers",
       "nature": "Disruption",
       "scale": "Toyota estimated losses of ~$195M from the shutdown; approximately 70,000 vehicles affected",
@@ -5743,7 +5743,7 @@
     {
       "id": "FIB-010",
       "name": "Cisco Systems \u2014 $2.25B inventory write-down (2001): demand-signal distortion and the bullwhip effect",
-      "industry": "Electronics / Networking Equipment / Technology",
+      "industry": "Electronics",
       "brand_group": "Cisco Systems manufactures networking infrastructure (routers, switches, optical equipment). In the late 1990s it was the fastest-growing company in American corporate history. At its March 2000 peak, Cisco briefly became the most valuable company in the world (~$550B market cap).",
       "nature": "Disruption",
       "scale": "$2.25B inventory write-down; $2.69B quarterly loss (first loss in 11+ years); 8,000+ jobs cut; stock fell from $82 to $13. CEO John Chambers called it a '100-year flood.'",
@@ -6368,7 +6368,7 @@
     {
       "id": "FIB-011",
       "name": "Avian Influenza / US Egg Crisis (2015 & 2022\u20132025) \u2014 HPAI biological shock to US egg supply chain",
-      "industry": "Food & Agriculture / Poultry / Consumer Staples",
+      "industry": "Food",
       "brand_group": "Industry-wide. Key actors: USDA-APHIS (regulator), Cal-Maine Foods (largest US egg producer), Iowa Select Farms. Downstream: McDonald's, Waffle House, major bakers. Emergency partners: T\u00fcrkiye (~15,000 tonnes agreed 2025), EU importers.",
       "nature": "Disruption",
       "scale": "Wave 1 (2015): 50.5M birds culled; egg prices +250%. Wave 2 (2022\u20132025): 173M birds affected in all 50 states; 1,704 confirmed HPAI-positive flocks (May 2025); egg price all-time high $6.23/dozen (March 2025); 230% 5-year price increase; USDA paid >$500M producer compensation (2023); H5N1 detected in dairy cattle (March 2024).",
@@ -6435,8 +6435,20 @@
       ],
       "disruption": [
         {
-          "label": "Effect on supply chain",
-          "value": "Shell egg retail shortages and foodservice disruptions. Ingredient cost shocks across baked goods, mayonnaise, protein bars, breakfast menus. Emergency imports from EU and T\u00fcrkiye. Food manufacturers reformulated products or absorbed margin impact. Restaurant chains modified menus and absorbed cost increases."
+          "label": "Trigger event",
+          "value": "Wave 1 (2015): H5N2 HPAI detected in Iowa and Minnesota commercial poultry flocks, spring 2015. 50.5 million birds culled in under 7 months \u2014 the largest animal disease outbreak in US history at that time. Egg prices +250%; turkey prices surged ahead of Thanksgiving.\n\nWave 2 (February 2022 \u2013 present): H5N1 HPAI detected in US commercial poultry February 2022. Spread across all 50 states and Puerto Rico. By May 2025: 1,704 confirmed HPAI-positive flocks, 173 million birds affected. USDA declared the \"largest and longest outbreak in the history of the United States.\" H5N1 also detected in dairy cattle (March 2024) \u2014 first confirmed detection in cows globally."
+        },
+        {
+          "label": "Root cause details",
+          "value": "Structural root cause: No approved commercial HPAI vaccine for US poultry market. Vaccine prohibition is NOT biological \u2014 it is a trade policy constraint. The EU, Japan and South Korea ban imports of poultry from vaccinated flocks. The US poultry industry resists vaccination to protect ~$5B/year in poultry exports. As a result, mandatory culling of entire infected flocks (100% kill rate in chickens) is the ONLY containment tool available.\n\nSecondary causes: (1) Geographic concentration of commercial egg production in the HPAI-endemic Midwest flyway corridor (Iowa, Minnesota and surrounding states). (2) High-density CAFO facilities with limited wild bird exclusion. (3) Flock recovery lag of 4\u20136 months minimum to raise new laying hens to production age."
+        },
+        {
+          "label": "Affected nodes",
+          "value": "N1 \u2014 Commercial laying hen flocks (Iowa/Midwest): Primary production node eliminated; 173M birds culled or dead across all 50 states.\nN2 \u2014 USDA-APHIS (regulator): Activated mandatory culling protocol; paid >$500M in producer compensation (2023 alone); no vaccine to deploy.\nN3 \u2014 Egg processing and distribution: Processing plants near outbreak zones paused operations due to biosecurity restrictions, compounding supply loss.\nN4 \u2014 Retail/foodservice (downstream): All downstream egg users simultaneously affected \u2014 supermarkets, fast food chains, bakeries, restaurant groups, food manufacturers using eggs as ingredients.\nN5 \u2014 International import market: Activated as emergency fallback; US imports surged 38% (December 2024); emergency imports from T\u00fcrkiye (~15,000 tonnes agreed by June 2025) and EU countries."
+        },
+        {
+          "label": "Effect on Supply chain",
+          "value": "Shell egg retail shortages and foodservice disruptions across the US. Egg retail price: $1.97/dozen (2021) \u2192 all-time record high of $6.23/dozen (March 2025) \u2014 a 230% increase over 5 years. USDA paid >$500M in producer compensation in 2023 alone. 44 trading partners implemented regional trade restrictions on US poultry.\n\nIngredient cost shocks across all downstream food categories: baked goods, mayonnaise, protein bars, restaurant breakfast menus. Food manufacturers faced significant margin compression. Restaurant chains modified menus and absorbed cost increases. Emergency imports from T\u00fcrkiye and EU partially offset the shortfall but could not fully substitute domestic volume. USDA projected egg prices could increase a further 20% throughout 2025."
         }
       ],
       "improvement": [],
@@ -6884,7 +6896,7 @@
     {
       "id": "FIB-012",
       "name": "Avocado Supply Chain \u2014 Geopolitical Single-Source Risk (Mexico/Michoac\u00e1n cartels, 2016\u20132026)",
-      "industry": "Food & Agriculture / Fresh Produce / Geopolitical Risk",
+      "industry": "Food",
       "brand_group": "Key producers: Michoac\u00e1n avocado growers (~73% Mexico output). US retailers: Walmart, Whole Foods, Costco. Foodservice: Chipotle, McDonald's, Yum! Brands. Cartel actors: CJNG, Knights Templar. Regulator: USDA APHIS (inspection authority with Mexican field presence).",
       "nature": "Disruption",
       "scale": "Mexico: ~80\u201390% of US avocado supply. Michoac\u00e1n: ~73% of Mexico output. US per capita consumption: 1.5 lbs (1990s) \u2192 8\u20139 lbs/year (2023) \u2014 5\u00d7 increase. Super Bowl alone: ~120M avocados. June 2024 suspension: carton prices +40% in 1 week. Average 4 truckloads stolen per day in Michoac\u00e1n. Trump Jan 2025: cartel FTO designation creates sanctions compliance risk for all US importers.",
@@ -6949,7 +6961,24 @@
           "value": "Low \u2014 limited recovery of perishable product during supply disruptions."
         }
       ],
-      "disruption": [],
+      "disruption": [
+        {
+          "label": "Trigger event",
+          "value": "Three documented USDA inspection suspension events \u2014 each triggered by cartel violence or threats against USDA APHIS phytosanitary inspectors physically working in Michoac\u00e1n, Mexico:\n\n(1) February 2022: USDA inspector in Uruapan, Michoac\u00e1n received a threatening cell phone message. USDA immediately suspended ALL Mexican avocado inspections for approximately 1 week \u2014 occurring days before the Super Bowl (~120 million avocados consumed). Prices spiked nationally. Mexico deployed 1,500 troops to Michoac\u00e1n.\n\n(2) June 2024: Two USDA APHIS inspectors were assaulted and detained at a police roadblock in Aranza, Michoac\u00e1n during a protest. USDA suspended all avocado AND mango inspections for 1+ week. Carton prices rose 40% within days (RaboResearch). Mexican government deployed security forces.\n\n(3) August 2026: A cartel leader's arrest in the Los Reyes area prompted security threats and protests. USDA suspended inspection activities. 300 security personnel deployed. US Embassy Mexico announced partial resumption August 8, 2026."
+        },
+        {
+          "label": "Root cause details",
+          "value": "Structural root cause: Mexico supplies ~80\u201390% of US avocados. Michoac\u00e1n state alone produces ~73% of Mexico's output. Michoac\u00e1n is heavily controlled by drug cartels \u2014 CJNG (Jalisco Nueva Generaci\u00f3n) and smaller groups extort farmers, tax shipments, and hijack an average of 4 truckloads of avocados per day.\n\nCritical vulnerability: USDA APHIS phytosanitary inspectors must physically work in Michoac\u00e1n to certify avocados for US export. When any inspector faces a security threat, USDA immediately and legally suspends ALL inspection activity \u2014 halting 100% of Michoac\u00e1n avocado exports with no minimum duration and no alternative. There is no inspection bypass mechanism.\n\nAdditional compounding factor: January 2025 \u2014 Trump administration designated Mexican cartels as Foreign Terrorist Organisations (FTO). Any US company transacting with Michoac\u00e1n supply chain participants (suppliers, subcontractors, logistics providers) may face potential charges related to terrorist financing \u2014 creating a new sanctions compliance dimension on the standard avocado import supply chain."
+        },
+        {
+          "label": "Affected nodes",
+          "value": "N1 \u2014 Michoac\u00e1n avocado orchards (~73% Mexico output): Extortion at farm gate; 4 truckloads hijacked per day; drought stress compounding (2025\u20132026 running at ~125% of 2024 drought intensity). The primary source node is simultaneously a cartel extortion zone and a climate-vulnerable agricultural region.\nN2 \u2014 USDA APHIS inspection (critical export gate): The single legal gate for US avocado imports from Mexico. Any threat to inspectors triggers 100% halt of all exports. No bypass mechanism exists.\nN3 \u2014 Mexico export supply chain (packing/logistics): Refrigerated truck route 1,200\u20131,500 km Michoac\u00e1n to US border; cartel toll points embedded throughout.\nN4 \u2014 US importers and distributors (~80 licensed importers): No advance notice of suspension; all in-transit and pending shipments halted simultaneously.\nN5 \u2014 US retail and foodservice (downstream): Chipotle (~100,000 lbs/day), McDonald's, Subway and major grocery chains all face immediate supply gaps and 40%+ price spikes during suspension events."
+        },
+        {
+          "label": "Effect on Supply chain",
+          "value": "Each of the three suspension events created an immediate 100% halt of Michoac\u00e1n avocado exports to the US \u2014 the only supply chain outcome possible when USDA inspection is suspended:\n\n\u2014 June 2024: Carton prices +40% within 1 week (RaboResearch); Mexican growers lost tens of millions of dollars per week; 700,000+ metric tonnes of avocados were stuck with Ivorian [Michoac\u00e1n] farmers with no buyers by 2026.\n\nNormal supply chain metrics: US per capita avocado consumption rose from 1.5 lbs (1990s) to 8\u20139 lbs/year by 2023 \u2014 a 5\u00d7 increase creating structural demand that no alternative origin can substitute at volume. California domestic production covers <10% of US demand. Alternative origins (Peru, Chile, Dominican Republic) require 14\u201321 days by sea vs 5\u201310 days from Michoac\u00e1n \u2014 and import pre-certification pathways were not in place.\n\nFTO designation impact (from January 2025): The supply chain is no longer only a logistics risk \u2014 it is a sanctions compliance risk. Every US importer, retailer and foodservice operator with Mexican avocado supply is now evaluating FTO compliance documentation requirements."
+        }
+      ],
       "improvement": [],
       "decision_blocks": [
         {
@@ -7395,7 +7424,7 @@
     {
       "id": "FIB-013",
       "name": "De Beers Diamond Supply Chain \u2014 Artificial Scarcity by Design (1888\u20132026)",
-      "industry": "Luxury Goods / Mining / Gemstones",
+      "industry": "Mining",
       "brand_group": "De Beers (now part of Anglo American; put up for sale 2024). Competitors: ALROSA (Russia, ~30% global output, sanctioned 2022), Rio Tinto, Dominion Diamond. Lab-grown disruptors: Lightbox (De Beers own brand), Diamond Foundry, Clean Origin. Antwerp: ~80% rough diamond trading hub. Surat: cuts/polishes ~90% of global gem diamonds.",
       "nature": "Disruption",
       "scale": "De Beers controlled 80\u201390% global diamond supply (1888\u2013late 1990s); now ~33%. Lab-grown diamonds: ~50% of US engagement rings by 2023. Natural diamond wholesale benchmark (1-carat D-IF): ~$62,000 (1980) \u2192 ~$13,500 (2026) \u2014 78% nominal decline. Russia ALROSA (30% global rough supply) sanctioned 2022. De Beers put up for sale by Anglo American 2024.",
@@ -7460,7 +7489,24 @@
           "value": "Low historically \u2014 diamonds not recycled into new stones. Estate/second-hand market exists but small. Lab-grown creates a potential circular model as production costs approach zero."
         }
       ],
-      "disruption": [],
+      "disruption": [
+        {
+          "label": "Trigger event",
+          "value": "This case has multiple disruption events spanning 130 years:\n\n(1) Lab-grown diamond technology disruption (2015\u20132026): CVD (Chemical Vapour Deposition) technology matured to produce gem-quality diamonds at scale. Lab-grown diamonds are chemically, physically and optically identical to mined diamonds \u2014 only advanced GIA testing can distinguish them. Lab-grown wholesale prices fell ~20% per year. By 2023 surveys showed approximately 50% of US engagement rings were set with lab-grown stones.\n\n(2) Russia-Ukraine sanctions (2022): ALROSA \u2014 Russia's state diamond company producing ~30% of global rough supply \u2014 was sanctioned by US and EU following the Ukraine invasion. Antwerp trading complex had to restructure sourcing away from Russian stones. Significant rough supply disruption across the cutting industry.\n\n(3) De Beers sale announced (2024): Anglo American announced its intention to divest De Beers, citing strategic portfolio review \u2014 ending 130+ years of Oppenheimer family and Anglo corporate control, directly driven by the lab-grown disruption to natural diamond economics."
+        },
+        {
+          "label": "Root cause details",
+          "value": "This is the INVERSE case in supply chain disruption research: De Beers deliberately engineered its supply chain to CREATE artificial scarcity as a business strategy \u2014 not a disruption to recover from.\n\nThe monopoly mechanism: De Beers controlled 80\u201390% of global rough diamond supply from 1888 to the late 1990s. By releasing controlled volumes through its sightholder system (10\u00d7 per year, non-negotiable prices, ~80 approved buyers) while stockpiling excess production in London vaults, De Beers maintained a price level that would have been impossible in a free market. The \"A Diamond is Forever\" campaign (1947) simultaneously manufactured consumer demand to match the artificially restricted supply.\n\nThe disruption root cause: Lab-grown diamond technology eliminated the scarcity mechanism entirely. Unlike every other supply chain disruption where scarcity is unintentional, De Beers' scarcity was artificial \u2014 and an artificial scarcity can be destroyed by a technology that makes the scarce thing abundant. CVD diamond growth made unlimited supply achievable. Natural diamond wholesale: ~$62,000/carat (1980 D-IF benchmark) \u2192 ~$13,500/carat (2026) \u2014 a 78% nominal decline over 46 years."
+        },
+        {
+          "label": "Affected nodes",
+          "value": "N1 \u2014 Primary mines (Botswana/SA/Namibia/Russia/Canada): Natural diamond production geologically constrained but price now determined by lab-grown competition, not geological scarcity.\nN2 \u2014 De Beers sight system (controlled distribution): Reduced from 90% to ~33% of global supply; pricing power eliminated as lab-grown sets market reference.\nN3 \u2014 Cutting and polishing centres (Antwerp/Surat/Dubai): Antwerp handles ~80% of rough diamond trading; disrupted by Russian ALROSA sanctions (2022). Surat cuts/polishes ~90% of global gem diamonds; facing reduced volumes as lab-grown takes share.\nN4 \u2014 Jewellery manufacturing and retail (Tiffany, Cartier, Signet, Walmart): Segment splitting between natural (premium/heirloom) and lab-grown (fashion/affordable). Lab-grown brands available at Walmart at $800 vs $5,000+ for natural equivalents.\nN5 \u2014 Lab-grown diamond production (disruptor): CVD and HPHT processes; marginal cost falling 20%/year; no geological constraints; growing from zero to ~50% of US engagement ring market in <10 years."
+        },
+        {
+          "label": "Effect on Supply chain",
+          "value": "The artificial scarcity model that supported natural diamond pricing for 130 years has collapsed. Natural diamond wholesale prices: ~$62,000/carat (1980 peak) \u2192 ~$13,500/carat (2026) \u2014 78% nominal decline. Lab-grown equivalent: $500\u2013$1,500 wholesale.\n\nSupply chain structure: Natural diamond supply chain (mine \u2192 controlled distribution \u2192 Antwerp \u2192 Surat \u2192 retail) now competes directly with a 2\u20134 week CVD growth process at 80\u201395% lower cost. Only advanced GIA gemological testing can distinguish them \u2014 retail consumers cannot see the difference.\n\nRussian ALROSA sanctions (2022): ~30% of global rough diamond supply disrupted; Antwerp had to restructure sourcing; rough prices temporarily spiked before alternative origins (Botswana, Canada) absorbed some volume.\n\nDe Beers response: Launched Lightbox lab-grown brand (2018) at $800 vs $5,000+ for natural; attempted two-tier market positioning (natural=heirloom/investment, lab=fashion). Put up for sale by Anglo American (2024) \u2014 reflecting the fundamental challenge to the monopoly business model.\n\nMarket outcome: De Beers global supply share fell from ~90% (1990s) to ~33% (now). Lab-grown share of US engagement rings: ~50% by 2023 surveys."
+        }
+      ],
       "improvement": [],
       "decision_blocks": [
         {
@@ -7881,7 +7927,7 @@
     {
       "id": "FIB-014",
       "name": "Samsung Galaxy Note 7 Battery Fires and Recall (2016) \u2014 dual supplier failure and product discontinuation",
-      "industry": "Consumer Electronics / Smartphones / Battery Supply Chain",
+      "industry": "Electronics",
       "brand_group": "Samsung Electronics (OEM). Primary battery: Samsung SDI (Samsung subsidiary). Replacement battery: ATL / Amperex Technology Limited (Hong Kong). Regulators: CPSC (US), FAA, EASA. Carriers: AT&T, Verizon, T-Mobile, Sprint. Competitor context: Apple iPhone 7 (launched same period).",
       "nature": "Disruption",
       "scale": "2.5M units recalled (first recall, Sept 2016). 3.1M total devices recalled and discontinued. Total cost: ~$5.3 billion. ~$17 billion market cap lost. Global airline ban (cabin and checked luggage). 96% global return rate achieved. 26 US burn injuries; 55 property damage events including car fires. Both SDI AND ATL batteries independently failed through different defect mechanisms.",
@@ -7949,7 +7995,19 @@
       "disruption": [
         {
           "label": "Trigger event",
-          "value": "August 2016: Galaxy Note 7 launched to record pre-orders. Within days of consumer delivery, reports of battery overheating and fire. 92 reports in US including 26 burn injuries and 55 property damage events before first recall announcement (September 2, 2016)."
+          "value": "August 2016: Samsung launched the Galaxy Note 7 to record pre-orders. Within days of consumer delivery, reports emerged of devices overheating and catching fire during charging. Within weeks, 92 US reports were filed including 26 burn injuries and 55 property damage events including car fires and a garage fire.\n\nSeptember 2, 2016 \u2014 First recall: Samsung recalled 2.5 million Note 7 units globally. The primary battery supplier (Samsung SDI, a Samsung subsidiary) was identified as the source of the defect. Samsung replaced with batteries from an alternative supplier (ATL \u2014 Amperex Technology Limited).\n\nOctober 2016 \u2014 Second recall and discontinuation: The replacement Note 7 units (with ATL batteries) ALSO caught fire \u2014 through a different defect mechanism. Samsung permanently discontinued the Galaxy Note 7 on October 11, 2016. A global airline ban was enforced \u2014 first from cabin use, then from all checked luggage. Both the primary AND the backup battery supplier had independently failed."
+        },
+        {
+          "label": "Root cause details",
+          "value": "Root cause (design): The Galaxy Note 7's battery cavity was designed too small for the desired battery capacity, leaving insufficient manufacturing tolerance for either supplier. Both suppliers independently failed for different reasons caused by the SAME underlying design constraint.\n\nSamsung SDI (primary) defect: Insufficient insulation tape at the positive electrode corner \u2014 causing short-circuit under physical compression within the too-tight chassis.\n\nATL (backup) defect: Welding burrs on the positive electrode and missing insulation tape in a different location \u2014 a separate, independent manufacturing defect also exposed by the insufficient chassis tolerance.\n\nRoot cause (process): Competitive time pressure \u2014 Samsung deliberately rushed the Note 7 launch to beat Apple's iPhone 7. Media coverage confirmed that suppliers and contract manufacturers were pushed to maximise production, just as engineers faced tight physical limits inside the phone chassis. The backup supplier (ATL) was deployed as a replacement without independent qualification under the Note 7 chassis constraints. The validation process that would have caught the ATL defect was compressed by the competitive timeline."
+        },
+        {
+          "label": "Affected nodes",
+          "value": "N1 \u2014 Samsung SDI (primary battery supplier): Samsung subsidiary; batteries failed due to insufficient electrode insulation at chassis-critical corner; supplier orders immediately stopped.\nN2 \u2014 ATL / Amperex Technology Limited (backup supplier): Replacement batteries also failed (different defect mechanism \u2014 welding burrs and missing insulation tape in different location); not independently qualified under Note 7 chassis constraints before deployment.\nN3 \u2014 Samsung Electronics (OEM/designer): Designed the chassis too small for the desired capacity; competitive time pressure compressed safety validation. Ultimately responsible for both supplier failures through the design constraint.\nN4 \u2014 Wireless carriers and retailers: AT&T, Verizon, T-Mobile, Best Buy, Samsung.com. Had to manage returns of 3.1M units; replacement device programme created 2+ week customer-facing gap.\nN5 \u2014 Regulators and aviation authorities: CPSC (US product ban); FAA and EASA (global aviation ban from cabin, then checked luggage). Airline ban made the Note 7 commercially unviable regardless of any potential safety fix."
+        },
+        {
+          "label": "Effect on Supply chain",
+          "value": "Total cost: approximately $5.3 billion. Market capitalisation lost: ~$17 billion in the weeks following recall. 3.1 million devices recalled and permanently discontinued globally.\n\nFirst recall (September 2016): 2.5 million units recalled; Samsung SDI identified as defective; replacement with ATL batteries presented as solution \u2014 did not fix the underlying design constraint.\n\nSecond recall + discontinuation (October 2016): ATL replacement units also caught fire; Samsung permanently halted all Note 7 production and sales; global airline ban enforced; CPSC issued official US product ban. 96% global return rate achieved over 3 months.\n\nAviation ban: The global airline ban \u2014 first from cabin, then from checked luggage \u2014 made the Note 7 commercially unusable for millions of customers regardless of any theoretical safety fix.\n\nBrand recovery: Samsung launched Galaxy S8 (April 2017) with 8-point battery safety check protocol (dimension inspection, X-ray, charge/discharge, TVOC, visual, OCV, accelerated degradation, disassembly inspection) \u2014 which became an industry standard. S8 sold strongly, confirming brand recovery."
         }
       ],
       "improvement": [],
@@ -8397,7 +8455,7 @@
     {
       "id": "FIB-015",
       "name": "BASF Ludwigshafen Pipeline Explosion (October 2016) \u2014 industrial accident with effective BCP response (the POSITIVE counterexample)",
-      "industry": "Chemicals / Petrochemicals / Industrial Manufacturing",
+      "industry": "Chemicals",
       "brand_group": "BASF SE (world's largest chemical company, HQ Ludwigshafen, Germany; ~\u20ac14\u201316B annual revenue; 39,000 employees on site). Downstream customers: automotive, construction, agriculture, electronics, consumer products industries globally. Logistics partners: Rhine river barge operators, rail freight, road hauliers.",
       "nature": "Disruption",
       "scale": "Ludwigshafen complex: 10 km\u00b2, 39,000 employees, 8,000+ chemical products, ~\u20ac14\u201316B annual revenue. 2 workers killed, 6 injured. Port terminal completely destroyed. Rhine river temporarily closed. Impact SMALLER THAN EXPECTED due to pre-existing BCP \u2014 the defining feature of this case.",
@@ -8465,7 +8523,19 @@
       "disruption": [
         {
           "label": "Trigger event",
-          "value": "17 October 2016: explosion in an above-ground pipeline at the northern port area of BASF's Ludwigshafen complex during maintenance work. Two workers killed, six injured. Large fire required multi-agency response from Ludwigshafen and regional fire departments."
+          "value": "17 October 2016, approximately 11:30 local time: An explosion occurred in an above-ground pipeline at the northern port area of BASF's Ludwigshafen complex \u2014 the world's largest integrated chemical manufacturing site \u2014 during maintenance work on a pipeline supplying petrochemical feedstocks (primarily naphtha and other hydrocarbons) to production facilities.\n\nTwo workers were killed and six were injured. A large fire required response from the Ludwigshafen fire department and regional mutual aid units. The explosion destroyed the northern port terminal \u2014 the facility through which raw material feedstocks arrived by Rhine river barge. The Rhine river itself was temporarily closed to shipping at the explosion location."
+        },
+        {
+          "label": "Root cause details",
+          "value": "Proximate cause: Explosion during maintenance work on an above-ground pipeline containing pressurised petrochemical feedstocks. The specific mechanical failure mode was not publicly disclosed in full by BASF, consistent with ongoing insurance and liability proceedings.\n\nStructural vulnerability: The Verbund model \u2014 BASF's core competitive advantage at Ludwigshafen \u2014 creates an integrated production network where 2,850 km of internal pipelines connect plants such that the output of one plant feeds directly into the next. This maximises energy efficiency and raw material utilisation. However, it also means that a failure in a single pipeline or terminal can cascade through multiple production units simultaneously.\n\nThe northern port terminal was the sole receiving point for Rhine barge feedstock deliveries to the Ludwigshafen complex. Destruction of this terminal created an immediate raw material supply disruption for all production units dependent on those feedstocks.\n\nWhy the impact was smaller than expected: BASF had pre-existing BCP with globally valid guidelines and security/capacity trainings for staff. This case is the POSITIVE COUNTEREXAMPLE \u2014 it demonstrates what adequate preparation looks like and how dramatically it limits the commercial impact of a physical catastrophe."
+        },
+        {
+          "label": "Affected nodes",
+          "value": "N1 \u2014 Ludwigshafen Verbund complex (10 km\u00b2, 39,000 employees, 8,000+ products): Production units dependent on terminal feedstocks faced cascade risk from interrupted raw material supply; BCP maintained continuity throughout.\nN2 \u2014 Northern port terminal (DESTROYED): The primary receiving point for Rhine barge feedstock deliveries \u2014 completely destroyed in the explosion. Required full rebuild (months).\nN3 \u2014 Rhine river logistics (primary feedstock route): River access to the destroyed terminal point closed; Rhine temporarily closed at explosion location. Barge logistics to Ludwigshafen suspended.\nN4 \u2014 Alternative logistics (truck and rail \u2014 BCP activated): Pre-planned logistics alternative; road trucks and rail freight immediately substituted for Rhine barge delivery \u2014 significantly higher cost per tonne but maintained supply continuity.\nN5 \u2014 Downstream chemical customers (global): BASF supplies automotive, construction, agriculture, electronics, consumer products industries globally. Active proactive communication maintained supply chain confidence."
+        },
+        {
+          "label": "Effect on Supply chain",
+          "value": "BASF was prepared for an incident and was in close contact with its customers to keep them informed about the current availability of products to minimize the impact on customer deliveries, which resulted in SMALLER THAN EXPECTED economic consequences from the accident.\n\nImmediate BCP response: Within hours of the explosion, BASF activated pre-existing business continuity plans. Logistics was immediately shifted from Rhine ships and pipelines to trucks and trains. All affected customers were proactively contacted with specific information: which products were affected, expected supply timelines, and alternative options.\n\nFinancial impact: BASF carried business interruption insurance; specific financial impact not publicly disclosed; described as smaller than expected due to BCP. Two workers killed \u2014 the primary human cost of the incident.\n\nPhysical recovery: Terminal rebuild completed over subsequent months; Rhine barge logistics restored to normal. Longer-term: BASF conducted a post-incident Verbund infrastructure resilience review.\n\nThe key supply chain lesson: The gap between explosion and catastrophe is entirely determined by the quality of preparation that precedes it. BASF had a BCP; every other disruption case in this register did not. Active, specific, proactive customer communication during a disruption limits commercial damage more than any operational measure."
         }
       ],
       "improvement": [],
@@ -8888,7 +8958,7 @@
     {
       "id": "FIB-016",
       "name": "iPhone X Component Shortage \u2014 OLED and Face ID (2017): dual new-technology supply ramp failure at competitive launch timing",
-      "industry": "Consumer Electronics / Smartphones / Display and Sensor Supply Chain",
+      "industry": "Electronics",
       "brand_group": "Apple Inc. (OEM). OLED sole supplier: Samsung Display (Apple's primary smartphone competitor). Face ID sensor suppliers: LG Innotek (dot projector), STMicroelectronics, Lumentum. Assembly: Foxconn / Hon Hai. Competitor: Samsung Galaxy S8/Note 8 (unrestricted supply in same period).",
       "nature": "Disruption",
       "scale": "Initial production: ~10,000 units/day vs normal iPhone launch of 50,000+/day. Estimated 20\u201335M units delivered end 2017 vs ~40\u201350M potential demand. 5\u20136 week customer lead time vs normal 2\u20133 days. iOS market share loss during holiday quarter 2017. Estimated 6\u20138M units of missed holiday quarter potential sales.",
@@ -8953,7 +9023,24 @@
           "value": "Apple's trade-in programme allows some device recycling. Limited specific CE dimension from the supply constraint itself."
         }
       ],
-      "disruption": [],
+      "disruption": [
+        {
+          "label": "Trigger event",
+          "value": "Apple chose to introduce TWO unproven supply-chain-intensive technologies simultaneously in the iPhone X \u2014 its 10th anniversary flagship:\n\n(1) OLED display: First time Apple used OLED in a mass-market iPhone. Samsung Display was the only manufacturer capable of producing the required OLED specifications at volume. No alternative OLED supplier was qualified for iPhone X. Samsung Display simultaneously served its own parent company (Galaxy S8, Note 8) \u2014 Apple's primary smartphone competitor.\n\n(2) Face ID / TrueDepth sensors: A structured-light 3D facial recognition system requiring sensors that projected 30,000 infrared dots onto the face. These sensor arrays had never been manufactured at smartphone scale before. Production yield issues with the structured-light projector (manufactured by Lumentum and STMicroelectronics) were the PRIMARY production constraint after OLED issues were resolved.\n\nApple committed to a November 2017 launch to mark the iPhone's 10th anniversary \u2014 creating a fixed competitive deadline that could not be moved regardless of supply readiness."
+        },
+        {
+          "label": "Root cause details",
+          "value": "Root cause 1 \u2014 Sole OLED supplier who is also a competitor: Samsung Display was Apple's only qualified OLED supplier for iPhone X. Samsung Display needed to serve both its parent company (Galaxy S8, Note 8) and Apple simultaneously from the same production lines. Samsung could observe Apple's production limitations in real time because Samsung Display was Apple's sole supplier \u2014 an unprecedented strategic vulnerability. No alternative OLED supplier had been qualified in advance.\n\nRoot cause 2 \u2014 New sensor technology launched before supply chain was proven: Face ID structured-light sensor arrays had never been manufactured at smartphone scale before. Yield improvements only occurred towards end of September 2017 \u2014 too late to support a high-volume holiday launch. The sensor yield constraint was predictable: a technology never mass-produced cannot be assumed to reach target yield by a fixed launch date.\n\nRoot cause 3 \u2014 Competitive time pressure overrode supply readiness: Apple committed to a November 2017 anniversary launch when supply could only support approximately 10,000 units/day \u2014 vs a normal iPhone launch capacity of 50,000+/day. The anniversary deadline was non-negotiable from a marketing perspective, but it was set before supply readiness was confirmed."
+        },
+        {
+          "label": "Affected nodes",
+          "value": "N1 \u2014 Samsung Display (sole OLED supplier \u2014 Apple's competitor): Dual-customer conflict (Galaxy + iPhone X from same lines); no alternative for Apple.\nN2 \u2014 TrueDepth / Face ID sensor supply chain (LG Innotek, STMicro, Lumentum): Never manufactured at scale before; yield issues persisted through late September 2017; PRIMARY constraint on production ramp.\nN3 \u2014 Apple / Foxconn assembly: Constrained to ~10,000 units/day (vs normal 50,000+) due to component supply; new assembly processes for the notch and Face ID module added learning curve.\nN4 \u2014 Apple retail and carrier distribution: 5\u20136 week customer lead time vs normal 2\u20133 day delivery; sold out immediately at every launch; holiday quarter impacted.\nN5 \u2014 Samsung Galaxy (full supply \u2014 competitive advantage): Galaxy S8 and Note 8 available in full quantity during Apple's constraint period; Samsung could observe Apple's production limits through the shared Samsung Display supplier relationship."
+        },
+        {
+          "label": "Effect on Supply chain",
+          "value": "Initial iPhone X production: ~10,000 units/day vs normal iPhone launch capacity of 50,000+/day.\nEstimated units delivered by end 2017: 20\u201335 million vs estimated demand of 40\u201350 million.\nCustomer lead time at launch: 5\u20136 weeks vs normal 2\u20133 days \u2014 a 10\u00d7 increase during peak holiday shopping season.\nEstimated missed holiday quarter potential: 6\u20138 million units \u00d7 ~$999 ASP = approximately $6\u20138 billion in deferred/lost revenue.\n\niOS market share: The delay hurt sales during the holiday quarter, resulting in iOS losing market share to Android during the quarter. Samsung Galaxy S8 and Note 8 \u2014 with unconstrained supply and Samsung's real-time knowledge of Apple's production limitations \u2014 gained holiday quarter share.\n\nPost-constraint recovery: iPhone X became commercially very successful once supply caught up in early 2018; significant pent-up demand was satisfied. Apple subsequently qualified LG Display as a second OLED supplier for subsequent iPhone models, and invested in proprietary MicroLED display technology as a long-term alternative to Samsung Display dependency."
+        }
+      ],
       "improvement": [],
       "decision_blocks": [
         {
@@ -9374,7 +9461,7 @@
     {
       "id": "FIB-017",
       "name": "UK Medicine Stockpiling \u2014 Brexit Preparation (2019): regulatory membership as supply chain infrastructure \u2014 acute crisis prevented, structural long-term damage accumulating",
-      "industry": "Pharmaceuticals / Healthcare / NHS Supply Chain",
+      "industry": "Healthcare",
       "brand_group": "Key actors: UK DHSC (Department of Health and Social Care), NHS England, pharmaceutical companies (GSK, AstraZeneca, Sanofi, Novartis, MSD/Merck). Primary import route: Dover\u2013Calais crossing. UK regulator: MHRA (independent of EMA post-Brexit). GSK: estimated \u00a370M Brexit costs over 2\u20133 years + \u00a350M/year ongoing.",
       "nature": "Disruption",
       "scale": "37 million medicine packs per month imported from EU to UK. 6-week additional stockpile mandated by DHSC. NHS England: \u00a3220M extra medicine procurement costs in one year (Sept 2022\u2013Sept 2023). MHRA shortage notifications: ~20/month (pre-Brexit) \u2192 199/month (late 2022) \u2014 10\u00d7 increase. Community pharmacies: \u00a337M/year additional staff time managing shortages. EMA reported 60% increase in EU shortage notifications 2019\u20132023.",
@@ -9439,7 +9526,24 @@
           "value": "Low relevance \u2014 pharmaceutical supply chains do not involve significant circular economy considerations for this case."
         }
       ],
-      "disruption": [],
+      "disruption": [
+        {
+          "label": "Trigger event",
+          "value": "UK June 2016 Brexit referendum result \u2192 political commitment to leave the EU Single Market \u2192 pharmaceutical industry begins assessing impact of losing frictionless medicine supply chain.\n\nFormal regulatory trigger: DHSC (Department of Health and Social Care) issued a formal letter to all pharmaceutical companies supplying NHS patients from or via the EU, requiring them to hold a minimum of six weeks of additional supply above normal buffer stocks by 29 March 2019 \u2014 the original Brexit deadline.\n\nThe operational trigger: The UK imports approximately 37 million medicine packs per month from the EU, primarily via the Dover\u2013Calais Channel crossing (transit time: 1\u20132 hours under EU single-market rules with no customs declarations). Under a no-deal Brexit, this route would become a full customs border with declaration requirements, potential delays and possible regulatory divergence \u2014 a fundamental conversion of a frictionless supply chain into a friction-laden one for time-sensitive, cold-chain-critical medical products."
+        },
+        {
+          "label": "Root cause details",
+          "value": "Structural root cause: The EU single market was supply chain infrastructure. Membership of the EU single market eliminated pharmaceutical supply chain friction that had been built over 50 years of regulatory harmonisation:\n\u2014 No customs declarations at Dover\u2013Calais\n\u2014 Automatic recognition of EMA (European Medicines Agency) marketing authorisations across all EU countries\n\u2014 Shared batch release testing protocols\n\u2014 Common pharmacovigilance and shortage monitoring systems\n\u2014 No tariffs on pharmaceutical products\n\nBrexit removed all of these simultaneously on 1 January 2021. The MHRA (Medicines and Healthcare products Regulatory Agency) became independent of EMA \u2014 requiring separate UK marketing authorisations for all medicines (additional regulatory cost and complexity). UK drug pricing (NHS Drug Tariff) already below international comparators, reducing commercial attractiveness for pharmaceutical companies managing global supply allocation.\n\nSecondary compounding factor: 60\u201380% of active pharmaceutical ingredients (APIs) manufactured in China and India \u2014 a structural global concentration independent of Brexit. Brexit adds EU-UK border friction on top of an already-concentrated API supply chain."
+        },
+        {
+          "label": "Affected nodes",
+          "value": "N1 \u2014 EU pharmaceutical manufacturers (primary source): Majority of NHS medicines manufactured in Germany, France, Belgium, Netherlands, Ireland, Denmark \u2014 delivered via Dover\u2013Calais under EU single market rules. Under Brexit: customs declarations, potential Dover delays, regulatory divergence.\nN2 \u2014 API manufacturers (China/India \u2014 60\u201380% of global supply): Double structural vulnerability \u2014 Brexit border friction on top of China/India API concentration creates two sequential points of supply chain risk.\nN3 \u2014 UK pharmaceutical import and wholesale distribution: Required to hold 6 weeks additional buffer above normal 2\u20134 week commercial stock levels; cold-chain capacity for biologics (vaccines, insulin, cancer biologics) a specific constraint.\nN4 \u2014 NHS pharmacies, hospitals and GP practices: ~11,000 community pharmacies, 900+ hospitals, thousands of dispensing GPs. Post-Brexit shortage notifications rose from ~20/month (pre-Brexit) to 199/month (late 2022).\nN5 \u2014 DHSC/MHRA (UK government/regulator): Issued mandatory 6-week buffer stockpile requirement; procured emergency air freight service (24\u201372 hour turnaround from EU); created Critical Imports Council (2024)."
+        },
+        {
+          "label": "Effect on Supply chain",
+          "value": "Short-term (acute crisis PREVENTED): The 2019 mandatory stockpile worked as intended. GSK, Sanofi (14-week total buffer), Novartis, AstraZeneca and MSD all built the required buffers. UK government secured emergency air freight capacity. NHS leaders confirmed no widespread acute medicine shortages at the actual Brexit transition (January 2021).\n\nMedium-term (COVID depletion): Post-Brexit stockpiles built in 2019 were consumed by COVID-19 surge demand for critical care medicines. Pharmaceutical industry warned stockpiles could not be rebuilt before end of transition period (December 31, 2020). The two crises overlapped, depleting the buffer built for one.\n\nLong-term structural damage (2021\u20132026, accumulating):\n\u2014 NHS England: +\u00a3220 million/year extra medicine procurement costs (September 2022\u2013September 2023)\n\u2014 MHRA shortage notifications: ~20/month (pre-Brexit) \u2192 199/month (late 2022) \u2014 a 10\u00d7 increase\n\u2014 GSK: \u00a370 million in Brexit-related costs over 2\u20133 years + \u00a350 million/year ongoing\n\u2014 Community pharmacies: \u00a337 million/year in additional staff time managing shortages\n\u2014 60% increase in shortage notifications 2019\u20132023 (EMA data)\n\nThe supply chain lesson: The acute crisis was prevented \u2014 an impressive BCP achievement. But BCP cannot substitute for permanently lost structural supply chain resilience. The long-term cost demonstrates the compounding price of losing 50 years of frictionless EU pharmaceutical supply chain integration."
+        }
+      ],
       "improvement": [],
       "decision_blocks": [
         {
@@ -9885,7 +9989,7 @@
     {
       "id": "FIB-018",
       "name": "Ever Given \u2014 Suez Canal Blockage (March 2021): Single-chokepoint infrastructure failure halting $9.6B/day of global trade; Retail / Consumer Goods and Automotive Industries hardest hit",
-      "industry": "Shipping / Logistics (Primary) \u2014 Retail / Consumer Goods (Top Industry Loss #1) \u2014 Automotive Manufacturing (Top Industry Loss #2) \u2014 Cross-Industry",
+      "industry": "Logistics",
       "brand_group": "Ship operator: Evergreen Marine Corporation (Taiwan). Ship owner: Shoei Kisen Kaisha (Japan). Salvage: Boskalis (Netherlands). Canal authority: Suez Canal Authority (Egypt). Most impacted: European retailers (fashion, electronics, outdoor); VW, BMW, Mercedes-Benz, Toyota (automotive OEMs). Shipping loss benchmark: Maersk Line ~$89M (University of Gothenburg study, 2025).",
       "nature": "Disruption",
       "scale": "6-day blockage (23\u201329 March 2021). $9.6B of global trade disrupted per day. 430+ ships stranded at both canal entrances. 12% of all global trade transits Suez daily. Top 2 industry losses: (1) Retail/Consumer Goods \u2014 \u00a31.3B UK losses alone; spring seasonal inventory missed selling windows; port congestion lasted 90 days post-reopening. (2) Automotive \u2014 components and finished vehicles delayed on top of existing $210B semiconductor chip shortage crisis. Total direct loss estimate: $2\u20132.5B EUR (GrECo/Prof. Kummer). Allianz estimate: up to $10B/week. Ever Given detained in Egypt 106 days in legal dispute.",
@@ -10475,7 +10579,7 @@
     {
       "id": "FIB-019",
       "name": "Takata Airbag Recall (2015\u20132019+): Largest product recall in automotive history \u2014 ammonium nitrate inflator failure",
-      "industry": "Automotive / Automotive Safety Components",
+      "industry": "Automotive",
       "brand_group": "Supplier: Takata Corporation (Japan) \u2192 acquired as Joyson Safety Systems (2018). OEMs affected: Honda, Toyota, Nissan, Ford, GM, BMW, Chrysler, Subaru, Mazda, VW, Mercedes, Audi, Tesla, Ferrari + 5 others (19 brands total).",
       "nature": "Disruption",
       "scale": "Largest product recall in automotive history: 100M+ inflators recalled worldwide; 67M US vehicles recalled; 19 automaker brands; model years 1998\u20132018. 35 confirmed US deaths, 400+ US injuries as of 2024. Takata filed for bankruptcy June 2017 (largest manufacturing bankruptcy in Japanese history). Recall still ongoing in 2026.",
@@ -10981,7 +11085,7 @@
     {
       "id": "FIB-020",
       "name": "Cocoa Price Crisis \u2014 West Africa Crop Failures (2023-2024): El Ni\u00f1o drought, Swollen Shoot Virus and governance failures eliminate one-third of world cocoa supply; prices hit 60-year record",
-      "industry": "Food & Beverage / Confectionery / Agricultural Commodities",
+      "industry": "Food",
       "brand_group": "Primary producers: COCOBOD (Ghana) \u2014 missed 800,000t forecast by 45%; produced only 432,145t; $1.3B in forward-contract losses. CCC (Ivory Coast) \u2014 halted forward sales; 30% port shipment decline. Downstream: Mondel\u0113z International (Cadbury, Toblerone) \u2014 North American chocolate volume -21%; Hershey \u2014 Q1 2025 confectionery segment value -26.6%; Nestl\u00e9 \u2014 10% price increase across confectionery; Barry Callebaut (world's largest bulk chocolate processor) \u2014 FY2024/25 volumes -6.1%. Mars \u2014 Galaxy bars shrunk from 110g to 100g; Snickers/Twix multipacks from 5 to 4 bars.",
       "nature": "Disruption",
       "scale": "C\u00f4te d'Ivoire + Ghana produce ~60-70% of global cocoa. Ivory Coast port shipments Oct 2023\u2013Jun 2024: 1.5M metric tonnes \u2014 down 30% YoY, 8-year low. Ghana 2023/24 harvest: 432,145 tonnes vs 800,000t forecast \u2014 45% miss, 22-year low. Global cocoa deficit 2023/24: -374,000 metric tonnes (ICCO) \u2014 stock-to-grindings ratio lowest in 40+ years. Peak price: $11,530/tonne (13 June 2024) \u2014 60-year high; +300% from pre-crisis level of ~$2,800. Price crash: $3,000/tonne (April 2026) \u2014 75% decline from peak. COCOBOD total liabilities: GH\u20b560 billion; $1.3B forward-contract losses. 22% of chocolate manufacturers reformulated at least one product line since 2024.",
@@ -11528,7 +11632,7 @@
     {
       "id": "FIB-021",
       "name": "East Palestine Ohio Train Derailment (February 2023): wheel bearing failure + controlled burn releases 116,000 gallons of vinyl chloride; $2.2B in costs; 16 states contaminated; fundamental rail hazmat safety failures exposed",
-      "industry": "Rail Logistics / Chemicals / Industrial Transport / Environmental / Regulatory",
+      "industry": "Chemicals",
       "brand_group": "Railroad: Norfolk Southern Railway (NS) \u2014 total costs as of end 2024: $2.2B (cleanup + legal + settlements). Settlements: $310M (EPA/DOJ federal settlement, May 2024); $600M (class action, East Palestine residents); $22M (village of East Palestine, 2025). Rail safety enhancements: >$200M committed. Chemical manufacturers: OxyChem (vinyl chloride \u2014 informed NS tank cars were NOT at risk of explosion; this was not passed to the fire chief). First responder: East Palestine volunteer fire department (did not have access to AskRail app; 1 hour elapsed before they knew what was on the train). Regulator: NTSB (found controlled burn was likely UNNECESSARY); FRA; EPA.",
       "nature": "Disruption",
       "scale": "38 of 149 cars derailed (3 Feb 2023, 21:00 local time), East Palestine, Ohio (Ohio-Pennsylvania border). 11 cars carried hazardous chemicals (train NOT classified as hazmat train \u2014 lower safety protocols applied). 5 cars contained vinyl chloride (carcinogen). Controlled burn: 116,000 gallons vinyl chloride released. Contamination spread: 16 US states; 540,000 square miles (14% of US land area); ~110 million residents (1/3 of US population) impacted by pollution (Environmental Research Letters study, 2024). Aquatic kills: 43,000+ animals in first month. Norfolk Southern total costs end 2024: $2.2B. Root cause: overheated wheel bearing visible on camera for 20+ miles before derailment; hot box detector threshold set too high; crew not alerted in time. NTSB finding: controlled burn was likely UNNECESSARY \u2014 vinyl chloride tank cars were NOT at risk of exploding (OxyChem told NS; NS did not pass this to fire chief).",
