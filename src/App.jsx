@@ -4,7 +4,7 @@ import DATA from "./data/cases.json";
 /* =====================================================================
    Future Industry in a Box — Case Library
    UX follows dashboard-ui-mockup-colorful.html:
-   grid → mode chooser → guided walkthrough / comic preview → completion.
+   grid → mode chooser → guided walkthrough / comic reader → completion.
    Data model (cases.json) is unchanged; this file only maps it to the new UX.
    ===================================================================== */
 
@@ -31,6 +31,10 @@ const ICONS = {
   award: `<circle cx="12" cy="8" r="6"/><path d="M15.5 13.5 17 22l-5-3-5 3 1.5-8.5"/>`,
   speech: `<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>`,
   search: `<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>`,
+  grid: `<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>`,
+  expand: `<path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/>`,
+  close: `<path d="M18 6 6 18"/><path d="m6 6 12 12"/>`,
+  image: `<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/>`,
 };
 
 function Icon({ name, size = 16, color, strokeWidth = 2, style, className }) {
@@ -212,8 +216,31 @@ function buildSteps(c) {
   return steps;
 }
 
-/* ---------------- Comic panels ---------------- */
-function buildComicPanels(c) {
+/* =====================================================================
+   Comic artwork
+   ---------------------------------------------------------------------
+   House format is 12 images per case, numbered 1..12, sitting together in
+   one folder. A case points at that folder in cases.json:
+
+      "comic": "/comics/FIB-001"
+
+   …or, when a case departs from the 12-png default:
+
+      "comic": { "dir": "/comics/FIB-001", "count": 12, "ext": "png" }
+
+   The reader groups them 4 to a page for the overview and the panel dots,
+   matching how the comics are drawn (3 pages x 4 panels).
+
+   Images live in public/, which Vite copies to the build root as-is, so
+   public/comics/FIB-001/1.png is served at /comics/FIB-001/1.png.
+
+   A case with no `comic` entry falls back to cards generated from its own
+   data, so the mode still works before artwork exists.
+   ===================================================================== */
+const PANELS_PER_PAGE = 4;
+const COMIC_DEFAULTS = { count: 12, ext: "png" };
+
+function generatedPanels(c) {
   const improvement = isImprovement(c);
   const panels = [];
   const nodes = c.normal_flow_nodes || [];
@@ -231,7 +258,55 @@ function buildComicPanels(c) {
     const best = [...scores].sort((a, b) => b[overallKey(b)] - a[overallKey(a)])[0];
     panels.push({ title: "How it ended", caption: `Best-rated option: ${best.label} — ${best[overallKey(best)].toFixed(1)} / 5` });
   }
-  return panels.map((p, i) => ({ ...p, label: `Scene ${i + 1} · ${p.title}` }));
+  return panels.map((p, i) => ({ ...p, index: i, page: 0, label: `Scene ${i + 1} · ${p.title}` }));
+}
+
+function buildComic(c) {
+  const raw = c.comic;
+  const dir = typeof raw === "string" ? raw : raw?.dir;
+
+  if (dir) {
+    const count = raw?.count || COMIC_DEFAULTS.count;
+    const ext = raw?.ext || COMIC_DEFAULTS.ext;
+    const base = String(dir).replace(/\/+$/, "");
+    const panels = Array.from({ length: count }, (_, i) => ({
+      index: i,
+      page: Math.floor(i / PANELS_PER_PAGE),
+      src: `${base}/${i + 1}.${ext}`,
+      label: `Panel ${i + 1} of ${count}`,
+    }));
+    return { kind: "art", perPage: PANELS_PER_PAGE,
+             pageCount: Math.ceil(count / PANELS_PER_PAGE), panels };
+  }
+
+  // No artwork yet — cards generated from case data.
+  return { kind: "generated", perPage: PANELS_PER_PAGE, pageCount: 1, panels: generatedPanels(c) };
+}
+
+/* Reads a bitmap's intrinsic size so one panel can be given its true aspect
+   ratio — that's what lets a panel fill the stage without letterboxing. */
+function useImageSize(src) {
+  const [size, setSize] = useState(null);
+  useEffect(() => {
+    setSize(null);
+    if (!src || typeof window === "undefined" || typeof window.Image !== "function") return;
+    let alive = true;
+    const img = new window.Image();
+    img.onload = () => alive && setSize({ w: img.naturalWidth, h: img.naturalHeight });
+    img.onerror = () => alive && setSize({ error: true });
+    img.src = src;
+    return () => { alive = false; };
+  }, [src]);
+  return size;
+}
+
+/* Warms the neighbouring bitmaps so turning panels doesn't flash. */
+function usePreload(sources) {
+  useEffect(() => {
+    if (typeof window === "undefined" || typeof window.Image !== "function") return;
+    const imgs = sources.filter(Boolean).map((s) => { const i = new window.Image(); i.src = s; return i; });
+    return () => imgs.forEach((i) => { i.onload = null; i.src = ""; });
+  }, [sources.join("|")]); // eslint-disable-line react-hooks/exhaustive-deps
 }
 
 /* =====================================================================
@@ -596,44 +671,224 @@ function GuidedMode({ c, note, onNote, onFinish }) {
   );
 }
 
+/* One panel at reading size. Clicking it hands off to the full-screen overlay. */
+function ComicPanelImage({ panel, onOpen }) {
+  const size = useImageSize(panel.src);
+
+  if (size?.error) {
+    return (
+      <div className="comic-missing">
+        <Icon name="image" size={30} />
+        <p>Panel artwork didn’t load.</p>
+        <code>{panel.src}</code>
+      </div>
+    );
+  }
+
+  const aspect = size ? size.w / size.h : 3 / 2;
+
+  return (
+    <button className="comic-open" onClick={onOpen} aria-label={`Open ${panel.label} full screen`}>
+      <div className="comic-frame" style={{ "--a": aspect, aspectRatio: `${aspect}` }}>
+        {!size && <div className="comic-skeleton" />}
+        <img className="comic-bitmap" src={panel.src} alt={panel.label} draggable="false" />
+        <span className="comic-open-badge"><Icon name="expand" size={14} /> Click to enlarge</span>
+      </div>
+    </button>
+  );
+}
+
+/* The four panels of the current page at once — click one to read it full size. */
+function ComicPageView({ comic, pageIndex, activeIndex, onPick }) {
+  const pagePanels = comic.panels.filter((p) => p.page === pageIndex);
+  return (
+    <div className="comic-pagegrid">
+      {pagePanels.map((p) => (
+        <button
+          key={p.index}
+          className={`comic-thumb ${p.index === activeIndex ? "active" : ""}`}
+          onClick={() => onPick(p.index)}
+          aria-label={`Read ${p.label}`}
+        >
+          <img src={p.src} alt={p.label} draggable="false" />
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/* Full-screen overlay: one panel filling the viewport, with prev / next / exit.
+   It drives the same index as the reader, so closing leaves you on the panel
+   you stopped at rather than snapping back. */
+function ComicLightbox({ panels, index, onIndex, onClose }) {
+  const panel = panels[index];
+  const isFirst = index === 0;
+  const isLast = index === panels.length - 1;
+
+  usePreload([panels[index - 1]?.src, panels[index + 1]?.src]);
+
+  // Lock the page behind the overlay.
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const onKey = (e) => {
+      if (e.key === "ArrowRight") { if (!isLast) onIndex(index + 1); }
+      else if (e.key === "ArrowLeft") { if (!isFirst) onIndex(index - 1); }
+      else if (e.key === "Escape") onClose();
+      else return;
+      e.preventDefault();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [index, isFirst, isLast, onIndex, onClose]);
+
+  return (
+    <div className="comic-lightbox" role="dialog" aria-modal="true" aria-label={panel.label}>
+      {/* Clicking anywhere off the artwork exits. */}
+      <div className="comic-lb-backdrop" onClick={onClose} />
+
+      <button className="comic-lb-exit" onClick={onClose}>
+        <Icon name="close" size={17} /> Exit
+      </button>
+
+      <button className="comic-lb-arrow prev" onClick={() => onIndex(index - 1)}
+              disabled={isFirst} aria-label="Previous panel">
+        <Icon name="arrowLeft" size={26} />
+      </button>
+
+      <img className="comic-lb-img" src={panel.src} alt={panel.label} draggable="false" />
+
+      <button className="comic-lb-arrow next" onClick={() => onIndex(index + 1)}
+              disabled={isLast} aria-label="Next panel">
+        <Icon name="arrowRight" size={26} />
+      </button>
+
+      <div className="comic-lb-counter">{panel.label}</div>
+    </div>
+  );
+}
+
 function ComicMode({ c, onFinish }) {
-  const panels = useMemo(() => buildComicPanels(c), [c]);
-  const [panelIndex, setPanelIndex] = useState(0);
+  const comic = useMemo(() => buildComic(c), [c]);
+  const rootRef = useRef(null);
+  const [index, setIndex] = useState(0);
+  const [view, setView] = useState("panel");   // opens on a single panel; "page" is the 2x2 overview
+  const [lightbox, setLightbox] = useState(false);
   const col = industryStyle(c);
+
+  const panels = comic.panels;
+  const panel = panels[index];
+  const pageIndex = panel?.page ?? 0;
+  const hasArt = comic.kind !== "generated";
+
+  // Keep the neighbouring panels warm so turning pages doesn't flash.
+  usePreload([panels[index - 1]?.src, panels[index + 1]?.src, panels[index + 2]?.src]);
+
+  const go = (d) => setIndex((i) => Math.min(panels.length - 1, Math.max(0, i + d)));
+
+  // A full-height panel would otherwise open below the fold: the detail header
+  // alone eats most of a laptop screen. Deferred a frame so it lands after the
+  // parent's scroll-to-top on mode change.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (typeof window.requestAnimationFrame !== "function") return;
+    const id = window.requestAnimationFrame(() => {
+      rootRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    return () => window.cancelAnimationFrame(id);
+  }, []);
+
+  // The overlay owns the keyboard while it's open.
+  useEffect(() => {
+    if (typeof window === "undefined" || lightbox) return;
+    const onKey = (e) => {
+      if (e.key === "ArrowRight") go(1);
+      else if (e.key === "ArrowLeft") go(-1);
+      else if (e.key.toLowerCase() === "o" && hasArt) setView((v) => (v === "panel" ? "page" : "panel"));
+      else return;
+      e.preventDefault();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lightbox, hasArt, panels.length]);
 
   if (!panels.length) return <p className="muted">No comic content available for this case yet.</p>;
 
-  const panel = panels[panelIndex];
-  const isFirst = panelIndex === 0;
-  const isLast = panelIndex === panels.length - 1;
+  const isFirst = index === 0;
+  const isLast = index === panels.length - 1;
 
   return (
-    <>
-      <div className="comic-panel" style={{ "--dot-color": col.fg }}>
-        <div className="comic-panel-bg" />
-        <div className="comic-panel-scene">
-          <Icon name={col.icon} size={96} color={col.fg} />
+    <div className="comic-reader" ref={rootRef}>
+      <div className="comic-toolbar">
+        <div className="comic-position">
+          <strong>Panel {index + 1}</strong>
+          <span>of {panels.length}</span>
+          {comic.pageCount > 1 && <span className="comic-pagetag">Page {pageIndex + 1} / {comic.pageCount}</span>}
         </div>
-        <div className="comic-caption">
-          <span className="comic-caption-label">{panel.label}</span>
-          <p>{panel.caption}</p>
-        </div>
+        {hasArt && (
+          <div className="comic-tools">
+            <button className={`comic-tool ${view === "page" ? "on" : ""}`} onClick={() => setView(view === "panel" ? "page" : "panel")}>
+              <Icon name="grid" size={14} /> {view === "panel" ? "Whole page" : "Single panel"}
+            </button>
+          </div>
+        )}
       </div>
+
+      <div className="comic-stage">
+        {!hasArt ? (
+          <div className="comic-placeholder" style={{ "--dot-color": col.fg }}>
+            <div className="comic-placeholder-bg" />
+            <div className="comic-placeholder-scene"><Icon name={col.icon} size={110} color={col.fg} /></div>
+            <div className="comic-placeholder-caption">
+              <span className="comic-caption-label">{panel.label}</span>
+              <p>{panel.caption}</p>
+            </div>
+          </div>
+        ) : view === "panel" ? (
+          <ComicPanelImage panel={panel} onOpen={() => setLightbox(true)} />
+        ) : (
+          <ComicPageView comic={comic} pageIndex={pageIndex} activeIndex={index}
+                         onPick={(i) => { setIndex(i); setView("panel"); }} />
+        )}
+      </div>
+
       <div className="comic-nav-row">
-        <button className="step-btn ghost" disabled={isFirst} onClick={() => setPanelIndex((i) => Math.max(0, i - 1))}>
+        <button className="step-btn ghost" disabled={isFirst} onClick={() => go(-1)}>
           <Icon name="arrowLeft" size={15} /> Back
         </button>
-        <div className="comic-dots">
-          {panels.map((_, i) => <div key={i} className={`comic-dot ${i === panelIndex ? "active" : ""}`} />)}
+        <div className="comic-dots" role="tablist" aria-label="Comic panels">
+          {panels.map((p, i) => (
+            <button
+              key={i}
+              className={`comic-dot ${i === index ? "active" : ""} ${comic.pageCount > 1 && i % comic.perPage === 0 && i > 0 ? "page-break" : ""}`}
+              onClick={() => setIndex(i)}
+              aria-label={p.label}
+              aria-selected={i === index}
+              role="tab"
+            />
+          ))}
         </div>
-        <button className="step-btn primary" onClick={() => (isLast ? onFinish() : setPanelIndex((i) => i + 1))}>
+        <button className="step-btn primary" onClick={() => (isLast ? onFinish() : go(1))}>
           {isLast ? "Finish" : "Next"} {!isLast && <Icon name="arrowRight" size={15} />}
         </button>
       </div>
-      <div className="placeholder-note">
-        Preview panels — this shows the flow only. Final illustrated artwork per case is a separate content task, not yet produced.
+
+      <div className="comic-hint">
+        {hasArt
+          ? "Click a panel to open it full screen · ← → to turn panels · O for the whole page"
+          : "Preview panels — this shows the flow only. Point this case at its artwork folder with `\"comic\": \"comics/" + c.id + "\"` in cases.json."}
       </div>
-    </>
+
+      {lightbox && hasArt && (
+        <ComicLightbox panels={panels} index={index} onIndex={setIndex} onClose={() => setLightbox(false)} />
+      )}
+    </div>
   );
 }
 
@@ -667,8 +922,8 @@ function CaseDetail({ c, onBack, onPrev, onNext, note, onNote }) {
               <button className="chooser-card comic" onClick={() => enter("comic")}>
                 <div className="chooser-icon comic"><Icon name="speech" size={21} /></div>
                 <div className="chooser-text">
-                  <div className="chooser-title">Understand with comic<span className="chooser-flag">Preview</span></div>
-                  <div className="chooser-desc">Follow the case as a short comic strip — a fun, visual way to see what happened, scene by scene.</div>
+                  <div className="chooser-title">Understand with comic</div>
+                  <div className="chooser-desc">Read the case as a 12-panel comic — one panel at a time, and click any panel to open it full screen.</div>
                 </div>
               </button>
             </div>
@@ -998,18 +1253,105 @@ const CSS = `
 .step-btn.ghost:hover{color:var(--ink);}
 .step-btn:disabled{opacity:0.35;cursor:default;transform:none;}
 
-/* Comic */
-.comic-panel{border:3px solid var(--ink);border-radius:8px;min-height:280px;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;}
-.comic-panel-bg{position:absolute;inset:0;background-image:radial-gradient(circle,var(--dot-color,var(--muted)) 1.6px,transparent 1.7px);background-size:16px 16px;opacity:0.28;}
-.comic-panel-scene{position:relative;flex:1;display:flex;align-items:center;justify-content:center;min-height:150px;}
-.comic-caption{position:relative;background:var(--ink);color:#fff;padding:16px 20px;}
-.comic-caption-label{display:inline-block;background:var(--accent-yellow);color:var(--ink);font-family:'Space Grotesk',sans-serif;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:4px;margin-bottom:8px;}
-.comic-caption p{margin:0;font-size:14.5px;line-height:1.55;font-weight:500;}
-.comic-nav-row{display:flex;align-items:center;justify-content:space-between;margin-top:20px;}
-.comic-dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;}
-.comic-dot{width:9px;height:9px;border-radius:50%;background:var(--hairline-strong);}
-.comic-dot.active{background:var(--ink);}
+/* Comic reader
+   The reader breaks out of the 820px prose column: artwork with lettering in it
+   needs every pixel it can get, and a panel confined to body-copy width is
+   exactly the problem this replaces. --stageh is the height the artwork may
+   occupy inline; the full-screen overlay below is its own world. */
+.comic-reader{--stageh:78vh;scroll-margin-top:20px;width:min(1180px,94vw);margin-left:50%;transform:translateX(-50%);}
+
+.comic-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px;min-height:34px;}
+.comic-position{display:flex;align-items:baseline;gap:6px;font-size:13px;color:var(--muted);}
+.comic-position strong{font-family:'Space Grotesk',sans-serif;font-size:15px;color:var(--ink);font-weight:700;}
+.comic-pagetag{margin-left:8px;padding:3px 10px;border-radius:100px;background:var(--surface);border:1px solid var(--hairline-strong);font-size:11.5px;}
+.comic-tools{display:flex;gap:8px;flex-wrap:wrap;}
+.comic-tool{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;color:var(--muted);
+  background:var(--surface);border:1.5px solid var(--hairline-strong);border-radius:100px;padding:7px 14px;cursor:pointer;
+  transition:border-color .15s ease,color .15s ease,background .15s ease;}
+.comic-tool:hover{border-color:var(--ink);color:var(--ink);}
+.comic-tool.on{background:var(--ink);border-color:var(--ink);color:#fff;}
+.comic-tool:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
+
+.comic-stage{display:flex;align-items:center;justify-content:center;background:#EFEDE6;border:1px solid var(--hairline-strong);
+  border-radius:14px;padding:clamp(10px,2vw,22px);min-height:320px;}
+
+/* The inline panel is a button — the whole thing is the hit target for the overlay.
+   width:100% matters: .comic-frame sizes itself with min(100%, ...), and a
+   shrink-to-fit parent would leave that percentage with nothing definite to
+   resolve against, collapsing the panel to a few pixels. */
+.comic-open{background:none;border:none;padding:0;cursor:zoom-in;display:flex;
+  align-items:center;justify-content:center;width:100%;border-radius:8px;}
+.comic-open:focus-visible{outline:3px solid var(--focus);outline-offset:4px;}
+.comic-open:hover .comic-open-badge{opacity:1;transform:translateY(0);}
+.comic-open:hover .comic-frame{box-shadow:0 12px 34px rgba(29,43,46,0.22);}
+/* width:min(100%, stage-height x aspect) is the fit-inside-the-box rule — the
+   panel grows until it runs out of either height or width, never distorting. */
+.comic-frame{position:relative;overflow:hidden;background:#fff;border:3px solid var(--ink);border-radius:6px;
+  width:min(100%,calc(var(--stageh) * var(--a,1.5)));height:auto;max-height:var(--stageh);
+  box-shadow:0 8px 28px rgba(29,43,46,0.14);flex-shrink:0;transition:box-shadow .18s ease;}
+.comic-bitmap{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;display:block;
+  image-rendering:auto;user-select:none;}
+.comic-open-badge{position:absolute;right:12px;bottom:12px;display:inline-flex;align-items:center;gap:6px;
+  background:rgba(29,43,46,0.86);color:#fff;font-size:11.5px;font-weight:600;padding:6px 12px;border-radius:100px;
+  opacity:0;transform:translateY(4px);transition:opacity .18s ease,transform .18s ease;pointer-events:none;}
+.comic-skeleton{position:absolute;inset:0;background:linear-gradient(100deg,#F1EFE8 30%,#F8F7F3 50%,#F1EFE8 70%);
+  background-size:200% 100%;animation:comicshim 1.2s ease-in-out infinite;}
+@keyframes comicshim{from{background-position:180% 0;}to{background-position:-40% 0;}}
+.comic-missing{text-align:center;color:var(--muted);padding:50px 20px;display:flex;flex-direction:column;align-items:center;gap:8px;}
+.comic-missing p{margin:0;font-size:14px;}
+.comic-missing code{font-size:11.5px;background:var(--surface);border:1px solid var(--hairline);padding:3px 8px;border-radius:5px;}
+
+/* Full-screen overlay */
+.comic-lightbox{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;
+  gap:clamp(8px,2vw,28px);padding:clamp(12px,3vw,40px);animation:lbfade .16s ease-out;}
+@keyframes lbfade{from{opacity:0;}to{opacity:1;}}
+.comic-lb-backdrop{position:absolute;inset:0;background:rgba(16,22,24,0.94);cursor:zoom-out;}
+.comic-lb-img{position:relative;max-width:calc(100vw - 190px);max-height:calc(100vh - 116px);
+  object-fit:contain;display:block;background:#fff;border-radius:4px;user-select:none;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5);}
+.comic-lb-arrow{position:relative;flex-shrink:0;width:54px;height:54px;border-radius:50%;border:none;cursor:pointer;
+  background:rgba(255,255,255,0.12);color:#fff;display:flex;align-items:center;justify-content:center;
+  transition:background .15s ease,transform .15s ease;}
+.comic-lb-arrow:hover:not(:disabled){background:rgba(255,255,255,0.26);transform:scale(1.06);}
+.comic-lb-arrow:disabled{opacity:0.22;cursor:default;}
+.comic-lb-arrow:focus-visible{outline:2px solid #fff;outline-offset:3px;}
+.comic-lb-exit{position:absolute;top:clamp(12px,2.4vw,26px);right:clamp(12px,2.4vw,26px);z-index:2;
+  display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#fff;cursor:pointer;
+  background:rgba(255,255,255,0.12);border:none;border-radius:100px;padding:9px 18px;transition:background .15s ease;}
+.comic-lb-exit:hover{background:rgba(255,255,255,0.26);}
+.comic-lb-exit:focus-visible{outline:2px solid #fff;outline-offset:3px;}
+.comic-lb-counter{position:absolute;bottom:clamp(12px,2.4vw,26px);left:50%;transform:translateX(-50%);
+  font-family:'Space Grotesk',sans-serif;font-size:12.5px;font-weight:600;color:rgba(255,255,255,0.78);
+  background:rgba(255,255,255,0.10);padding:7px 16px;border-radius:100px;white-space:nowrap;}
+
+/* Whole-page overview: the four panels of the current page, side by side */
+.comic-pagegrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-height:var(--stageh);overflow:auto;width:100%;
+  align-content:start;padding:2px;}
+.comic-thumb{border:3px solid var(--ink);border-radius:6px;overflow:hidden;background:#fff;cursor:pointer;padding:0;line-height:0;
+  transition:transform .15s ease,box-shadow .15s ease;}
+.comic-thumb:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(29,43,46,0.16);}
+.comic-thumb.active{outline:3px solid var(--accent-yellow);outline-offset:2px;}
+.comic-thumb:focus-visible{outline:3px solid var(--focus);outline-offset:2px;}
+.comic-thumb img{width:100%;height:auto;display:block;}
+
+.comic-nav-row{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:18px;}
+.comic-dots{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;}
+.comic-dot{width:10px;height:10px;border-radius:50%;background:var(--hairline-strong);border:none;padding:0;cursor:pointer;transition:background .15s ease,transform .15s ease;}
+.comic-dot:hover{transform:scale(1.25);}
+.comic-dot.active{background:var(--ink);transform:scale(1.25);}
+.comic-dot.page-break{margin-left:14px;position:relative;}
+.comic-dot.page-break::before{content:"";position:absolute;left:-8px;top:-1px;width:1px;height:12px;background:var(--hairline-strong);}
+.comic-hint{font-size:11.5px;color:var(--muted);margin-top:14px;text-align:center;}
 .placeholder-note{font-size:11.5px;color:var(--muted);font-style:italic;margin-top:16px;text-align:center;}
+
+/* Caption-card fallback for cases with no artwork yet */
+.comic-placeholder{border:3px solid var(--ink);border-radius:8px;width:100%;max-width:820px;min-height:340px;position:relative;
+  overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;background:#fff;}
+.comic-placeholder-bg{position:absolute;inset:0;background-image:radial-gradient(circle,var(--dot-color,var(--muted)) 1.6px,transparent 1.7px);background-size:16px 16px;opacity:0.28;}
+.comic-placeholder-scene{position:relative;flex:1;display:flex;align-items:center;justify-content:center;min-height:190px;}
+.comic-placeholder-caption{position:relative;background:var(--ink);color:#fff;padding:16px 20px;}
+.comic-caption-label{display:inline-block;background:var(--accent-yellow);color:var(--ink);font-family:'Space Grotesk',sans-serif;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:4px;margin-bottom:8px;}
+.comic-placeholder-caption p{margin:0;font-size:14.5px;line-height:1.55;font-weight:500;}
 
 /* Completion */
 .complete-wrap{text-align:center;padding:30px 10px 10px;}
@@ -1032,5 +1374,16 @@ const CSS = `
   .kv-row{grid-template-columns:1fr;gap:2px;}
   .score-row{grid-template-columns:1fr 90px 32px;}
   .step-card{padding:20px;}
+  .comic-reader{width:100vw;--stageh:66vh;}
+  .comic-stage{padding:8px;border-radius:0;border-left:none;border-right:none;}
+  .comic-nav-row{flex-wrap:wrap;justify-content:center;}
+  .comic-lb-img{max-width:calc(100vw - 24px);max-height:calc(100vh - 168px);}
+  .comic-lb-arrow{position:fixed;bottom:18px;width:48px;height:48px;background:rgba(255,255,255,0.18);}
+  .comic-lb-arrow.prev{left:22px;}
+  .comic-lb-arrow.next{right:22px;}
+  .comic-lb-counter{bottom:34px;}
+  .comic-nav-row .comic-dots{order:3;width:100%;margin-top:10px;}
+  .comic-toolbar{justify-content:center;}
 }
-`;
+  `;
+  
