@@ -1254,6 +1254,7 @@
       "name": "Tesla \u2014 vertical integration + software-defined, AI-driven supply chain",
       "industry": "Automotive",
       "brand_group": "Tesla, Inc. \u2014 deep but SELECTIVE vertical integrator (~80% of supply chain controlled).",
+      "comic": "/comics/FIB-003",
       "nature": "Improvement",
       "scale": "2023: 1.85M produced (+35%), 1.81M delivered (+38%); Q4-2024 record ~495,570 delivered; 11.0 GWh storage Q4-2024.",
       "normal_flow_nodes": [
@@ -1910,6 +1911,7 @@
       "name": "Ryanair \u2014 ultra-low-cost carrier supply chain & digital operations",
       "industry": "Aviation",
       "brand_group": "Ryanair Holdings \u2192 Ryanair DAC, Buzz, Malta Air, Lauda Europe (multi-AOC).",
+      "comic": "/comics/FIB-004",
       "nature": "Improvement",
       "scale": "200.2m (FY25), 208.4m (FY26); FY27 guidance ~216m; target 300m FY34",
       "normal_flow_nodes": [
