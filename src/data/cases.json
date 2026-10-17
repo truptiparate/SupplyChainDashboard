@@ -2522,6 +2522,7 @@
       "name": "Maersk NotPetya Cyberattack (2017) \u2014 global shipping infrastructure wiped",
       "industry": "Logistics",
       "brand_group": "A.P. M\u00f8ller-Maersk \u2014 world's largest container shipping line",
+      "comic": "/comics/FIB-005",
       "nature": "Disruption",
       "scale": "Handles ~20% of global maritime container trade; 130 countries; 600+ offices; 76 container terminals; 45,000 employees affected",
       "normal_flow_nodes": [
@@ -3069,6 +3070,7 @@
       "name": "Toyota \u2014 Great East Japan Earthquake (2011) & the RESCUE/BCP resilience programme",
       "industry": "Automotive",
       "brand_group": "Toyota Motor Corporation \u2014 world's largest or second-largest automaker by volume",
+      "comic": "/comics/FIB-006",
       "nature": "Disruption",
       "scale": "Global output down 78% YoY in April 2011 (Matsuo 2015, citing Toyota data); net income down 77% for fiscal year ending March 2012",
       "normal_flow_nodes": [
