@@ -3739,6 +3739,7 @@
       "name": "KFC UK \u2014 2018 Chicken Shortage: Single-DC logistics failure and crisis recovery",
       "industry": "Food",
       "brand_group": "KFC (Kentucky Fried Chicken) is a global fast-food chain owned by Yum! Brands. The UK is KFC's fifth largest market globally, contributing ~6% of its US$24.5bn global sales (2017). The UK has the largest fast-food chicken market in Europe. KFC UK operates ~900 restaurants, ~95% franchised.",
+      "comic": "/comics/FIB-007",
       "nature": "Disruption",
       "scale": "~900 UK/Ireland restaurants; ~500 fresh-chicken farmers supplying the UK network; UK turnover \u00a3445.7M (2017 pre-crisis).",
       "normal_flow_nodes": [
