@@ -8,6 +8,9 @@ import DATA from "./data/cases.json";
    Data model (cases.json) is unchanged; this file only maps it to the new UX.
    ===================================================================== */
 
+/* "About us" opens the course's Moodle page in a new tab. */
+const MOODLE_URL = "https://moodle.hof-university.de/course/view.php?id=7457";
+
 /* ---------------- Icons (Lucide paths, inline so no extra dependency) ---------------- */
 const ICONS = {
   // one per industry vertical
@@ -108,6 +111,14 @@ function isImprovement(c) {
 }
 function natureLabel(c) {
   return isImprovement(c) ? "Improvement" : "Disruption";
+}
+/* A case "has a comic" when cases.json points it at an artwork folder —
+   the same `comic` field the reader uses, so the card marker and the reader
+   can never disagree. */
+function hasComic(c) {
+  const raw = c.comic;
+  if (typeof raw === "string") return raw.trim().length > 0;
+  return Boolean(raw && raw.dir);
 }
 function narrativeOf(c) {
   return (isImprovement(c) ? c.improvement : c.disruption) || [];
@@ -331,6 +342,35 @@ function NatureBadge({ c }) {
   );
 }
 
+/* Little purple bookmark hanging off the top edge of a card that has a comic:
+   a smiling speech bubble, the word "Comic", and a sparkle that twinkles on hover.
+   The ribbon is clipped into a notched tail; the sparkle sits outside that clip
+   so it can poke over the corner. */
+function ComicBookmark({ tone }) {
+  return (
+    <span className="comic-bookmark" title="This case has a comic" aria-hidden="true">
+      <span
+        className="cb-ribbon"
+        style={{ background: `linear-gradient(160deg, ${tone.bg} 0%, ${tone.deep} 100%)`, color: tone.fg }}
+      >
+        <svg className="cb-face" viewBox="0 0 24 24" width="17" height="17">
+          <path d="M12 3C7 3 3 6.4 3 10.6c0 2.4 1.3 4.5 3.3 5.9L5.6 20.4l4-2.4c.8.2 1.6.3 2.4.3 5 0 9-3.4 9-7.6S17 3 12 3Z"
+                fill="#fff" stroke={tone.fg} strokeOpacity="0.35" strokeWidth="1" />
+          <circle cx="8.9" cy="9.9" r="1.2" fill={tone.fg} />
+          <circle cx="15.1" cy="9.9" r="1.2" fill={tone.fg} />
+          <circle cx="7.2" cy="12.4" r="1.05" fill="#F9A8D4" opacity="0.85" />
+          <circle cx="16.8" cy="12.4" r="1.05" fill="#F9A8D4" opacity="0.85" />
+          <path d="M9.7 12.6c1.3 1.25 3.3 1.25 4.6 0" stroke={tone.fg} strokeWidth="1.4" fill="none" strokeLinecap="round" />
+        </svg>
+        <span className="cb-text">Comic</span>
+      </span>
+      <svg className="cb-sparkle" viewBox="0 0 24 24" width="12" height="12">
+        <path d="M12 1.5 14.4 9.6 22.5 12l-8.1 2.4L12 22.5 9.6 14.4 1.5 12l8.1-2.4Z" fill="#FBD38D" />
+      </svg>
+    </span>
+  );
+}
+
 function Chip({ label, value }) {
   const col = toneColor(ratingTone(value));
   return (
@@ -472,8 +512,14 @@ function IndustryBanner({ c }) {
    ===================================================================== */
 function CaseCard({ c, onOpen }) {
   const count = flatDecisions(c).length;
+  const comic = hasComic(c);
   return (
-    <button className="card" onClick={onOpen} aria-label={`Open case ${c.id}: ${c.name}`}>
+    <button
+      className={`card ${comic ? "has-comic" : ""}`}
+      onClick={onOpen}
+      aria-label={`Open case ${c.id}: ${c.name}${comic ? " (comic available)" : ""}`}
+    >
+      {comic && <ComicBookmark tone={industryStyle(c)} />}
       <div className="card-top">
         <IconCircle c={c} />
         <div className="card-meta">
@@ -1014,7 +1060,7 @@ export default function App() {
           <div className="topbar-right">
             <nav className="topnav">
               <a href="#" onClick={(e) => e.preventDefault()}>Help</a>
-              <a href="#" onClick={(e) => e.preventDefault()}>About us</a>
+              <a href={MOODLE_URL} target="_blank" rel="noopener noreferrer">About us</a>
             </nav>
             <div className="case-count">{DATA.cases.length} cases</div>
           </div>
@@ -1129,7 +1175,7 @@ const CSS = `
 /* Grid */
 .grid{max-width:1280px;margin:0 auto;padding:28px 48px 80px;display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:20px;}
 .empty-note{max-width:1280px;margin:-60px auto 80px;padding:0 48px;color:var(--muted);font-size:13.5px;}
-.card{background:var(--surface);border:1.5px solid var(--hairline);border-radius:14px;padding:18px 20px;cursor:pointer;display:flex;flex-direction:column;gap:14px;text-align:left;color:var(--ink);transition:border-color .15s ease,transform .15s ease,box-shadow .18s ease;box-shadow:0 1px 2px rgba(29,43,46,0.04);}
+.card{position:relative;background:var(--surface);border:1.5px solid var(--hairline);border-radius:14px;padding:18px 20px;cursor:pointer;display:flex;flex-direction:column;gap:14px;text-align:left;color:var(--ink);transition:border-color .15s ease,transform .15s ease,box-shadow .18s ease;box-shadow:0 1px 2px rgba(29,43,46,0.04);}
 .card:hover{border-color:var(--ink);transform:translateY(-3px);box-shadow:0 10px 24px rgba(29,43,46,0.10);}
 .card:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
 .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
@@ -1145,6 +1191,36 @@ const CSS = `
 .badge.disruption{background:var(--disruption-tint);color:#B8452F;}
 .badge.improvement{background:var(--improvement-tint);color:#1F6E63;}
 .decision-count{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--muted);font-weight:500;}
+
+/* Comic bookmark on cards that have a comic.
+   Hangs from the top edge just right of the industry icon, so it never covers
+   the icon or the case ID. Wrapper = position + wiggle; .cb-ribbon = the clipped
+   purple shape; .cb-sparkle sits outside the clip so it can poke over the corner. */
+.comic-bookmark{position:absolute;top:-1.5px;left:86px;z-index:1;display:block;pointer-events:none;
+  transform-origin:50% 0;filter:drop-shadow(0 2px 4px rgba(29,43,46,0.10));}
+.cb-ribbon{display:inline-flex;align-items:center;gap:5px;padding:6px 10px 13px 8px;
+  border-radius:0 0 4px 4px;
+  clip-path:polygon(0 0,100% 0,100% 100%,50% calc(100% - 6px),0 100%);}
+.cb-face{display:block;flex-shrink:0;}
+.cb-text{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.03em;line-height:1;}
+.cb-sparkle{position:absolute;top:-5px;right:-7px;transform-origin:50% 50%;}
+.card.has-comic:hover .comic-bookmark{animation:cbWiggle .7s ease-in-out;}
+.card.has-comic:hover .cb-sparkle{animation:cbTwinkle .9s ease-in-out;}
+@keyframes cbWiggle{
+  0%,100%{transform:rotate(0deg);}
+  20%{transform:rotate(-7deg);}
+  45%{transform:rotate(5deg);}
+  70%{transform:rotate(-3deg);}
+  88%{transform:rotate(1.5deg);}
+}
+@keyframes cbTwinkle{
+  0%,100%{transform:scale(1) rotate(0deg);opacity:1;}
+  40%{transform:scale(1.45) rotate(45deg);opacity:0.85;}
+  70%{transform:scale(0.8) rotate(90deg);opacity:1;}
+}
+@media (prefers-reduced-motion:reduce){
+  .card.has-comic:hover .comic-bookmark,.card.has-comic:hover .cb-sparkle{animation:none;}
+}
 
 /* Detail */
 .detail{max-width:820px;margin:0 auto;padding:40px 48px 60px;}
@@ -1386,4 +1462,3 @@ const CSS = `
   .comic-toolbar{justify-content:center;}
 }
   `;
-  
