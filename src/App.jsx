@@ -1059,8 +1059,20 @@ export default function App() {
           </div>
           <div className="topbar-right">
             <nav className="topnav">
-              <a href="#" onClick={(e) => e.preventDefault()}>Help</a>
-              <a href={MOODLE_URL} target="_blank" rel="noopener noreferrer">About us</a>
+              <span className="help-wrap">
+                <a href="#" onClick={(e) => e.preventDefault()} aria-describedby="help-wip-tip">Help</a>
+                <span className="wip-tip" id="help-wip-tip" role="tooltip">
+                  <span className="wip-emoji" aria-hidden="true">🐣</span>
+                  <strong>Lead time: a little longer!</strong> This hasn't shipped yet. We're working through the backlog, promise.
+                </span>
+              </span>
+              <span className="help-wrap">
+                <a href={MOODLE_URL} target="_blank" rel="noopener noreferrer" aria-describedby="about-hi-tip">About us</a>
+                <span className="wip-tip tip-green" id="about-hi-tip" role="tooltip">
+                  <span className="wip-emoji" aria-hidden="true">👋</span>
+                  <strong>Come say hi on Moodle!</strong>
+                </span>
+              </span>
             </nav>
             <div className="case-count">{DATA.cases.length} cases</div>
           </div>
@@ -1150,6 +1162,37 @@ const CSS = `
 .topnav a{font-size:13.5px;color:var(--ink);text-decoration:none;font-weight:500;padding-bottom:2px;border-bottom:1.5px solid transparent;transition:border-color .15s ease;}
 .topnav a:hover{border-bottom-color:var(--ink);}
 .case-count{font-size:13px;color:var(--muted);}
+
+/* "Still hatching" tooltip on Help. Opens just below the link (the top bar has
+   too little headroom above it), layered over everything on the page. */
+.help-wrap{position:relative;display:inline-flex;}
+.wip-tip{position:absolute;top:calc(100% + 12px);left:50%;z-index:100;
+  width:max-content;max-width:230px;transform:translate(-50%,4px);
+  display:block;text-align:center;font-size:12px;line-height:1.5;color:var(--ink);font-weight:400;
+  background:#FFF9EC;border:1.5px solid #F6DFA6;border-radius:14px;padding:10px 14px 11px;
+  box-shadow:0 10px 24px rgba(29,43,46,0.12);
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .16s ease,transform .16s ease,visibility .16s;}
+.wip-tip::before{content:"";position:absolute;top:-7px;left:50%;width:12px;height:12px;
+  background:#FFF9EC;border-left:1.5px solid #F6DFA6;border-top:1.5px solid #F6DFA6;
+  border-radius:3px 0 0 0;transform:translateX(-50%) rotate(45deg);}
+.wip-tip strong{font-family:'Space Grotesk',sans-serif;font-weight:700;color:#A2720C;}
+/* Green variant for "About us" */
+.wip-tip.tip-green{background:#EEF8F2;border-color:#BFE3CD;}
+.wip-tip.tip-green::before{background:#EEF8F2;border-color:#BFE3CD;}
+.wip-tip.tip-green strong{color:#1F6E63;}
+.wip-emoji{display:block;font-size:20px;line-height:1;margin-bottom:4px;transform-origin:50% 100%;}
+.help-wrap:hover .wip-tip,.help-wrap:focus-within .wip-tip{opacity:1;visibility:visible;transform:translate(-50%,0);}
+.help-wrap:hover .wip-emoji,.help-wrap:focus-within .wip-emoji{animation:wipWobble .8s ease-in-out;}
+@keyframes wipWobble{
+  0%,100%{transform:rotate(0deg);}
+  25%{transform:rotate(-10deg);}
+  55%{transform:rotate(8deg);}
+  80%{transform:rotate(-4deg);}
+}
+@media (prefers-reduced-motion:reduce){
+  .help-wrap:hover .wip-emoji,.help-wrap:focus-within .wip-emoji{animation:none;}
+}
 
 /* Filter bar */
 .filterbar{max-width:1280px;margin:0 auto;padding:0 48px 28px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;}
@@ -1447,6 +1490,9 @@ const CSS = `
 @media (max-width:640px){
   .topbar,.filterbar,.grid,.detail,.legend,.detail-nav,.empty-note{padding-left:16px;padding-right:16px;}
   .topbar{flex-direction:column;}
+  .wip-tip{left:-6px;transform:translateY(4px);}
+  .help-wrap:hover .wip-tip,.help-wrap:focus-within .wip-tip{transform:translateY(0);}
+  .wip-tip::before{left:18px;}
   .kv-row{grid-template-columns:1fr;gap:2px;}
   .score-row{grid-template-columns:1fr 90px 32px;}
   .step-card{padding:20px;}
