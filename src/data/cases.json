@@ -5,7 +5,6 @@
       "name": "Philips Albuquerque RF-Chip Fire (2000) \u2014 Nokia vs. Ericsson",
       "industry": "Electronics",
       "brand_group": "Supplier: Royal Philips Electronics (Fab 22). Customers: Nokia & Ericsson.",
-      "comic": "/comics/FIB-001",
       "nature": "Disruption",
       "scale": "Plant served ~30 customers; Nokia & Ericsson together ~40% of output. In 2000 Nokia was #1 handset maker (~30.6% share), Ericsson #3 (~9.7%).",
       "normal_flow_nodes": [
@@ -585,14 +584,18 @@
         }
       ],
       "sources": [],
-      "_sheet_name": "FIB-001"
+      "_sheet_name": "FIB-001",
+      "comic": {
+        "dir": "/comics/FIB-001",
+        "count": 12,
+        "ext": "png"
+      }
     },
     {
       "id": "FIB-002",
       "name": "Zara (Inditex) \u2014 item-level RFID + AI demand/allocation across the full digital stack",
       "industry": "Retail",
       "brand_group": "Zara is the flagship BRAND; Inditex (Industria de Dise\u00f1o Textil, S.A.) is the listed PARENT GROUP.",
-      "comic": "/comics/FIB-002",
       "nature": "Improvement",
       "scale": "Group sales \u20ac38.6bn (+7.5%); 5,563 stores; Zara >70% of group sales; ~840M+ garments RFID-tagged/yr.",
       "normal_flow_nodes": [
@@ -1247,14 +1250,18 @@
         }
       ],
       "sources": [],
-      "_sheet_name": "FIB-002"
+      "_sheet_name": "FIB-002",
+      "comic": {
+        "dir": "/comics/FIB-002",
+        "count": 12,
+        "ext": "png"
+      }
     },
     {
       "id": "FIB-003",
       "name": "Tesla \u2014 vertical integration + software-defined, AI-driven supply chain",
       "industry": "Automotive",
       "brand_group": "Tesla, Inc. \u2014 deep but SELECTIVE vertical integrator (~80% of supply chain controlled).",
-      "comic": "/comics/FIB-003",
       "nature": "Improvement",
       "scale": "2023: 1.85M produced (+35%), 1.81M delivered (+38%); Q4-2024 record ~495,570 delivered; 11.0 GWh storage Q4-2024.",
       "normal_flow_nodes": [
@@ -1904,14 +1911,18 @@
         }
       ],
       "sources": [],
-      "_sheet_name": "FIB-003"
+      "_sheet_name": "FIB-003",
+      "comic": {
+        "dir": "/comics/FIB-003",
+        "count": 12,
+        "ext": "png"
+      }
     },
     {
       "id": "FIB-004",
       "name": "Ryanair \u2014 ultra-low-cost carrier supply chain & digital operations",
       "industry": "Aviation",
       "brand_group": "Ryanair Holdings \u2192 Ryanair DAC, Buzz, Malta Air, Lauda Europe (multi-AOC).",
-      "comic": "/comics/FIB-004",
       "nature": "Improvement",
       "scale": "200.2m (FY25), 208.4m (FY26); FY27 guidance ~216m; target 300m FY34",
       "normal_flow_nodes": [
@@ -2515,14 +2526,18 @@
         }
       ],
       "sources": [],
-      "_sheet_name": "FIB-004"
+      "_sheet_name": "FIB-004",
+      "comic": {
+        "dir": "/comics/FIB-004",
+        "count": 12,
+        "ext": "png"
+      }
     },
     {
       "id": "FIB-005",
       "name": "Maersk NotPetya Cyberattack (2017) \u2014 global shipping infrastructure wiped",
       "industry": "Logistics",
       "brand_group": "A.P. M\u00f8ller-Maersk \u2014 world's largest container shipping line",
-      "comic": "/comics/FIB-005",
       "nature": "Disruption",
       "scale": "Handles ~20% of global maritime container trade; 130 countries; 600+ offices; 76 container terminals; 45,000 employees affected",
       "normal_flow_nodes": [
@@ -3063,14 +3078,18 @@
         }
       ],
       "sources": [],
-      "_sheet_name": "FIB-005"
+      "_sheet_name": "FIB-005",
+      "comic": {
+        "dir": "/comics/FIB-005",
+        "count": 12,
+        "ext": "png"
+      }
     },
     {
       "id": "FIB-006",
       "name": "Toyota \u2014 Great East Japan Earthquake (2011) & the RESCUE/BCP resilience programme",
       "industry": "Automotive",
       "brand_group": "Toyota Motor Corporation \u2014 world's largest or second-largest automaker by volume",
-      "comic": "/comics/FIB-006",
       "nature": "Disruption",
       "scale": "Global output down 78% YoY in April 2011 (Matsuo 2015, citing Toyota data); net income down 77% for fiscal year ending March 2012",
       "normal_flow_nodes": [
@@ -3732,14 +3751,18 @@
         }
       ],
       "sources": [],
-      "_sheet_name": "FIB-006"
+      "_sheet_name": "FIB-006",
+      "comic": {
+        "dir": "/comics/FIB-006",
+        "count": 12,
+        "ext": "png"
+      }
     },
     {
       "id": "FIB-007",
       "name": "KFC UK \u2014 2018 Chicken Shortage: Single-DC logistics failure and crisis recovery",
       "industry": "Food",
       "brand_group": "KFC (Kentucky Fried Chicken) is a global fast-food chain owned by Yum! Brands. The UK is KFC's fifth largest market globally, contributing ~6% of its US$24.5bn global sales (2017). The UK has the largest fast-food chicken market in Europe. KFC UK operates ~900 restaurants, ~95% franchised.",
-      "comic": "/comics/FIB-007",
       "nature": "Disruption",
       "scale": "~900 UK/Ireland restaurants; ~500 fresh-chicken farmers supplying the UK network; UK turnover \u00a3445.7M (2017 pre-crisis).",
       "normal_flow_nodes": [
@@ -4410,7 +4433,12 @@
         }
       ],
       "sources": [],
-      "_sheet_name": "FIB-007"
+      "_sheet_name": "FIB-007",
+      "comic": {
+        "dir": "/comics/FIB-007",
+        "count": 12,
+        "ext": "png"
+      }
     },
     {
       "id": "FIB-008",

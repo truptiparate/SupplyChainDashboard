@@ -17,10 +17,40 @@ Re-run this script any time the source Excel is updated:
     python3 extract.py <path_to_xlsx> <output_json_path>
 """
 import sys
+import os
+import re
 import json
 import openpyxl
 
 SKIP_SHEET_SUBSTRINGS = ("directory",)
+
+# Comic artwork lives in public/comics/<case id>/<panel number>.<ext> — e.g.
+# public/comics/FIB-001/1.png .. 12.png. A case gets a comic automatically
+# just by having a folder named after its id; nothing needs to be hand-edited
+# into cases.json (and re-running extraction won't wipe it out, since it's
+# re-derived from disk every time instead of being extraction output that
+# gets overwritten).
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+COMICS_DIR = os.path.join(SCRIPT_DIR, "..", "public", "comics")
+PANEL_RE = re.compile(r"^(\d+)\.(png|jpe?g)$", re.IGNORECASE)
+
+
+def find_comic(case_id):
+    if not case_id:
+        return None
+    comic_dir = os.path.join(COMICS_DIR, str(case_id))
+    if not os.path.isdir(comic_dir):
+        return None
+    panels = {}
+    for fname in os.listdir(comic_dir):
+        m = PANEL_RE.match(fname)
+        if m:
+            panels[int(m.group(1))] = m.group(2).lower()
+    if not panels:
+        return None
+    count = max(panels)
+    ext = panels[count]
+    return {"dir": f"/comics/{case_id}", "count": count, "ext": ext}
 
 
 def cell(ws, row, col):
@@ -440,6 +470,9 @@ def main():
             case = extract_case(ws)
             if case:
                 case["_sheet_name"] = name
+                comic = find_comic(case.get("id"))
+                if comic:
+                    case["comic"] = comic
                 cases.append(case)
         except Exception as e:
             errors.append({"sheet": name, "error": str(e)})
