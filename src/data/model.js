@@ -73,3 +73,10 @@ export const CASES = DATA.cases.map((c) => ({ ...c, scores: scoresByDecisionNo(c
 export function caseById(id) {
   return CASES.find((c) => c.id === id);
 }
+
+export function isImprovement(c) {
+  return String(c.nature || "").toLowerCase().startsWith("improve");
+}
+export function natureLabel(c) {
+  return isImprovement(c) ? "Improvement" : "Disruption";
+}
