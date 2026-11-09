@@ -1,7 +1,8 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
-import { CASES, overallKey } from "./data/model.js";
+import { CASES, overallKey, isImprovement, natureLabel } from "./data/model.js";
 import { primaryIndustry, styleForText, industryStyle } from "./data/industries.js";
 import Icon from "./components/Icon.jsx";
+import SeaChart from "./components/SeaChart.jsx";
 
 /* =====================================================================
    Future Industry in a Box — Case Library
@@ -16,20 +17,6 @@ import Icon from "./components/Icon.jsx";
 const MOODLE_URL = "https://moodle.hof-university.de/course/view.php?id=7457";
 
 /* ---------------- Data helpers ---------------- */
-function isImprovement(c) {
-  return String(c.nature || "").toLowerCase().startsWith("improve");
-}
-function natureLabel(c) {
-  return isImprovement(c) ? "Improvement" : "Disruption";
-}
-/* A case "has a comic" when cases.json points it at an artwork folder —
-   the same `comic` field the reader uses, so the card marker and the reader
-   can never disagree. */
-function hasComic(c) {
-  const raw = c.comic;
-  if (typeof raw === "string") return raw.trim().length > 0;
-  return Boolean(raw && raw.dir);
-}
 function narrativeOf(c) {
   return (isImprovement(c) ? c.improvement : c.disruption) || [];
 }
@@ -249,35 +236,6 @@ function NatureBadge({ c }) {
   );
 }
 
-/* Little purple bookmark hanging off the top edge of a card that has a comic:
-   a smiling speech bubble, the word "Comic", and a sparkle that twinkles on hover.
-   The ribbon is clipped into a notched tail; the sparkle sits outside that clip
-   so it can poke over the corner. */
-function ComicBookmark({ tone }) {
-  return (
-    <span className="comic-bookmark" title="This case has a comic" aria-hidden="true">
-      <span
-        className="cb-ribbon"
-        style={{ background: `linear-gradient(160deg, ${tone.bg} 0%, ${tone.deep} 100%)`, color: tone.fg }}
-      >
-        <svg className="cb-face" viewBox="0 0 24 24" width="17" height="17">
-          <path d="M12 3C7 3 3 6.4 3 10.6c0 2.4 1.3 4.5 3.3 5.9L5.6 20.4l4-2.4c.8.2 1.6.3 2.4.3 5 0 9-3.4 9-7.6S17 3 12 3Z"
-                fill="#fff" stroke={tone.fg} strokeOpacity="0.35" strokeWidth="1" />
-          <circle cx="8.9" cy="9.9" r="1.2" fill={tone.fg} />
-          <circle cx="15.1" cy="9.9" r="1.2" fill={tone.fg} />
-          <circle cx="7.2" cy="12.4" r="1.05" fill="#F9A8D4" opacity="0.85" />
-          <circle cx="16.8" cy="12.4" r="1.05" fill="#F9A8D4" opacity="0.85" />
-          <path d="M9.7 12.6c1.3 1.25 3.3 1.25 4.6 0" stroke={tone.fg} strokeWidth="1.4" fill="none" strokeLinecap="round" />
-        </svg>
-        <span className="cb-text">Comic</span>
-      </span>
-      <svg className="cb-sparkle" viewBox="0 0 24 24" width="12" height="12">
-        <path d="M12 1.5 14.4 9.6 22.5 12l-8.1 2.4L12 22.5 9.6 14.4 1.5 12l8.1-2.4Z" fill="#FBD38D" />
-      </svg>
-    </span>
-  );
-}
-
 function Chip({ label, value }) {
   const col = toneColor(ratingTone(value));
   return (
@@ -417,39 +375,6 @@ function IndustryBanner({ c }) {
 /* =====================================================================
    Grid card
    ===================================================================== */
-function CaseCard({ c, onOpen }) {
-  const count = flatDecisions(c).length;
-  const comic = hasComic(c);
-  return (
-    <button
-      className={`card ${comic ? "has-comic" : ""}`}
-      onClick={onOpen}
-      aria-label={`Open case ${c.id}: ${c.name}${comic ? " (comic available)" : ""}`}
-    >
-      {comic && <ComicBookmark tone={industryStyle(c)} />}
-      <div className="card-top">
-        <IconCircle c={c} />
-        <div className="card-meta">
-          <div className="case-id">{c.id}</div>
-          <div className="industry-tag">{primaryIndustry(c)}</div>
-        </div>
-      </div>
-      <div className="card-body">
-        <div className="case-name">{c.name}</div>
-        <div className="case-desc">{hookOf(c)}</div>
-      </div>
-      <div className="card-footer">
-        <NatureBadge c={c} />
-        {count > 0 && (
-          <div className="decision-count">
-            <Icon name="layers" size={13} /> {count} decision{count === 1 ? "" : "s"}
-          </div>
-        )}
-      </div>
-    </button>
-  );
-}
-
 /* =====================================================================
    Case detail: chooser → guided / comic → complete
    ===================================================================== */
@@ -952,6 +877,7 @@ export default function App() {
   };
 
   const openCase = (id) => { setSelected(id); window.scrollTo(0, 0); };
+  const visibleIds = useMemo(() => new Set(filtered.map((c) => c.id)), [filtered]);
   const backToGrid = () => { setSelected(null); window.scrollTo(0, 0); };
 
   return (
@@ -1028,10 +954,8 @@ export default function App() {
         />
       ) : (
         <>
-          <div className="grid">
-            {filtered.map((c) => <CaseCard key={c.id} c={c} onOpen={() => openCase(c.id)} />)}
-          </div>
-          {filtered.length === 0 && <p className="empty-note">No cases match that search.</p>}
+          <SeaChart cases={CASES} visibleIds={visibleIds} onOpen={openCase} />
+          {filtered.length === 0 && <p className="empty-note">No cases match that search — every port is still on the chart, just dimmed.</p>}
         </>
       )}
     </div>
