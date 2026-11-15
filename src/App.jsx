@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
-import { CASES, overallKey, isImprovement, natureLabel } from "./data/model.js";
-import { primaryIndustry, styleForText, industryStyle } from "./data/industries.js";
+import { CASES, TIERS, overallKey, isImprovement, natureLabel } from "./data/model.js";
+import { primaryIndustry, industryStyle } from "./data/industries.js";
 import Icon from "./components/Icon.jsx";
 import SeaChart from "./components/SeaChart.jsx";
 import Logbook from "./components/Logbook.jsx";
@@ -843,16 +843,9 @@ function CaseDetail({ c, onBack, onPrev, onNext, note, onNote }) {
 export default function App() {
   const [selected, setSelected] = useState(null);
   const [query, setQuery] = useState("");
-  const [industry, setIndustry] = useState(null);
-  const [nature, setNature] = useState(null); // null | "Disruption" | "Improvement"
+  const [tierFilter, setTierFilter] = useState(null); // null | 0-3
   const [predictionNotes, setPredictionNotes] = useState({}); // keyed by case id, kept across modes/cases
   const [view, setView] = useState("chart"); // "chart" | "logbook"
-
-  const industries = useMemo(() => {
-    const set = new Set();
-    CASES.forEach((c) => set.add(primaryIndustry(c)));
-    return Array.from(set).sort();
-  }, []);
 
   const filtered = useMemo(() => {
     const q = query.toLowerCase();
@@ -863,11 +856,10 @@ export default function App() {
         String(c.industry || "").toLowerCase().includes(q) ||
         String(c.brand_group || "").toLowerCase().includes(q) ||
         c.id.toLowerCase().includes(q);
-      const matchesIndustry = !industry || primaryIndustry(c) === industry;
-      const matchesNature = !nature || natureLabel(c) === nature;
-      return matchesQuery && matchesIndustry && matchesNature;
+      const matchesTier = tierFilter == null || c.tier === tierFilter;
+      return matchesQuery && matchesTier;
     });
-  }, [query, industry, nature]);
+  }, [query, tierFilter]);
 
   const selectedCase = selected ? CASES.find((c) => c.id === selected) : null;
 
@@ -930,20 +922,20 @@ export default function App() {
                 <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search cases…" />
               </div>
               <div className="filter-divider" />
-              <button className={`pill ${!industry ? "active" : ""}`} onClick={() => setIndustry(null)}>All industries</button>
-              {industries.map((ind) => {
-                const s = styleForText(ind) || FALLBACK_STYLE;
-                return (
-                  <button key={ind} className={`pill ${industry === ind ? "active" : ""}`} onClick={() => setIndustry(ind)}>
-                    <span className="pill-dot" style={{ background: s.fg }} />
-                    {ind}
-                  </button>
-                );
-              })}
-              <div className="filter-divider" />
-              <button className={`pill ${!nature ? "active" : ""}`} onClick={() => setNature(null)}>All types</button>
-              <button className={`pill nature-disruption ${nature === "Disruption" ? "active" : ""}`} onClick={() => setNature("Disruption")}>Disruption</button>
-              <button className={`pill nature-improvement ${nature === "Improvement" ? "active" : ""}`} onClick={() => setNature("Improvement")}>Improvement</button>
+              <button className={`pill ${tierFilter == null ? "active" : ""}`} onClick={() => setTierFilter(null)}>All levels</button>
+              {TIERS.map((t, i) => (
+                <button
+                  key={t.name}
+                  className={`pill ${tierFilter === i ? "active" : ""}`}
+                  style={tierFilter === i ? { background: t.hex, borderColor: t.hex, color: "#0E2A3B" } : undefined}
+                  onClick={() => setTierFilter(tierFilter === i ? null : i)}
+                >
+                  <span className="pill-sig" style={{ color: tierFilter === i ? "#0E2A3B" : t.hex }}>
+                    {[0, 1, 2, 3].map((b) => <i key={b} className={b <= i ? "on" : ""} style={{ height: 3 + b * 3 }} />)}
+                  </span>
+                  {t.name}
+                </button>
+              ))}
             </div>
             <div className="legend">
               <div className="legend-item"><span className="legend-swatch disruption" />Disruption — something broke, a response was needed</div>
@@ -1076,10 +1068,10 @@ const CSS = `
 .pill{border:1.5px solid #2F6683;background:transparent;color:#D7E7EF;padding:7px 14px;border-radius:100px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:border-color .15s ease,color .15s ease,background .15s ease,transform .1s ease;}
 .pill:hover{border-color:#F2F8FA;color:#F2F8FA;transform:translateY(-1px);}
 .pill.active{background:#F2F8FA;color:#0E2A3B;border-color:#F2F8FA;}
-.pill.active.nature-disruption{background:var(--disruption);border-color:var(--disruption);color:#fff;}
-.pill.active.nature-improvement{background:var(--improvement);border-color:var(--improvement);color:#fff;}
 .pill:focus-visible{outline:2px solid #FFC83D;outline-offset:2px;}
-.pill-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.pill-sig{display:inline-flex;align-items:flex-end;gap:1.5px;height:9px;}
+.pill-sig i{display:block;width:2.5px;border-radius:.8px;background:currentColor;opacity:.3;}
+.pill-sig i.on{opacity:1;}
 .filter-divider{width:1px;height:20px;background:#2F6683;margin:0 4px;}
 .legend{max-width:1280px;margin:0 auto;padding:0 48px 16px;display:flex;flex-wrap:wrap;gap:20px;font-size:12.5px;color:#9DC0D4;background:#123446;}
 .legend-item{display:flex;align-items:center;gap:7px;}
