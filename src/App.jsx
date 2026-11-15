@@ -3,6 +3,7 @@ import { CASES, overallKey, isImprovement, natureLabel } from "./data/model.js";
 import { primaryIndustry, styleForText, industryStyle } from "./data/industries.js";
 import Icon from "./components/Icon.jsx";
 import SeaChart from "./components/SeaChart.jsx";
+import Logbook from "./components/Logbook.jsx";
 
 /* =====================================================================
    Future Industry in a Box — Case Library
@@ -845,6 +846,7 @@ export default function App() {
   const [industry, setIndustry] = useState(null);
   const [nature, setNature] = useState(null); // null | "Disruption" | "Improvement"
   const [predictionNotes, setPredictionNotes] = useState({}); // keyed by case id, kept across modes/cases
+  const [view, setView] = useState("chart"); // "chart" | "logbook"
 
   const industries = useMemo(() => {
     const set = new Set();
@@ -907,6 +909,15 @@ export default function App() {
                 </span>
               </span>
             </nav>
+            {!selectedCase && (
+              <button
+                className="view-toggle"
+                onClick={() => setView((v) => (v === "chart" ? "logbook" : "chart"))}
+                aria-pressed={view === "logbook"}
+              >
+                {view === "chart" ? "Logbook" : "Sea chart"}
+              </button>
+            )}
             <div className="case-count">{CASES.length} cases</div>
           </div>
         </div>
@@ -954,8 +965,16 @@ export default function App() {
         />
       ) : (
         <>
-          <SeaChart cases={CASES} visibleIds={visibleIds} onOpen={openCase} />
-          {filtered.length === 0 && <p className="empty-note">No cases match that search — every port is still on the chart, just dimmed.</p>}
+          {view === "chart" ? (
+            <SeaChart cases={CASES} visibleIds={visibleIds} onOpen={openCase} />
+          ) : (
+            <Logbook cases={CASES} visibleIds={visibleIds} onOpen={openCase} />
+          )}
+          {filtered.length === 0 && (
+            <p className="empty-note">
+              No cases match that search — {view === "chart" ? "every port is still on the chart" : "every case is still listed below"}, just dimmed.
+            </p>
+          )}
         </>
       )}
     </div>
@@ -993,6 +1012,26 @@ const CSS = `
 .topnav a{font-size:13.5px;color:var(--ink);text-decoration:none;font-weight:500;padding-bottom:2px;border-bottom:1.5px solid transparent;transition:border-color .15s ease;}
 .topnav a:hover{border-bottom-color:var(--ink);}
 .case-count{font-size:13px;color:var(--muted);}
+.view-toggle{font-size:13px;font-weight:600;color:var(--ink);background:var(--surface);border:1.5px solid var(--hairline-strong);border-radius:100px;padding:6px 14px;cursor:pointer;transition:border-color .15s ease,background .15s ease;}
+.view-toggle:hover{border-color:var(--ink);}
+.view-toggle[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink);}
+
+/* Logbook */
+.lb-wrap{max-width:1280px;margin:0 auto;padding:28px 48px 80px;display:flex;flex-direction:column;gap:32px;}
+.lb-tier-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.lb-tier-head h2{font-size:18px;}
+.lb-count{font-size:13px;color:var(--muted);margin-left:2px;}
+.lb-sig{display:inline-flex;align-items:flex-end;gap:1.5px;height:9px;}
+.lb-sig i{display:block;width:3px;border-radius:.8px;background:currentColor;opacity:.28;}
+.lb-sig i.on{opacity:1;}
+.lb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;}
+.lb-card{background:var(--surface);border:1.5px solid var(--hairline);border-radius:14px;padding:14px 16px;text-align:left;display:flex;flex-direction:column;gap:8px;cursor:pointer;transition:transform .15s ease,border-color .15s ease;color:var(--ink);}
+.lb-card:hover{transform:translateY(-2px);border-color:var(--ink);}
+.lb-card.dim{opacity:.35;}
+.lb-top{display:flex;justify-content:space-between;gap:10px;font-size:12px;color:var(--muted);}
+.lb-top .lb-disrupt{color:#B8452F;font-weight:600;}
+.lb-top .lb-improve{color:#1F6E63;font-weight:600;}
+.lb-card b{font-family:'Space Grotesk',sans-serif;font-size:14.5px;line-height:1.35;font-weight:600;}
 
 /* "Still hatching" tooltip on Help. Opens just below the link (the top bar has
    too little headroom above it), layered over everything on the page. */
