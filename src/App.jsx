@@ -842,24 +842,13 @@ function CaseDetail({ c, onBack, onPrev, onNext, note, onNote }) {
    ===================================================================== */
 export default function App() {
   const [selected, setSelected] = useState(null);
-  const [query, setQuery] = useState("");
   const [tierFilter, setTierFilter] = useState(null); // null | 0-3
   const [predictionNotes, setPredictionNotes] = useState({}); // keyed by case id, kept across modes/cases
   const [view, setView] = useState("chart"); // "chart" | "logbook"
 
   const filtered = useMemo(() => {
-    const q = query.toLowerCase();
-    return CASES.filter((c) => {
-      const matchesQuery =
-        !q ||
-        c.name.toLowerCase().includes(q) ||
-        String(c.industry || "").toLowerCase().includes(q) ||
-        String(c.brand_group || "").toLowerCase().includes(q) ||
-        c.id.toLowerCase().includes(q);
-      const matchesTier = tierFilter == null || c.tier === tierFilter;
-      return matchesQuery && matchesTier;
-    });
-  }, [query, tierFilter]);
+    return tierFilter == null ? CASES : CASES.filter((c) => c.tier === tierFilter);
+  }, [tierFilter]);
 
   const selectedCase = selected ? CASES.find((c) => c.id === selected) : null;
 
@@ -917,11 +906,7 @@ export default function App() {
         {!selectedCase && (
           <>
             <div className="filterbar">
-              <div className="search-field">
-                <Icon name="search" size={15} />
-                <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search cases…" />
-              </div>
-              <div className="filter-divider" />
+              <span className="filterbar-label">Difficulty</span>
               <button className={`pill ${tierFilter == null ? "active" : ""}`} onClick={() => setTierFilter(null)}>All levels</button>
               {TIERS.map((t, i) => (
                 <button
@@ -936,10 +921,6 @@ export default function App() {
                   {t.name}
                 </button>
               ))}
-            </div>
-            <div className="legend">
-              <div className="legend-item"><span className="legend-swatch disruption" />Disruption — something broke, a response was needed</div>
-              <div className="legend-item"><span className="legend-swatch improvement" />Improvement — a proactive change was made</div>
             </div>
           </>
         )}
@@ -961,11 +942,6 @@ export default function App() {
             <SeaChart cases={CASES} visibleIds={visibleIds} onOpen={openCase} />
           ) : (
             <Logbook cases={CASES} visibleIds={visibleIds} onOpen={openCase} />
-          )}
-          {filtered.length === 0 && (
-            <p className="empty-note">
-              No cases match that search — {view === "chart" ? "every port is still on the chart" : "every case is still listed below"}, just dimmed.
-            </p>
           )}
         </>
       )}
@@ -1059,12 +1035,7 @@ const CSS = `
 
 /* Filter bar — same navy band as the top bar, one shade darker (matches the
    prototype's hud/legend split: a flat deck under the gradient above it). */
-.filterbar{max-width:1280px;margin:0 auto;padding:12px 48px 18px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:#123446;border-top:1px solid #1F4B63;}
-.search-field{position:relative;flex:1;min-width:220px;max-width:340px;}
-.search-field input{width:100%;border:none;border-bottom:1.5px solid #2F6683;background:transparent;padding:8px 4px 8px 26px;font-size:14px;font-family:'Inter',sans-serif;color:#F2F8FA;outline:none;transition:border-color .15s ease;}
-.search-field input:focus{border-bottom-color:#FFC83D;}
-.search-field input::placeholder{color:#6F8CA0;}
-.search-field svg{position:absolute;left:2px;top:9px;stroke:#9DC0D4;}
+.filterbar{max-width:1280px;margin:0 auto;padding:14px 48px 18px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:#123446;border-top:1px solid #1F4B63;}
 .pill{border:1.5px solid #2F6683;background:transparent;color:#D7E7EF;padding:7px 14px;border-radius:100px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:border-color .15s ease,color .15s ease,background .15s ease,transform .1s ease;}
 .pill:hover{border-color:#F2F8FA;color:#F2F8FA;transform:translateY(-1px);}
 .pill.active{background:#F2F8FA;color:#0E2A3B;border-color:#F2F8FA;}
@@ -1072,16 +1043,10 @@ const CSS = `
 .pill-sig{display:inline-flex;align-items:flex-end;gap:1.5px;height:9px;}
 .pill-sig i{display:block;width:2.5px;border-radius:.8px;background:currentColor;opacity:.3;}
 .pill-sig i.on{opacity:1;}
-.filter-divider{width:1px;height:20px;background:#2F6683;margin:0 4px;}
-.legend{max-width:1280px;margin:0 auto;padding:0 48px 16px;display:flex;flex-wrap:wrap;gap:20px;font-size:12.5px;color:#9DC0D4;background:#123446;}
-.legend-item{display:flex;align-items:center;gap:7px;}
-.legend-swatch{width:10px;height:10px;border-radius:3px;}
-.legend-swatch.disruption{background:var(--disruption);}
-.legend-swatch.improvement{background:var(--improvement);}
+.filterbar-label{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9DC0D4;margin-right:4px;}
 
 /* Grid */
 .grid{max-width:1280px;margin:0 auto;padding:28px 48px 80px;display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:20px;}
-.empty-note{max-width:1280px;margin:-60px auto 80px;padding:0 48px;color:var(--muted);font-size:13.5px;}
 .card{position:relative;background:var(--surface);border:1.5px solid var(--hairline);border-radius:14px;padding:18px 20px;cursor:pointer;display:flex;flex-direction:column;gap:14px;text-align:left;color:var(--ink);transition:border-color .15s ease,transform .15s ease,box-shadow .18s ease;box-shadow:0 1px 2px rgba(29,43,46,0.04);}
 .card:hover{border-color:var(--ink);transform:translateY(-3px);box-shadow:0 10px 24px rgba(29,43,46,0.10);}
 .card:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
@@ -1352,7 +1317,7 @@ const CSS = `
 .nav-btn.next{margin-left:auto;}
 
 @media (max-width:640px){
-  .topbar,.filterbar,.grid,.detail,.legend,.detail-nav,.empty-note{padding-left:16px;padding-right:16px;}
+  .topbar,.filterbar,.grid,.detail,.detail-nav{padding-left:16px;padding-right:16px;}
   .topbar{flex-direction:column;}
   .wip-tip{left:-6px;transform:translateY(4px);}
   .help-wrap:hover .wip-tip,.help-wrap:focus-within .wip-tip{transform:translateY(0);}
