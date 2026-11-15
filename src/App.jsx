@@ -3,6 +3,7 @@ import { CASES, overallKey, isImprovement, natureLabel } from "./data/model.js";
 import { primaryIndustry, styleForText, industryStyle } from "./data/industries.js";
 import Icon from "./components/Icon.jsx";
 import SeaChart from "./components/SeaChart.jsx";
+import Logbook from "./components/Logbook.jsx";
 
 /* =====================================================================
    Future Industry in a Box — Case Library
@@ -845,6 +846,7 @@ export default function App() {
   const [industry, setIndustry] = useState(null);
   const [nature, setNature] = useState(null); // null | "Disruption" | "Improvement"
   const [predictionNotes, setPredictionNotes] = useState({}); // keyed by case id, kept across modes/cases
+  const [view, setView] = useState("chart"); // "chart" | "logbook"
 
   const industries = useMemo(() => {
     const set = new Set();
@@ -907,6 +909,15 @@ export default function App() {
                 </span>
               </span>
             </nav>
+            {!selectedCase && (
+              <button
+                className="view-toggle"
+                onClick={() => setView((v) => (v === "chart" ? "logbook" : "chart"))}
+                aria-pressed={view === "logbook"}
+              >
+                {view === "chart" ? "Logbook" : "Sea chart"}
+              </button>
+            )}
             <div className="case-count">{CASES.length} cases</div>
           </div>
         </div>
@@ -954,8 +965,16 @@ export default function App() {
         />
       ) : (
         <>
-          <SeaChart cases={CASES} visibleIds={visibleIds} onOpen={openCase} />
-          {filtered.length === 0 && <p className="empty-note">No cases match that search — every port is still on the chart, just dimmed.</p>}
+          {view === "chart" ? (
+            <SeaChart cases={CASES} visibleIds={visibleIds} onOpen={openCase} />
+          ) : (
+            <Logbook cases={CASES} visibleIds={visibleIds} onOpen={openCase} />
+          )}
+          {filtered.length === 0 && (
+            <p className="empty-note">
+              No cases match that search — {view === "chart" ? "every port is still on the chart" : "every case is still listed below"}, just dimmed.
+            </p>
+          )}
         </>
       )}
     </div>
@@ -966,7 +985,7 @@ export default function App() {
    Styles (ported from the colorful mockup)
    ===================================================================== */
 const CSS = `
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@500;700&display=swap');
 
 .fib-app{
   --canvas:#F8F7F3;--surface:#FFFFFF;--ink:#1D2B2E;--muted:#5C6D70;
@@ -982,17 +1001,38 @@ const CSS = `
 .fib-app button{font-family:inherit;}
 .fib-app .muted{color:var(--muted);}
 
-/* Top bar */
-.topbar-wrap{background:linear-gradient(120deg,#FDEFE3 0%,#F3E8FF 35%,#E0F2FE 70%,#E0F7EF 100%);border-bottom:1px solid var(--hairline);}
+/* Top bar — dark navy/nautical, matching the sea chart below it rather than
+   the light canvas palette used everywhere else in the app. */
+.topbar-wrap{background:linear-gradient(165deg,#0E2A3B 0%,#173C52 100%);}
 .topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:36px 48px 28px;max-width:1280px;margin:0 auto;}
 .brand-block{display:flex;flex-direction:column;gap:4px;}
-.brand{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.01em;}
-.tagline{font-size:13px;color:var(--muted);}
+.brand{font-family:'Bricolage Grotesque','Space Grotesk',sans-serif;font-size:22px;font-weight:800;letter-spacing:-0.01em;color:#F2F8FA;}
+.tagline{font-size:13px;color:#9DC0D4;}
 .topbar-right{display:flex;align-items:center;gap:22px;}
 .topnav{display:flex;align-items:center;gap:18px;}
-.topnav a{font-size:13.5px;color:var(--ink);text-decoration:none;font-weight:500;padding-bottom:2px;border-bottom:1.5px solid transparent;transition:border-color .15s ease;}
-.topnav a:hover{border-bottom-color:var(--ink);}
-.case-count{font-size:13px;color:var(--muted);}
+.topnav a{font-size:13.5px;color:#E2F0F7;text-decoration:none;font-weight:500;padding-bottom:2px;border-bottom:1.5px solid transparent;transition:border-color .15s ease;}
+.topnav a:hover{border-bottom-color:#E2F0F7;}
+.case-count{font-size:13px;color:#9DC0D4;}
+.view-toggle{font-size:13px;font-weight:600;color:#E2F0F7;background:#173C52;border:1.5px solid #2F6683;border-radius:100px;padding:6px 14px;cursor:pointer;transition:border-color .15s ease,background .15s ease,color .15s ease;}
+.view-toggle:hover{border-color:#F2F8FA;color:#F2F8FA;}
+.view-toggle[aria-pressed="true"]{background:#FFC83D;color:#0E2A3B;border-color:#FFC83D;}
+
+/* Logbook */
+.lb-wrap{max-width:1280px;margin:0 auto;padding:28px 48px 80px;display:flex;flex-direction:column;gap:32px;}
+.lb-tier-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.lb-tier-head h2{font-size:18px;}
+.lb-count{font-size:13px;color:var(--muted);margin-left:2px;}
+.lb-sig{display:inline-flex;align-items:flex-end;gap:1.5px;height:9px;}
+.lb-sig i{display:block;width:3px;border-radius:.8px;background:currentColor;opacity:.28;}
+.lb-sig i.on{opacity:1;}
+.lb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;}
+.lb-card{background:var(--surface);border:1.5px solid var(--hairline);border-radius:14px;padding:14px 16px;text-align:left;display:flex;flex-direction:column;gap:8px;cursor:pointer;transition:transform .15s ease,border-color .15s ease;color:var(--ink);}
+.lb-card:hover{transform:translateY(-2px);border-color:var(--ink);}
+.lb-card.dim{opacity:.35;}
+.lb-top{display:flex;justify-content:space-between;gap:10px;font-size:12px;color:var(--muted);}
+.lb-top .lb-disrupt{color:#B8452F;font-weight:600;}
+.lb-top .lb-improve{color:#1F6E63;font-weight:600;}
+.lb-card b{font-family:'Space Grotesk',sans-serif;font-size:14.5px;line-height:1.35;font-weight:600;}
 
 /* "Still hatching" tooltip on Help. Opens just below the link (the top bar has
    too little headroom above it), layered over everything on the page. */
@@ -1025,22 +1065,23 @@ const CSS = `
   .help-wrap:hover .wip-emoji,.help-wrap:focus-within .wip-emoji{animation:none;}
 }
 
-/* Filter bar */
-.filterbar{max-width:1280px;margin:0 auto;padding:0 48px 28px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;}
+/* Filter bar — same navy band as the top bar, one shade darker (matches the
+   prototype's hud/legend split: a flat deck under the gradient above it). */
+.filterbar{max-width:1280px;margin:0 auto;padding:12px 48px 18px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:#123446;border-top:1px solid #1F4B63;}
 .search-field{position:relative;flex:1;min-width:220px;max-width:340px;}
-.search-field input{width:100%;border:none;border-bottom:1.5px solid var(--hairline-strong);background:transparent;padding:8px 4px 8px 26px;font-size:14px;font-family:'Inter',sans-serif;color:var(--ink);outline:none;transition:border-color .15s ease;}
-.search-field input:focus{border-bottom-color:var(--ink);}
-.search-field input::placeholder{color:var(--muted);}
-.search-field svg{position:absolute;left:2px;top:9px;stroke:var(--muted);}
-.pill{border:1.5px solid var(--hairline-strong);background:var(--surface);color:var(--muted);padding:7px 14px;border-radius:100px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:border-color .15s ease,color .15s ease,background .15s ease,transform .1s ease;}
-.pill:hover{border-color:var(--ink);color:var(--ink);transform:translateY(-1px);}
-.pill.active{background:var(--ink);color:#fff;border-color:var(--ink);}
-.pill.active.nature-disruption{background:var(--disruption);border-color:var(--disruption);}
-.pill.active.nature-improvement{background:var(--improvement);border-color:var(--improvement);}
-.pill:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
+.search-field input{width:100%;border:none;border-bottom:1.5px solid #2F6683;background:transparent;padding:8px 4px 8px 26px;font-size:14px;font-family:'Inter',sans-serif;color:#F2F8FA;outline:none;transition:border-color .15s ease;}
+.search-field input:focus{border-bottom-color:#FFC83D;}
+.search-field input::placeholder{color:#6F8CA0;}
+.search-field svg{position:absolute;left:2px;top:9px;stroke:#9DC0D4;}
+.pill{border:1.5px solid #2F6683;background:transparent;color:#D7E7EF;padding:7px 14px;border-radius:100px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:border-color .15s ease,color .15s ease,background .15s ease,transform .1s ease;}
+.pill:hover{border-color:#F2F8FA;color:#F2F8FA;transform:translateY(-1px);}
+.pill.active{background:#F2F8FA;color:#0E2A3B;border-color:#F2F8FA;}
+.pill.active.nature-disruption{background:var(--disruption);border-color:var(--disruption);color:#fff;}
+.pill.active.nature-improvement{background:var(--improvement);border-color:var(--improvement);color:#fff;}
+.pill:focus-visible{outline:2px solid #FFC83D;outline-offset:2px;}
 .pill-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-.filter-divider{width:1px;height:20px;background:var(--hairline-strong);margin:0 4px;}
-.legend{max-width:1280px;margin:0 auto;padding:0 48px 18px;display:flex;flex-wrap:wrap;gap:20px;font-size:12.5px;color:var(--muted);}
+.filter-divider{width:1px;height:20px;background:#2F6683;margin:0 4px;}
+.legend{max-width:1280px;margin:0 auto;padding:0 48px 16px;display:flex;flex-wrap:wrap;gap:20px;font-size:12.5px;color:#9DC0D4;background:#123446;}
 .legend-item{display:flex;align-items:center;gap:7px;}
 .legend-swatch{width:10px;height:10px;border-radius:3px;}
 .legend-swatch.disruption{background:var(--disruption);}
