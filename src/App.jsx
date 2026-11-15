@@ -17,6 +17,13 @@ import Logbook from "./components/Logbook.jsx";
 /* "About us" opens the course's Moodle page in a new tab. */
 const MOODLE_URL = "https://moodle.hof-university.de/course/view.php?id=7457";
 
+/* The page itself no longer scrolls (the app is a fixed-height shell) —
+   .main-stage is the actual scrolling element now, so this replaces the old
+   scrollStageTop() calls used when switching cases/modes. */
+function scrollStageTop() {
+  document.querySelector(".main-stage")?.scrollTo({ top: 0 });
+}
+
 /* ---------------- Data helpers ---------------- */
 function narrativeOf(c) {
   return (isImprovement(c) ? c.improvement : c.disruption) || [];
@@ -775,7 +782,7 @@ function CaseDetail({ c, onBack, onPrev, onNext, note, onNote }) {
   const [mode, setMode] = useState(null); // null | "guided" | "comic" | "complete"
   const [modeKey, setModeKey] = useState(0); // remount a mode when re-entered so it restarts at step 1
 
-  useEffect(() => { window.scrollTo(0, 0); }, [mode]);
+  useEffect(() => { scrollStageTop(); }, [mode]);
 
   const enter = (m) => { setMode(m); setModeKey((k) => k + 1); };
 
@@ -859,9 +866,9 @@ export default function App() {
     setSelected(navList[(i + dir + navList.length) % navList.length].id);
   };
 
-  const openCase = (id) => { setSelected(id); window.scrollTo(0, 0); };
+  const openCase = (id) => { setSelected(id); scrollStageTop(); };
   const visibleIds = useMemo(() => new Set(filtered.map((c) => c.id)), [filtered]);
-  const backToGrid = () => { setSelected(null); window.scrollTo(0, 0); };
+  const backToGrid = () => { setSelected(null); scrollStageTop(); };
 
   return (
     <div className="fib-app">
@@ -926,25 +933,23 @@ export default function App() {
         )}
       </div>
 
-      {selectedCase ? (
-        <CaseDetail
-          key={selectedCase.id}
-          c={selectedCase}
-          onBack={backToGrid}
-          onPrev={() => step(-1)}
-          onNext={() => step(1)}
-          note={predictionNotes[selectedCase.id] || ""}
-          onNote={(v) => setPredictionNotes((n) => ({ ...n, [selectedCase.id]: v }))}
-        />
-      ) : (
-        <>
-          {view === "chart" ? (
-            <SeaChart cases={CASES} visibleIds={visibleIds} onOpen={openCase} />
-          ) : (
-            <Logbook cases={CASES} visibleIds={visibleIds} onOpen={openCase} />
-          )}
-        </>
-      )}
+      <main className="main-stage">
+        {selectedCase ? (
+          <CaseDetail
+            key={selectedCase.id}
+            c={selectedCase}
+            onBack={backToGrid}
+            onPrev={() => step(-1)}
+            onNext={() => step(1)}
+            note={predictionNotes[selectedCase.id] || ""}
+            onNote={(v) => setPredictionNotes((n) => ({ ...n, [selectedCase.id]: v }))}
+          />
+        ) : view === "chart" ? (
+          <SeaChart cases={CASES} visibleIds={visibleIds} onOpen={openCase} />
+        ) : (
+          <Logbook cases={CASES} visibleIds={visibleIds} onOpen={openCase} />
+        )}
+      </main>
     </div>
   );
 }
@@ -961,17 +966,20 @@ const CSS = `
   --disruption:#E1604A;--disruption-tint:#FBEAE6;
   --improvement:#2E9587;--improvement-tint:#E7F3F1;
   --focus:#1D2B2E;--accent-yellow:#F4B740;--accent-yellow-tint:#FDF3DE;
-  background:var(--canvas);color:var(--ink);min-height:100vh;
+  background:var(--canvas);color:var(--ink);height:100vh;
+  display:flex;flex-direction:column;overflow:hidden;
   font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;
 }
+.main-stage{flex:1;min-height:0;position:relative;overflow-y:auto;overflow-x:hidden;}
 .fib-app *{box-sizing:border-box;}
 .fib-app h1,.fib-app h2,.fib-app h3{font-family:'Space Grotesk',sans-serif;}
 .fib-app button{font-family:inherit;}
 .fib-app .muted{color:var(--muted);}
 
 /* Top bar — dark navy/nautical, matching the sea chart below it rather than
-   the light canvas palette used everywhere else in the app. */
-.topbar-wrap{background:linear-gradient(165deg,#0E2A3B 0%,#173C52 100%);}
+   the light canvas palette used everywhere else in the app. One flat color
+   across the whole bar (brand row + difficulty row), no dividing line. */
+.topbar-wrap{background:#0E2A3B;flex-shrink:0;}
 .topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:36px 48px 28px;max-width:1280px;margin:0 auto;}
 .brand-block{display:flex;flex-direction:column;gap:4px;}
 .brand{font-family:'Bricolage Grotesque','Space Grotesk',sans-serif;font-size:22px;font-weight:800;letter-spacing:-0.01em;color:#F2F8FA;}
@@ -1035,7 +1043,7 @@ const CSS = `
 
 /* Filter bar — same navy band as the top bar, one shade darker (matches the
    prototype's hud/legend split: a flat deck under the gradient above it). */
-.filterbar{max-width:1280px;margin:0 auto;padding:14px 48px 18px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:#123446;border-top:1px solid #1F4B63;}
+.filterbar{max-width:1280px;margin:0 auto;padding:14px 48px 18px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;}
 .pill{border:1.5px solid #2F6683;background:transparent;color:#D7E7EF;padding:7px 14px;border-radius:100px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:border-color .15s ease,color .15s ease,background .15s ease,transform .1s ease;}
 .pill:hover{border-color:#F2F8FA;color:#F2F8FA;transform:translateY(-1px);}
 .pill.active{background:#F2F8FA;color:#0E2A3B;border-color:#F2F8FA;}
