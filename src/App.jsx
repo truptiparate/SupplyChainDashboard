@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
-import { CASES, overallKey, isImprovement, natureLabel } from "./data/model.js";
-import { primaryIndustry, styleForText, industryStyle } from "./data/industries.js";
+import { CASES, TIERS, overallKey, isImprovement, natureLabel } from "./data/model.js";
+import { primaryIndustry, industryStyle } from "./data/industries.js";
 import Icon from "./components/Icon.jsx";
 import SeaChart from "./components/SeaChart.jsx";
 import Logbook from "./components/Logbook.jsx";
@@ -16,6 +16,13 @@ import Logbook from "./components/Logbook.jsx";
 
 /* "About us" opens the course's Moodle page in a new tab. */
 const MOODLE_URL = "https://moodle.hof-university.de/course/view.php?id=7457";
+
+/* The page itself no longer scrolls (the app is a fixed-height shell) —
+   .main-stage is the actual scrolling element now, so this replaces the old
+   scrollStageTop() calls used when switching cases/modes. */
+function scrollStageTop() {
+  document.querySelector(".main-stage")?.scrollTo({ top: 0 });
+}
 
 /* ---------------- Data helpers ---------------- */
 function narrativeOf(c) {
@@ -775,7 +782,7 @@ function CaseDetail({ c, onBack, onPrev, onNext, note, onNote }) {
   const [mode, setMode] = useState(null); // null | "guided" | "comic" | "complete"
   const [modeKey, setModeKey] = useState(0); // remount a mode when re-entered so it restarts at step 1
 
-  useEffect(() => { window.scrollTo(0, 0); }, [mode]);
+  useEffect(() => { scrollStageTop(); }, [mode]);
 
   const enter = (m) => { setMode(m); setModeKey((k) => k + 1); };
 
@@ -842,32 +849,13 @@ function CaseDetail({ c, onBack, onPrev, onNext, note, onNote }) {
    ===================================================================== */
 export default function App() {
   const [selected, setSelected] = useState(null);
-  const [query, setQuery] = useState("");
-  const [industry, setIndustry] = useState(null);
-  const [nature, setNature] = useState(null); // null | "Disruption" | "Improvement"
+  const [tierFilter, setTierFilter] = useState(null); // null | 0-3
   const [predictionNotes, setPredictionNotes] = useState({}); // keyed by case id, kept across modes/cases
   const [view, setView] = useState("chart"); // "chart" | "logbook"
 
-  const industries = useMemo(() => {
-    const set = new Set();
-    CASES.forEach((c) => set.add(primaryIndustry(c)));
-    return Array.from(set).sort();
-  }, []);
-
   const filtered = useMemo(() => {
-    const q = query.toLowerCase();
-    return CASES.filter((c) => {
-      const matchesQuery =
-        !q ||
-        c.name.toLowerCase().includes(q) ||
-        String(c.industry || "").toLowerCase().includes(q) ||
-        String(c.brand_group || "").toLowerCase().includes(q) ||
-        c.id.toLowerCase().includes(q);
-      const matchesIndustry = !industry || primaryIndustry(c) === industry;
-      const matchesNature = !nature || natureLabel(c) === nature;
-      return matchesQuery && matchesIndustry && matchesNature;
-    });
-  }, [query, industry, nature]);
+    return tierFilter == null ? CASES : CASES.filter((c) => c.tier === tierFilter);
+  }, [tierFilter]);
 
   const selectedCase = selected ? CASES.find((c) => c.id === selected) : null;
 
@@ -878,9 +866,9 @@ export default function App() {
     setSelected(navList[(i + dir + navList.length) % navList.length].id);
   };
 
-  const openCase = (id) => { setSelected(id); window.scrollTo(0, 0); };
+  const openCase = (id) => { setSelected(id); scrollStageTop(); };
   const visibleIds = useMemo(() => new Set(filtered.map((c) => c.id)), [filtered]);
-  const backToGrid = () => { setSelected(null); window.scrollTo(0, 0); };
+  const backToGrid = () => { setSelected(null); scrollStageTop(); };
 
   return (
     <div className="fib-app">
@@ -925,58 +913,43 @@ export default function App() {
         {!selectedCase && (
           <>
             <div className="filterbar">
-              <div className="search-field">
-                <Icon name="search" size={15} />
-                <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search cases…" />
-              </div>
-              <div className="filter-divider" />
-              <button className={`pill ${!industry ? "active" : ""}`} onClick={() => setIndustry(null)}>All industries</button>
-              {industries.map((ind) => {
-                const s = styleForText(ind) || FALLBACK_STYLE;
-                return (
-                  <button key={ind} className={`pill ${industry === ind ? "active" : ""}`} onClick={() => setIndustry(ind)}>
-                    <span className="pill-dot" style={{ background: s.fg }} />
-                    {ind}
-                  </button>
-                );
-              })}
-              <div className="filter-divider" />
-              <button className={`pill ${!nature ? "active" : ""}`} onClick={() => setNature(null)}>All types</button>
-              <button className={`pill nature-disruption ${nature === "Disruption" ? "active" : ""}`} onClick={() => setNature("Disruption")}>Disruption</button>
-              <button className={`pill nature-improvement ${nature === "Improvement" ? "active" : ""}`} onClick={() => setNature("Improvement")}>Improvement</button>
-            </div>
-            <div className="legend">
-              <div className="legend-item"><span className="legend-swatch disruption" />Disruption — something broke, a response was needed</div>
-              <div className="legend-item"><span className="legend-swatch improvement" />Improvement — a proactive change was made</div>
+              <span className="filterbar-label">Difficulty</span>
+              <button className={`pill ${tierFilter == null ? "active" : ""}`} onClick={() => setTierFilter(null)}>All levels</button>
+              {TIERS.map((t, i) => (
+                <button
+                  key={t.name}
+                  className={`pill ${tierFilter === i ? "active" : ""}`}
+                  style={tierFilter === i ? { background: t.hex, borderColor: t.hex, color: "#0E2A3B" } : undefined}
+                  onClick={() => setTierFilter(tierFilter === i ? null : i)}
+                >
+                  <span className="pill-sig" style={{ color: tierFilter === i ? "#0E2A3B" : t.hex }}>
+                    {[0, 1, 2, 3].map((b) => <i key={b} className={b <= i ? "on" : ""} style={{ height: 3 + b * 3 }} />)}
+                  </span>
+                  {t.name}
+                </button>
+              ))}
             </div>
           </>
         )}
       </div>
 
-      {selectedCase ? (
-        <CaseDetail
-          key={selectedCase.id}
-          c={selectedCase}
-          onBack={backToGrid}
-          onPrev={() => step(-1)}
-          onNext={() => step(1)}
-          note={predictionNotes[selectedCase.id] || ""}
-          onNote={(v) => setPredictionNotes((n) => ({ ...n, [selectedCase.id]: v }))}
-        />
-      ) : (
-        <>
-          {view === "chart" ? (
-            <SeaChart cases={CASES} visibleIds={visibleIds} onOpen={openCase} />
-          ) : (
-            <Logbook cases={CASES} visibleIds={visibleIds} onOpen={openCase} />
-          )}
-          {filtered.length === 0 && (
-            <p className="empty-note">
-              No cases match that search — {view === "chart" ? "every port is still on the chart" : "every case is still listed below"}, just dimmed.
-            </p>
-          )}
-        </>
-      )}
+      <main className="main-stage">
+        {selectedCase ? (
+          <CaseDetail
+            key={selectedCase.id}
+            c={selectedCase}
+            onBack={backToGrid}
+            onPrev={() => step(-1)}
+            onNext={() => step(1)}
+            note={predictionNotes[selectedCase.id] || ""}
+            onNote={(v) => setPredictionNotes((n) => ({ ...n, [selectedCase.id]: v }))}
+          />
+        ) : view === "chart" ? (
+          <SeaChart cases={CASES} visibleIds={visibleIds} onOpen={openCase} />
+        ) : (
+          <Logbook cases={CASES} visibleIds={visibleIds} onOpen={openCase} />
+        )}
+      </main>
     </div>
   );
 }
@@ -993,17 +966,20 @@ const CSS = `
   --disruption:#E1604A;--disruption-tint:#FBEAE6;
   --improvement:#2E9587;--improvement-tint:#E7F3F1;
   --focus:#1D2B2E;--accent-yellow:#F4B740;--accent-yellow-tint:#FDF3DE;
-  background:var(--canvas);color:var(--ink);min-height:100vh;
+  background:var(--canvas);color:var(--ink);height:100vh;
+  display:flex;flex-direction:column;overflow:hidden;
   font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;
 }
+.main-stage{flex:1;min-height:0;position:relative;overflow-y:auto;overflow-x:hidden;}
 .fib-app *{box-sizing:border-box;}
 .fib-app h1,.fib-app h2,.fib-app h3{font-family:'Space Grotesk',sans-serif;}
 .fib-app button{font-family:inherit;}
 .fib-app .muted{color:var(--muted);}
 
 /* Top bar — dark navy/nautical, matching the sea chart below it rather than
-   the light canvas palette used everywhere else in the app. */
-.topbar-wrap{background:linear-gradient(165deg,#0E2A3B 0%,#173C52 100%);}
+   the light canvas palette used everywhere else in the app. One flat color
+   across the whole bar (brand row + difficulty row), no dividing line. */
+.topbar-wrap{background:#0E2A3B;flex-shrink:0;}
 .topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:36px 48px 28px;max-width:1280px;margin:0 auto;}
 .brand-block{display:flex;flex-direction:column;gap:4px;}
 .brand{font-family:'Bricolage Grotesque','Space Grotesk',sans-serif;font-size:22px;font-weight:800;letter-spacing:-0.01em;color:#F2F8FA;}
@@ -1067,29 +1043,18 @@ const CSS = `
 
 /* Filter bar — same navy band as the top bar, one shade darker (matches the
    prototype's hud/legend split: a flat deck under the gradient above it). */
-.filterbar{max-width:1280px;margin:0 auto;padding:12px 48px 18px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:#123446;border-top:1px solid #1F4B63;}
-.search-field{position:relative;flex:1;min-width:220px;max-width:340px;}
-.search-field input{width:100%;border:none;border-bottom:1.5px solid #2F6683;background:transparent;padding:8px 4px 8px 26px;font-size:14px;font-family:'Inter',sans-serif;color:#F2F8FA;outline:none;transition:border-color .15s ease;}
-.search-field input:focus{border-bottom-color:#FFC83D;}
-.search-field input::placeholder{color:#6F8CA0;}
-.search-field svg{position:absolute;left:2px;top:9px;stroke:#9DC0D4;}
+.filterbar{max-width:1280px;margin:0 auto;padding:14px 48px 18px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;}
 .pill{border:1.5px solid #2F6683;background:transparent;color:#D7E7EF;padding:7px 14px;border-radius:100px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:border-color .15s ease,color .15s ease,background .15s ease,transform .1s ease;}
 .pill:hover{border-color:#F2F8FA;color:#F2F8FA;transform:translateY(-1px);}
 .pill.active{background:#F2F8FA;color:#0E2A3B;border-color:#F2F8FA;}
-.pill.active.nature-disruption{background:var(--disruption);border-color:var(--disruption);color:#fff;}
-.pill.active.nature-improvement{background:var(--improvement);border-color:var(--improvement);color:#fff;}
 .pill:focus-visible{outline:2px solid #FFC83D;outline-offset:2px;}
-.pill-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-.filter-divider{width:1px;height:20px;background:#2F6683;margin:0 4px;}
-.legend{max-width:1280px;margin:0 auto;padding:0 48px 16px;display:flex;flex-wrap:wrap;gap:20px;font-size:12.5px;color:#9DC0D4;background:#123446;}
-.legend-item{display:flex;align-items:center;gap:7px;}
-.legend-swatch{width:10px;height:10px;border-radius:3px;}
-.legend-swatch.disruption{background:var(--disruption);}
-.legend-swatch.improvement{background:var(--improvement);}
+.pill-sig{display:inline-flex;align-items:flex-end;gap:1.5px;height:9px;}
+.pill-sig i{display:block;width:2.5px;border-radius:.8px;background:currentColor;opacity:.3;}
+.pill-sig i.on{opacity:1;}
+.filterbar-label{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9DC0D4;margin-right:4px;}
 
 /* Grid */
 .grid{max-width:1280px;margin:0 auto;padding:28px 48px 80px;display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:20px;}
-.empty-note{max-width:1280px;margin:-60px auto 80px;padding:0 48px;color:var(--muted);font-size:13.5px;}
 .card{position:relative;background:var(--surface);border:1.5px solid var(--hairline);border-radius:14px;padding:18px 20px;cursor:pointer;display:flex;flex-direction:column;gap:14px;text-align:left;color:var(--ink);transition:border-color .15s ease,transform .15s ease,box-shadow .18s ease;box-shadow:0 1px 2px rgba(29,43,46,0.04);}
 .card:hover{border-color:var(--ink);transform:translateY(-3px);box-shadow:0 10px 24px rgba(29,43,46,0.10);}
 .card:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
@@ -1360,7 +1325,7 @@ const CSS = `
 .nav-btn.next{margin-left:auto;}
 
 @media (max-width:640px){
-  .topbar,.filterbar,.grid,.detail,.legend,.detail-nav,.empty-note{padding-left:16px;padding-right:16px;}
+  .topbar,.filterbar,.grid,.detail,.detail-nav{padding-left:16px;padding-right:16px;}
   .topbar{flex-direction:column;}
   .wip-tip{left:-6px;transform:translateY(4px);}
   .help-wrap:hover .wip-tip,.help-wrap:focus-within .wip-tip{transform:translateY(0);}

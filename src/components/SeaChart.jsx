@@ -407,7 +407,7 @@ export default function SeaChart({ cases, visibleIds, onOpen }) {
 }
 
 const SEA_CSS = `
-.sc-stage{position:relative;height:72vh;min-height:460px;background:#2A8DB5;box-shadow:0 1px 2px rgba(29,43,46,0.08);}
+.sc-stage{position:absolute;inset:0;background:#2A8DB5;}
 .sc-mapscroll{position:absolute;inset:0;overflow:auto;scrollbar-width:thin;border-radius:18px;}
 .sc-map{display:block;width:100%;height:100%;min-width:960px;min-height:600px;}
 .sc-wave{fill:none;stroke:#F4FBFC;stroke-width:2.2;stroke-linecap:round;opacity:0;animation:scWave var(--d,7s) ease-in-out var(--dl,0s) infinite;}
