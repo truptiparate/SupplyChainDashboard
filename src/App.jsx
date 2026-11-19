@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import { CASES, TIERS, overallKey, isImprovement, natureLabel } from "./data/model.js";
-import { primaryIndustry, industryStyle } from "./data/industries.js";
+import { industryStyle } from "./data/industries.js";
 import Icon from "./components/Icon.jsx";
 import SeaChart from "./components/SeaChart.jsx";
 import Logbook from "./components/Logbook.jsx";
@@ -48,16 +48,6 @@ function flatDecisions(c) {
     (b.decisions || []).map((d) => ({ group: blockTitle(b.source), data: d }))
   );
 }
-function friendlyHeading(label, improvement) {
-  const l = String(label).toLowerCase();
-  if (l.includes("trigger")) return "What happened";
-  if (l.includes("problem")) return "What needed to change";
-  if (l.includes("root cause")) return "Why it happened";
-  if (l.includes("affected")) return "What was impacted";
-  if (l.includes("effect")) return improvement ? "What it changed" : "How it rippled through the supply chain";
-  return label;
-}
-
 /* ---------------- Rating tone (unchanged logic) ---------------- */
 function ratingTone(raw) {
   if (raw == null) return null;
@@ -76,57 +66,6 @@ function toneColor(tone) {
     case "warn": return { fg: "#A2720C", bg: "#FDF3DE" };
     default: return { fg: "#5C6D70", bg: "#F3F2EE" };
   }
-}
-
-/* ---------------- Guided walkthrough steps ---------------- */
-function buildSteps(c) {
-  const improvement = isImprovement(c);
-  const narrative = narrativeOf(c);
-  const decisions = flatDecisions(c);
-  const steps = [];
-
-  if (c.normal_flow_nodes?.length) {
-    steps.push({
-      type: "flow",
-      label: improvement ? "Before the change" : "Before the disruption",
-      heading: "How this supply chain normally worked",
-      nodes: c.normal_flow_nodes,
-    });
-  }
-  if (c.kpis?.length) {
-    steps.push({ type: "kv", label: "Normal KPI conditions", heading: "What “normal” looked like", items: c.kpis });
-  }
-
-  const key = improvement ? "problem" : "trigger";
-  let triggerIdx = narrative.findIndex((d) => String(d.label).toLowerCase().includes(key));
-  if (triggerIdx < 0 && narrative.length) triggerIdx = 0;
-  if (triggerIdx >= 0) {
-    const t = narrative[triggerIdx];
-    steps.push({ type: "text", label: improvement ? "The problem" : "The trigger", heading: friendlyHeading(t.label, improvement), text: t.value });
-  }
-
-  if (decisions.length) steps.push({ type: "predict", label: "Your turn", heading: "What would you do here?" });
-
-  narrative.forEach((d, i) => {
-    if (i !== triggerIdx) steps.push({ type: "text", label: d.label, heading: friendlyHeading(d.label, improvement), text: d.value });
-  });
-
-  decisions.forEach((d, i) => {
-    steps.push({
-      type: "decision",
-      label: `Decision ${i + 1} of ${decisions.length}`,
-      group: d.group,
-      heading: d.data["Description"] || `Decision ${i + 1}`,
-      decision: d.data,
-    });
-  });
-
-  const impact = c.decisions_impact_summary || [];
-  const scores = c.decision_scores || [];
-  if (impact.length || scores.length) {
-    steps.push({ type: "outcome", label: "Outcome", heading: "How the options compare", impact, scores });
-  }
-  return steps;
 }
 
 /* =====================================================================
@@ -225,25 +164,6 @@ function usePreload(sources) {
 /* =====================================================================
    Small presentational components
    ===================================================================== */
-function IconCircle({ c, size = 52 }) {
-  const s = industryStyle(c);
-  return (
-    <div className="node-icon" style={{ background: s.bg, width: size, height: size }} title={primaryIndustry(c)}>
-      <Icon name={s.icon} size={Math.round(size / 2)} color={s.fg} />
-    </div>
-  );
-}
-
-function NatureBadge({ c }) {
-  const imp = isImprovement(c);
-  return (
-    <span className={`badge ${imp ? "improvement" : "disruption"}`}>
-      <Icon name={imp ? "trendUp" : "trendDown"} size={12} />
-      {c.nature || natureLabel(c)}
-    </span>
-  );
-}
-
 function Chip({ label, value }) {
   const col = toneColor(ratingTone(value));
   return (
@@ -267,17 +187,23 @@ function KVList({ items }) {
   );
 }
 
-function FlowChain({ nodes, compact }) {
+/* Horizontal flow with an animated "running dots" connector between nodes —
+   the flowing-dash technique (background-position animation on a dotted
+   background, plus a rotated-border arrowhead) is ported directly from the
+   prototype's .link/@keyframes flow. Nodes themselves are static; they
+   don't yet change state as the story progresses — that's the fuller
+   moment-by-moment timeline, deferred to a later phase. */
+function RouteFlow({ nodes }) {
   return (
-    <div className={`flow-chain ${compact ? "compact" : ""}`}>
+    <div className="route-chain">
       {nodes.map((n, i) => (
         <React.Fragment key={i}>
-          <div className="flow-node">
-            <div className="flow-node-id">N{i + 1}</div>
-            <div className="flow-node-label">{n.label.replace(/^Node\s*\d+\s*[–—-]\s*/i, "")}</div>
-            {!compact && n.description && <div className="flow-node-desc">{n.description}</div>}
+          <div className="route-node">
+            <div className="route-node-id">N{i + 1}</div>
+            <div className="route-node-label">{n.label.replace(/^Node\s*\d+\s*[–—-]\s*/i, "")}</div>
+            {n.description && <div className="route-node-desc">{n.description}</div>}
           </div>
-          {i < nodes.length - 1 && <div className="flow-arrow">→</div>}
+          {i < nodes.length - 1 && <div className="route-link" />}
         </React.Fragment>
       ))}
     </div>
@@ -285,7 +211,7 @@ function FlowChain({ nodes, compact }) {
 }
 
 function DecisionDetail({ d, full }) {
-  const skip = new Set(["Decision No", "Description", "Action", "Best when"]);
+  const skip = new Set(["decision_no", "Description", "Action", "Best when"]);
   const ratingKeys = Object.keys(d).filter((k) => !skip.has(k));
   return (
     <>
@@ -314,7 +240,7 @@ function ScoreRanking({ scores }) {
         const val = s[overallKey(s)];
         return (
           <div className="score-row" key={i}>
-            <span className="score-name">{s.label}</span>
+            <span className="score-name">Decision {s.decision_no}</span>
             <div className="kpi-bar-track">
               <div className={`kpi-bar-fill ${i === 0 ? "up" : "down"}`} style={{ width: `${(val / 5) * 100}%` }} />
             </div>
@@ -329,7 +255,7 @@ function ScoreRanking({ scores }) {
 function ImpactTable({ rows }) {
   const cols = useMemo(() => {
     const set = new Set();
-    rows.forEach((r) => Object.keys(r).forEach((k) => k !== "label" && set.add(k)));
+    rows.forEach((r) => Object.keys(r).forEach((k) => k !== "decision_no" && set.add(k)));
     return Array.from(set);
   }, [rows]);
   return (
@@ -344,7 +270,7 @@ function ImpactTable({ rows }) {
         <tbody>
           {rows.map((r, i) => (
             <tr key={i}>
-              <td className="impact-label">{r.label}</td>
+              <td className="impact-label">Decision {r.decision_no}</td>
               {cols.map((c) => {
                 const col = toneColor(ratingTone(r[c]));
                 return (
@@ -361,199 +287,75 @@ function ImpactTable({ rows }) {
   );
 }
 
-function IndustryBanner({ c }) {
-  const col = industryStyle(c);
-  const dots = [{ x: 40, y: 30 }, { x: 110, y: 70 }, { x: 70, y: 110 }, { x: 180, y: 40 }, { x: 230, y: 90 }, { x: 300, y: 55 }];
-  const d = `M${dots[0].x},${dots[0].y} L${dots[1].x},${dots[1].y} L${dots[2].x},${dots[2].y} M${dots[1].x},${dots[1].y} L${dots[3].x},${dots[3].y} L${dots[4].x},${dots[4].y} L${dots[5].x},${dots[5].y}`;
-  return (
-    <div className="industry-banner" style={{ background: `linear-gradient(135deg, ${col.bg} 0%, ${col.deep} 100%)` }}>
-      <svg className="banner-nodes" viewBox="0 0 480 160" preserveAspectRatio="none">
-        <path d={d} stroke={col.fg} strokeWidth="1.2" fill="none" opacity="0.25" />
-        {dots.map((p, i) => <circle key={i} cx={p.x} cy={p.y} r="3.5" fill={col.fg} opacity="0.35" />)}
-      </svg>
-      <Icon name={col.icon} className="banner-watermark" color={col.fg} strokeWidth={1.2} />
-      <div className="banner-caption">
-        <IconCircle c={c} size={26} />
-        {primaryIndustry(c)}
-      </div>
-    </div>
-  );
-}
-
 /* =====================================================================
-   Grid card
+   Case detail: voyage page (hero + sticky section nav + sections)
    ===================================================================== */
-/* =====================================================================
-   Case detail: chooser → guided / comic → complete
-   ===================================================================== */
-function DetailHeader({ c, onBack }) {
+/* Hero — sea-gradient band + white card, matching the prototype's compact
+   hero (tags row, title, hook text). No mission/star objectives here —
+   those are gamification, deferred. Brand & group / scale (shown in the
+   old plain header) aren't part of the prototype's hero either, so they're
+   dropped here rather than carried over; Case file is the place for that
+   kind of supporting detail if it's wanted back. */
+function DetailHero({ c, onBack }) {
+  const style = industryStyle(c);
+  const tier = TIERS[c.tier];
+  const improvement = isImprovement(c);
   return (
-    <>
-      <button className="back-link" onClick={onBack}>
-        <Icon name="arrowLeft" size={14} /> Back to all cases
-      </button>
-      <div className="detail-header">
-        <IconCircle c={c} size={56} />
-        <div>
-          <div className="detail-title-row">
-            <span className="detail-case-id">{c.id}</span>
-            <NatureBadge c={c} />
+    <div className="hero-sea">
+      <div className="hero-inner">
+        <button className="back-pill" onClick={onBack}>
+          <Icon name="arrowLeft" size={14} /> Back to all cases
+        </button>
+        <div className="hero-card">
+          <div className="hero-badge" style={{ background: style.bg }}>
+            <Icon name={style.icon} size={28} color={style.fg} />
           </div>
-          <h1 className="detail-name">{c.name}</h1>
-          <div className="detail-industry">{c.industry}</div>
-          {(c.brand_group || c.scale) && (
-            <div className="detail-meta">
-              {c.brand_group && <span><span className="muted">Brand & group</span> {c.brand_group}</span>}
-              {c.scale && <span><span className="muted">Scale</span> {c.scale}</span>}
+          <div className="hero-main">
+            <div className="hero-tags">
+              <span className="tag">{c.id}</span>
+              <span className="tag tier" style={{ background: `${tier.hex}26`, color: tier.hex }}>
+                <span className="lb-sig" style={{ color: tier.hex }}>
+                  {[0, 1, 2, 3].map((b) => <i key={b} className={b <= c.tier ? "on" : ""} style={{ height: 3 + b * 3 }} />)}
+                </span>
+                {tier.name}
+              </span>
+              <span className={`tag ${improvement ? "imp" : "dis"}`}>{natureLabel(c)}</span>
             </div>
-          )}
-        </div>
-      </div>
-    </>
-  );
-}
-
-function SwitchLinks({ current, onSwitch }) {
-  return (
-    <div className="switch-row">
-      {current !== "guided" && (
-        <button className="switch-view" onClick={() => onSwitch("guided")}>
-          <Icon name="compass" size={13} /> Guided walkthrough
-        </button>
-      )}
-      {current !== "comic" && (
-        <button className="switch-view" onClick={() => onSwitch("comic")}>
-          <Icon name="speech" size={13} /> Comic
-        </button>
-      )}
-    </div>
-  );
-}
-
-function PastStep({ step, note }) {
-  const cls = `flow-section is-past ${step.type === "decision" ? "is-decision" : ""}`;
-  let body;
-  switch (step.type) {
-    case "flow":
-      body = <FlowChain nodes={step.nodes} compact />;
-      break;
-    case "kv":
-      body = <KVList items={step.items} />;
-      break;
-    case "predict":
-      body = <div className="flow-content"><p className="predict-recap">{note?.trim() ? note : "No prediction noted — moving on."}</p></div>;
-      break;
-    case "decision":
-      body = (
-        <div className="decision-block">
-          <div className="decision-block-title">{step.heading}</div>
-          {step.decision["Action"] && <p>{step.decision["Action"]}</p>}
-        </div>
-      );
-      break;
-    case "outcome":
-      body = step.scores.length ? <ScoreRanking scores={step.scores} /> : <ImpactTable rows={step.impact} />;
-      break;
-    default:
-      body = <div className="flow-content"><p>{step.text}</p></div>;
-  }
-  return (
-    <div className={cls}>
-      <div className="flow-label">{step.label}{step.group ? ` · ${step.group}` : ""}</div>
-      {body}
-    </div>
-  );
-}
-
-function CurrentStep({ step, note, onNote }) {
-  if (step.type === "predict") {
-    return (
-      <div className="step-card predict">
-        <h2 className="step-heading">
-          <Icon name="bulb" size={18} color="#B8791C" style={{ verticalAlign: -3, marginRight: 6 }} />
-          {step.heading}
-        </h2>
-        <p className="step-text">Before you see what the team actually decided, take a moment to think it through.</p>
-        <textarea
-          className="predict-textarea"
-          value={note}
-          onChange={(e) => onNote(e.target.value)}
-          placeholder="Jot down your instinct — this isn't graded, just for you."
-        />
-        <div className="predict-note">Your notes stay on this page only.</div>
-      </div>
-    );
-  }
-  return (
-    <div className="step-card">
-      {step.type === "decision" && step.group && <div className="decision-step-label">{step.group}</div>}
-      <h2 className="step-heading">{step.heading}</h2>
-      {step.type === "flow" && <FlowChain nodes={step.nodes} />}
-      {step.type === "kv" && <KVList items={step.items} />}
-      {step.type === "text" && <p className="step-text">{step.text}</p>}
-      {step.type === "decision" && <DecisionDetail d={step.decision} full />}
-      {step.type === "outcome" && (
-        <div className="outcome-stack">
-          {step.impact.length > 0 && (
-            <div>
-              <div className="flow-label">Impact summary</div>
-              <ImpactTable rows={step.impact} />
-            </div>
-          )}
-          {step.scores.length > 0 && (
-            <div>
-              <div className="flow-label">Scored ranking (out of 5)</div>
-              <ScoreRanking scores={step.scores} />
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function GuidedMode({ c, note, onNote, onFinish }) {
-  const steps = useMemo(() => buildSteps(c), [c]);
-  const [stepIndex, setStepIndex] = useState(0);
-  const currentRef = useRef(null);
-
-  useEffect(() => {
-    if (stepIndex > 0) currentRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-  }, [stepIndex]);
-
-  if (!steps.length) return <p className="muted">No walkthrough content recorded for this case yet.</p>;
-
-  const step = steps[stepIndex];
-  const isFirst = stepIndex === 0;
-  const isLast = stepIndex === steps.length - 1;
-  const nextLabel = step.type === "predict" ? "Reveal what happened" : isLast ? "Finish" : "Next";
-
-  return (
-    <>
-      <div className="progress-row">
-        {steps.map((_, i) => (
-          <div key={i} className={`progress-dot ${i < stepIndex ? "done" : ""} ${i === stepIndex ? "current" : ""}`} />
-        ))}
-      </div>
-      <div className="flow">
-        {steps.slice(0, stepIndex).map((s, i) => <PastStep key={i} step={s} note={note} />)}
-        <div className="flow-section is-current" ref={currentRef}>
-          <div className="step-label-row">
-            <div className="step-label">{step.label}</div>
-            <div className="step-count">{stepIndex + 1} / {steps.length}</div>
+            <h1 className="hero-title">{c.name}</h1>
+            <p className="hero-sub">{hookOf(c)}</p>
           </div>
-          <CurrentStep step={step} note={note} onNote={onNote} />
         </div>
       </div>
-      <div className="step-controls">
-        <button className="step-btn ghost" disabled={isFirst} onClick={() => setStepIndex((i) => Math.max(0, i - 1))}>
-          <Icon name="arrowLeft" size={15} /> Back
-        </button>
-        <button className="step-btn primary" onClick={() => (isLast ? onFinish() : setStepIndex((i) => i + 1))}>
-          {nextLabel} {!isLast && <Icon name="arrowRight" size={15} />}
-        </button>
+    </div>
+  );
+}
+
+/* "This section needs headline-stat content not extracted from the sheet
+   yet" placeholder — same spirit as the comic mode's generated-panel
+   fallback, but Impact has no in-data substitute to generate, so it's a
+   plain message instead. */
+function ComingSoon({ title, text }) {
+  return (
+    <div className="section-soon">
+      <div className="section-soon-icon"><Icon name="zap" size={24} color="#0E2A3B" /></div>
+      <div>
+        <div className="section-soon-title">{title}</div>
+        <div className="section-soon-text">{text}</div>
       </div>
-    </>
+    </div>
+  );
+}
+
+function ImpactGrid({ items }) {
+  return (
+    <div className="impact-grid">
+      {items.map((it, i) => (
+        <div className={`stat-tile ${it.t || "info"}`} key={i}>
+          <div className="stat-v">{it.v}</div>
+          <div className="stat-l">{it.l}</div>
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -662,7 +464,6 @@ function ComicLightbox({ panels, index, onIndex, onClose }) {
 
 function ComicMode({ c, onFinish }) {
   const comic = useMemo(() => buildComic(c), [c]);
-  const rootRef = useRef(null);
   const [index, setIndex] = useState(0);
   const [view, setView] = useState("panel");   // opens on a single panel; "page" is the 2x2 overview
   const [lightbox, setLightbox] = useState(false);
@@ -677,18 +478,6 @@ function ComicMode({ c, onFinish }) {
   usePreload([panels[index - 1]?.src, panels[index + 1]?.src, panels[index + 2]?.src]);
 
   const go = (d) => setIndex((i) => Math.min(panels.length - 1, Math.max(0, i + d)));
-
-  // A full-height panel would otherwise open below the fold: the detail header
-  // alone eats most of a laptop screen. Deferred a frame so it lands after the
-  // parent's scroll-to-top on mode change.
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (typeof window.requestAnimationFrame !== "function") return;
-    const id = window.requestAnimationFrame(() => {
-      rootRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
-    return () => window.cancelAnimationFrame(id);
-  }, []);
 
   // The overlay owns the keyboard while it's open.
   useEffect(() => {
@@ -710,7 +499,7 @@ function ComicMode({ c, onFinish }) {
   const isLast = index === panels.length - 1;
 
   return (
-    <div className="comic-reader" ref={rootRef}>
+    <div className="comic-reader">
       <div className="comic-toolbar">
         <div className="comic-position">
           <strong>Panel {index + 1}</strong>
@@ -778,62 +567,153 @@ function ComicMode({ c, onFinish }) {
   );
 }
 
+/* Matches the prototype's voyage-page sections, all always on the page at
+   once instead of behind a pick-a-mode chooser. Impact is scaffolded (nav
+   entry + stat-tile UI) even though no case has `impact` data yet — see
+   CLAUDE.md. It shows a "coming soon" placeholder until that's extracted
+   from the sheet, same as a case with no comic artwork does. */
+const SECTIONS = [
+  { id: "sec-comic", label: "Comic", icon: "speech" },
+  { id: "sec-impact", label: "Impact", icon: "zap" },
+  { id: "sec-call", label: "Your call", icon: "bulb" },
+  { id: "sec-lab", label: "Decision lab", icon: "sliders" },
+  { id: "sec-route", label: "The route", icon: "route" },
+  { id: "sec-file", label: "Case file", icon: "file" },
+];
+
+function SectionNav({ active, onJump }) {
+  return (
+    <div className="secbar">
+      <div className="secbar-inner">
+        {SECTIONS.map((s) => (
+          <button key={s.id} className={`seclink ${active === s.id ? "current" : ""}`} onClick={() => onJump(s.id)}>
+            <Icon name={s.icon} size={14} /> {s.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function CaseDetail({ c, onBack, onPrev, onNext, note, onNote }) {
-  const [mode, setMode] = useState(null); // null | "guided" | "comic" | "complete"
-  const [modeKey, setModeKey] = useState(0); // remount a mode when re-entered so it restarts at step 1
+  const [activeSection, setActiveSection] = useState(SECTIONS[0].id);
+  const sectionRefs = useRef({});
 
-  useEffect(() => { scrollStageTop(); }, [mode]);
+  useEffect(() => { scrollStageTop(); setActiveSection(SECTIONS[0].id); }, [c.id]);
 
-  const enter = (m) => { setMode(m); setModeKey((k) => k + 1); };
+  // Scroll-spy: highlight whichever section is nearest the top of the
+  // scrolling pane (.main-stage — the page itself doesn't scroll, see
+  // scrollStageTop above), not the browser viewport.
+  useEffect(() => {
+    const root = document.querySelector(".main-stage");
+    if (!root || typeof IntersectionObserver !== "function") return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const hit = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+        if (hit) setActiveSection(hit.target.id);
+      },
+      { root, rootMargin: "-10% 0px -75% 0px", threshold: 0 }
+    );
+    SECTIONS.forEach((s) => { const el = sectionRefs.current[s.id]; if (el) observer.observe(el); });
+    return () => observer.disconnect();
+  }, [c.id]);
+
+  const jump = (id) => sectionRefs.current[id]?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const setSectionRef = (id) => (el) => { sectionRefs.current[id] = el; };
+
+  const narrative = narrativeOf(c);
+  const narrativeHeading = isImprovement(c) ? "What needed to change" : "What happened";
 
   return (
     <>
-      <div className="detail">
-        <DetailHeader c={c} onBack={onBack} />
+      <DetailHero c={c} onBack={onBack} />
 
-        {mode === null && (
-          <>
-            <IndustryBanner c={c} />
-            <div className="chooser-prompt">How would you like to explore this case?</div>
-            <div className="chooser-options">
-              <button className="chooser-card guided" onClick={() => enter("guided")}>
-                <div className="chooser-icon guided"><Icon name="compass" size={21} /></div>
-                <div className="chooser-text">
-                  <div className="chooser-title">Guided walkthrough</div>
-                  <div className="chooser-desc">
-                    Move through the case one step at a time — each step stays visible as you go, so nothing you've already read disappears, with a quick "what would you do?" moment along the way.
-                  </div>
-                </div>
-              </button>
-              <button className="chooser-card comic" onClick={() => enter("comic")}>
-                <div className="chooser-icon comic"><Icon name="speech" size={21} /></div>
-                <div className="chooser-text">
-                  <div className="chooser-title">Understand with comic</div>
-                  <div className="chooser-desc">Read the case as a 12-panel comic — one panel at a time, and click any panel to open it full screen.</div>
-                </div>
-              </button>
-            </div>
-          </>
-        )}
+      <SectionNav active={activeSection} onJump={jump} />
 
-        {(mode === "guided" || mode === "comic") && <SwitchLinks current={mode} onSwitch={enter} />}
+      <div className="detail voyage-sections">
+        <section id="sec-comic" ref={setSectionRef("sec-comic")} className="voyage-section">
+          <h2 className="voyage-section-title"><Icon name="speech" size={18} /> Comic</h2>
+          <ComicMode c={c} onFinish={() => {}} />
+        </section>
 
-        {mode === "guided" && (
-          <GuidedMode key={modeKey} c={c} note={note} onNote={onNote} onFinish={() => setMode("complete")} />
-        )}
-        {mode === "comic" && <ComicMode key={modeKey} c={c} onFinish={() => setMode("complete")} />}
+        <section id="sec-impact" ref={setSectionRef("sec-impact")} className="voyage-section">
+          <h2 className="voyage-section-title"><Icon name="zap" size={18} /> Impact</h2>
+          {c.impact?.length ? (
+            <ImpactGrid items={c.impact} />
+          ) : (
+            <ComingSoon
+              title="Headline numbers coming soon"
+              text="This case doesn't have extracted headline stats yet — once they're added to the source sheet and re-extracted, they'll show up here automatically."
+            />
+          )}
+        </section>
 
-        {mode === "complete" && (
-          <div className="complete-wrap">
-            <div className="complete-burst"><Icon name="award" size={36} /></div>
-            <div className="complete-title">Case complete!</div>
-            <div className="complete-sub">You've walked through {c.id} — {c.name}.</div>
-            <div className="complete-actions">
-              <button className="step-btn ghost" onClick={onBack}><Icon name="arrowLeft" size={15} /> Back to all cases</button>
-              <button className="step-btn primary" onClick={onNext}>Next case <Icon name="arrowRight" size={15} /></button>
-            </div>
+        <section id="sec-call" ref={setSectionRef("sec-call")} className="voyage-section">
+          <h2 className="voyage-section-title"><Icon name="bulb" size={18} /> Your call</h2>
+          <div className="step-card predict">
+            <h3 className="step-heading">What would you do here?</h3>
+            <p className="step-text">Before you see what the team actually decided, take a moment to think it through.</p>
+            <textarea
+              className="predict-textarea"
+              value={note}
+              onChange={(e) => onNote(e.target.value)}
+              placeholder="Jot down your instinct — this isn't graded, just for you."
+            />
+            <div className="predict-note">Your notes stay on this page only.</div>
           </div>
-        )}
+        </section>
+
+        <section id="sec-lab" ref={setSectionRef("sec-lab")} className="voyage-section">
+          <h2 className="voyage-section-title"><Icon name="sliders" size={18} /> Decision lab</h2>
+          {(c.decision_blocks || []).map((block, i) => (
+            <div key={i} style={{ marginBottom: 28 }}>
+              <div className="flow-label">{blockTitle(block.source) || "Decisions"}</div>
+              <div className="decision-grid">
+                {block.decisions.map((d, j) => (
+                  <div className="decision-block" key={j}>
+                    <div className="decision-block-title">{d["Description"] || `Decision ${d.decision_no ?? j + 1}`}</div>
+                    <DecisionDetail d={d} full />
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </section>
+
+        <section id="sec-route" ref={setSectionRef("sec-route")} className="voyage-section">
+          <h2 className="voyage-section-title"><Icon name="route" size={18} /> The route</h2>
+          {c.normal_flow_nodes?.length > 0 && <RouteFlow nodes={c.normal_flow_nodes} />}
+          {c.kpis?.length > 0 && (
+            <div style={{ marginTop: 24 }}>
+              <div className="flow-label">Normal KPI conditions</div>
+              <KVList items={c.kpis} />
+            </div>
+          )}
+          {narrative.length > 0 && (
+            <div style={{ marginTop: 24 }}>
+              <div className="flow-label">{narrativeHeading}</div>
+              <KVList items={narrative} />
+            </div>
+          )}
+        </section>
+
+        <section id="sec-file" ref={setSectionRef("sec-file")} className="voyage-section">
+          <h2 className="voyage-section-title"><Icon name="file" size={18} /> Case file</h2>
+          {c.decisions_impact_summary?.length > 0 && (
+            <div style={{ marginBottom: 24 }}>
+              <div className="flow-label">Impact summary</div>
+              <ImpactTable rows={c.decisions_impact_summary} />
+            </div>
+          )}
+          {c.decision_scores?.length > 0 && (
+            <div>
+              <div className="flow-label">Scored ranking (out of 5)</div>
+              <ScoreRanking scores={c.decision_scores} />
+            </div>
+          )}
+        </section>
       </div>
 
       <div className="detail-nav">
@@ -1053,125 +933,58 @@ const CSS = `
 .pill-sig i.on{opacity:1;}
 .filterbar-label{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9DC0D4;margin-right:4px;}
 
-/* Grid */
-.grid{max-width:1280px;margin:0 auto;padding:28px 48px 80px;display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:20px;}
-.card{position:relative;background:var(--surface);border:1.5px solid var(--hairline);border-radius:14px;padding:18px 20px;cursor:pointer;display:flex;flex-direction:column;gap:14px;text-align:left;color:var(--ink);transition:border-color .15s ease,transform .15s ease,box-shadow .18s ease;box-shadow:0 1px 2px rgba(29,43,46,0.04);}
-.card:hover{border-color:var(--ink);transform:translateY(-3px);box-shadow:0 10px 24px rgba(29,43,46,0.10);}
-.card:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
-.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
-.node-icon{border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1.5px solid rgba(0,0,0,0.04);}
-.card-meta{text-align:right;display:flex;flex-direction:column;gap:2px;padding-top:2px;}
-.case-id{font-family:'Space Grotesk',sans-serif;font-size:12px;color:var(--muted);font-weight:600;}
-.industry-tag{font-size:11px;color:var(--muted);}
-.card-body{display:flex;flex-direction:column;gap:6px;}
-.case-name{font-size:16px;font-weight:600;line-height:1.3;letter-spacing:-0.01em;}
-.case-desc{font-size:13px;color:var(--muted);line-height:1.5;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;}
-.card-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;}
-.badge{font-size:12px;font-weight:700;padding:5px 12px;border-radius:100px;display:inline-flex;align-items:center;gap:5px;}
-.badge.disruption{background:var(--disruption-tint);color:#B8452F;}
-.badge.improvement{background:var(--improvement-tint);color:#1F6E63;}
-.decision-count{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--muted);font-weight:500;}
+/* Hero — sea-gradient band + white card, matching the prototype's compact
+   hero. Sea colors echo the sea chart's own ocean palette (#8EDDE3 ->
+   #4DB8D2 -> #2A8DB5), distinct from the navy top bar. */
+.hero-sea{background:linear-gradient(180deg,#8EDDE3,#4DB8D2 70%,#2A8DB5);padding:20px 0 26px;}
+.hero-inner{max-width:1180px;margin:0 auto;padding:0 48px;display:flex;flex-direction:column;gap:14px;}
+.back-pill{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.78);border:none;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700;color:#0E2A3B;cursor:pointer;}
+.back-pill:hover{background:#fff;}
+.hero-card{background:var(--surface);border-radius:18px;padding:18px 22px;display:flex;align-items:flex-start;gap:18px;box-shadow:0 14px 40px rgba(14,42,59,.18);}
+.hero-badge{width:58px;height:58px;border-radius:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.hero-main{min-width:0;}
+.hero-tags{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px;}
+.tag{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:6px;background:var(--canvas);color:var(--muted);display:inline-flex;align-items:center;gap:6px;}
+.tag.dis{background:var(--disruption-tint);color:#B8452F;}
+.tag.imp{background:var(--improvement-tint);color:#1F6E63;}
+.hero-title{font-size:clamp(20px,2.6vw,28px);line-height:1.2;margin:0;letter-spacing:-0.01em;}
+.hero-sub{font-size:14px;color:var(--muted);margin:6px 0 0;line-height:1.5;max-width:72ch;}
 
-/* Comic bookmark on cards that have a comic.
-   Hangs from the top edge just right of the industry icon, so it never covers
-   the icon or the case ID. Wrapper = position + wiggle; .cb-ribbon = the clipped
-   purple shape; .cb-sparkle sits outside the clip so it can poke over the corner. */
-.comic-bookmark{position:absolute;top:-1.5px;left:86px;z-index:1;display:block;pointer-events:none;
-  transform-origin:50% 0;filter:drop-shadow(0 2px 4px rgba(29,43,46,0.10));}
-.cb-ribbon{display:inline-flex;align-items:center;gap:5px;padding:6px 10px 13px 8px;
-  border-radius:0 0 4px 4px;
-  clip-path:polygon(0 0,100% 0,100% 100%,50% calc(100% - 6px),0 100%);}
-.cb-face{display:block;flex-shrink:0;}
-.cb-text{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.03em;line-height:1;}
-.cb-sparkle{position:absolute;top:-5px;right:-7px;transform-origin:50% 50%;}
-.card.has-comic:hover .comic-bookmark{animation:cbWiggle .7s ease-in-out;}
-.card.has-comic:hover .cb-sparkle{animation:cbTwinkle .9s ease-in-out;}
-@keyframes cbWiggle{
-  0%,100%{transform:rotate(0deg);}
-  20%{transform:rotate(-7deg);}
-  45%{transform:rotate(5deg);}
-  70%{transform:rotate(-3deg);}
-  88%{transform:rotate(1.5deg);}
-}
-@keyframes cbTwinkle{
-  0%,100%{transform:scale(1) rotate(0deg);opacity:1;}
-  40%{transform:scale(1.45) rotate(45deg);opacity:0.85;}
-  70%{transform:scale(0.8) rotate(90deg);opacity:1;}
-}
-@media (prefers-reduced-motion:reduce){
-  .card.has-comic:hover .comic-bookmark,.card.has-comic:hover .cb-sparkle{animation:none;}
-}
+/* "Coming soon" placeholder — for sections (e.g. Impact) that need content
+   not extracted from the sheet yet. */
+.section-soon{display:flex;gap:16px;align-items:center;background:#0E2A3B;color:#E2F0F7;border-radius:16px;padding:20px 22px;}
+.section-soon-icon{width:48px;height:48px;border-radius:50%;background:#FFC83D;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.section-soon-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:15.5px;margin-bottom:4px;}
+.section-soon-text{font-size:13px;color:#9DC0D4;line-height:1.5;}
+
+/* Impact stat tiles — built ahead of real data (see CLAUDE.md); ready for
+   when extract.py starts producing an impact field per case. */
+.impact-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
+.stat-tile{background:var(--surface);border:1.5px solid var(--hairline);border-radius:16px;padding:16px;position:relative;overflow:hidden;}
+.stat-tile::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--disruption);}
+.stat-tile.lift::before{background:var(--improvement);}
+.stat-tile.info::before{background:#4FA8F0;}
+.stat-v{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(22px,2.6vw,30px);letter-spacing:-0.02em;}
+.stat-l{font-size:12.5px;line-height:1.35;color:var(--muted);margin-top:4px;}
+@media (max-width:980px){.impact-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
 
 /* Detail */
 .detail{max-width:820px;margin:0 auto;padding:40px 48px 60px;}
-.back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);background:none;border:none;cursor:pointer;padding:0 0 28px;}
-.back-link:hover{color:var(--ink);}
-.detail-header{display:flex;align-items:flex-start;gap:16px;padding-bottom:24px;border-bottom:1px solid var(--hairline);margin-bottom:28px;}
-.detail-title-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px;}
-.detail-case-id{font-family:'Space Grotesk',sans-serif;font-size:13px;color:var(--muted);font-weight:600;}
-.detail-name{font-size:26px;font-weight:700;letter-spacing:-0.015em;margin:0 0 8px;}
-.detail-industry{font-size:13px;color:var(--muted);}
-.detail-meta{display:flex;flex-wrap:wrap;gap:18px;font-size:13px;margin-top:8px;}
-.detail-meta .muted{margin-right:4px;}
-
-/* Chooser */
-.industry-banner{position:relative;height:160px;border-radius:16px;overflow:hidden;margin-bottom:22px;display:flex;align-items:flex-end;}
-.industry-banner .banner-watermark{position:absolute;right:-10px;top:50%;transform:translateY(-50%);width:170px;height:170px;opacity:0.16;}
-.industry-banner .banner-nodes{position:absolute;inset:0;width:100%;height:100%;}
-.industry-banner .banner-caption{position:relative;margin:16px;display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.82);backdrop-filter:blur(2px);padding:7px 14px 7px 8px;border-radius:100px;font-size:12.5px;font-weight:600;}
-.industry-banner .banner-caption .node-icon{border:none;}
-.chooser-prompt{font-size:14px;color:var(--muted);margin-bottom:16px;}
-.chooser-options{display:flex;flex-direction:column;gap:14px;margin-bottom:12px;}
-.chooser-card{border:1.5px solid var(--hairline-strong);border-radius:14px;padding:18px 22px;text-align:left;background:var(--surface);color:var(--ink);cursor:pointer;transition:border-color .15s ease,transform .15s ease,box-shadow .15s ease;display:flex;align-items:center;gap:18px;width:100%;}
-.chooser-card:hover{border-color:var(--ink);transform:translateY(-3px);box-shadow:0 10px 24px rgba(29,43,46,0.10);}
-.chooser-card:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
-.chooser-card.guided{background:linear-gradient(100deg,#FDF3DE 0%,#FFFFFF 45%);}
-.chooser-card.comic{background:linear-gradient(100deg,#F1EBFF 0%,#FFFFFF 45%);}
-.chooser-icon{width:46px;height:46px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
-.chooser-icon.guided{background:var(--accent-yellow-tint);color:#B8791C;}
-.chooser-icon.comic{background:#F1EBFF;color:#7C3AED;}
-.chooser-text{display:flex;flex-direction:column;gap:4px;}
-.chooser-title{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;}
-.chooser-flag{font-family:'Inter',sans-serif;font-size:10.5px;font-weight:600;color:#7C3AED;background:#F1EBFF;padding:2px 8px;border-radius:100px;margin-left:8px;vertical-align:middle;}
-.chooser-desc{font-size:13px;color:var(--muted);line-height:1.5;}
-.switch-row{display:flex;flex-wrap:wrap;gap:18px;margin-bottom:20px;}
-.switch-view{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;color:var(--muted);background:none;border:none;cursor:pointer;padding:0;}
-.switch-view:hover{color:var(--ink);}
-
-/* Cumulative flow */
-.flow{position:relative;padding-left:28px;margin-top:8px;}
-.flow::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:linear-gradient(180deg,#F4B740,#E1604A,#8B5CF6,#2E9587);opacity:0.35;}
-.flow-section{position:relative;margin-bottom:36px;}
-.flow-section::before{content:"";position:absolute;left:-28px;top:3px;width:10px;height:10px;border-radius:50%;background:var(--surface);border:2.5px solid var(--ink);}
-.flow-section.is-decision::before{border-color:var(--disruption);}
-.flow-section.is-current::before{border-color:var(--accent-yellow);width:12px;height:12px;left:-29px;}
 .flow-label{font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:600;}
-.flow-content{font-size:14.5px;line-height:1.65;}
-.flow-content p{margin:0;}
-.predict-recap{font-style:italic;color:var(--muted);white-space:pre-wrap;}
 .decision-block{background:var(--surface);border:1.5px solid var(--hairline);border-radius:12px;padding:14px 16px;}
 .decision-block-title{font-weight:600;font-size:14px;margin-bottom:4px;}
 .decision-block p{margin:0;font-size:13.5px;line-height:1.55;color:var(--muted);}
-.decision-step-label{font-family:'Space Grotesk',sans-serif;font-size:12px;color:var(--disruption);margin-bottom:6px;font-weight:700;}
 
 /* Data blocks */
 .kv-list{display:grid;gap:10px;}
 .kv-row{display:grid;grid-template-columns:180px 1fr;gap:16px;}
 .kv-label{font-size:12.5px;color:var(--muted);font-weight:500;}
 .kv-value{font-size:13.5px;line-height:1.6;}
-.flow-chain{display:flex;overflow-x:auto;padding-bottom:6px;align-items:stretch;}
-.flow-node{min-width:170px;max-width:190px;padding:12px 14px;background:var(--surface);border:1.5px solid var(--hairline);border-radius:10px;}
-.flow-chain.compact .flow-node{min-width:130px;padding:8px 10px;}
-.flow-node-id{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:var(--disruption);margin-bottom:4px;}
-.flow-node-label{font-size:12.5px;line-height:1.45;}
-.flow-node-desc{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.5;}
-.flow-arrow{display:flex;align-items:center;padding:0 8px;color:var(--muted);}
 .rating-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;}
 .rating-chip{display:flex;flex-direction:column;gap:2px;padding:6px 10px;border-radius:8px;min-width:84px;}
 .rating-chip-label{font-size:10.5px;color:var(--muted);}
 .rating-chip-value{font-size:12.5px;font-weight:600;}
 .best-when{font-size:12.5px;color:var(--muted);font-style:italic;margin-top:14px;border-top:1px solid var(--hairline);padding-top:10px;}
-.outcome-stack{display:flex;flex-direction:column;gap:22px;}
 .impact-wrap{overflow-x:auto;}
 .impact-table{border-collapse:collapse;width:100%;font-size:12px;}
 .impact-table th{text-align:left;padding:6px 10px;color:var(--muted);font-weight:500;border-bottom:1px solid var(--hairline);white-space:nowrap;}
@@ -1186,14 +999,6 @@ const CSS = `
 .kpi-bar-fill.down{background:linear-gradient(90deg,#E1604A,#F4B740);}
 .kpi-bar-fill.up{background:linear-gradient(90deg,#2E9587,#6EE7D8);}
 
-/* Guided walkthrough */
-.progress-row{display:flex;align-items:center;gap:6px;margin-bottom:28px;}
-.progress-dot{height:5px;flex:1;border-radius:3px;background:var(--hairline-strong);transition:background .2s ease;}
-.progress-dot.done{background:var(--improvement);}
-.progress-dot.current{background:var(--accent-yellow);}
-.step-label-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-.step-label{font-size:12px;color:var(--muted);font-weight:600;}
-.step-count{font-family:'Space Grotesk',sans-serif;font-size:12px;color:var(--muted);}
 .step-card{background:var(--surface);border:1.5px solid var(--hairline);border-radius:16px;padding:30px;min-height:180px;display:flex;flex-direction:column;justify-content:center;box-shadow:0 2px 10px rgba(29,43,46,0.05);}
 .step-card.predict{background:linear-gradient(160deg,var(--accent-yellow-tint) 0%,#FFFFFF 55%);}
 .step-heading{font-size:19px;font-weight:700;margin:0 0 12px;letter-spacing:-0.01em;}
@@ -1201,7 +1006,6 @@ const CSS = `
 .predict-textarea{width:100%;min-height:80px;margin-top:16px;border:1.5px solid var(--hairline-strong);border-radius:10px;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;color:var(--ink);resize:vertical;outline:none;background:#fff;}
 .predict-textarea:focus{border-color:var(--accent-yellow);}
 .predict-note{font-size:12px;color:var(--muted);margin-top:8px;}
-.step-controls{display:flex;justify-content:space-between;align-items:center;margin-top:24px;}
 .step-btn{display:inline-flex;align-items:center;gap:8px;border:none;cursor:pointer;font-size:14px;font-weight:600;padding:11px 22px;border-radius:100px;transition:transform .1s ease,background .15s ease;}
 .step-btn.primary{background:var(--ink);color:#fff;}
 .step-btn.primary:hover{background:#33474C;transform:translateY(-1px);}
@@ -1309,14 +1113,31 @@ const CSS = `
 .comic-caption-label{display:inline-block;background:var(--accent-yellow);color:var(--ink);font-family:'Space Grotesk',sans-serif;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:4px;margin-bottom:8px;}
 .comic-placeholder-caption p{margin:0;font-size:14.5px;line-height:1.55;font-weight:500;}
 
-/* Completion */
-.complete-wrap{text-align:center;padding:30px 10px 10px;}
-.complete-burst{width:88px;height:88px;border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;background:conic-gradient(from 0deg,#F4B740,#E1604A,#8B5CF6,#2E9587,#F4B740);position:relative;color:var(--ink);}
-.complete-burst::before{content:"";position:absolute;inset:6px;border-radius:50%;background:var(--surface);}
-.complete-burst svg{position:relative;z-index:1;}
-.complete-title{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;margin:0 0 8px;}
-.complete-sub{font-size:14px;color:var(--muted);margin-bottom:28px;line-height:1.5;}
-.complete-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+/* Voyage page: sticky section nav + always-on sections (replaces the old
+   chooser -> single-mode -> complete flow). */
+.secbar{position:sticky;top:0;z-index:10;background:rgba(247,248,244,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--hairline);}
+.secbar-inner{max-width:820px;margin:0 auto;display:flex;gap:4px;overflow-x:auto;padding:8px 48px;scrollbar-width:none;}
+.secbar-inner::-webkit-scrollbar{display:none;}
+.seclink{white-space:nowrap;background:none;border:none;font-size:13.5px;font-weight:700;color:var(--muted);padding:7px 12px;border-radius:999px;display:inline-flex;gap:6px;align-items:center;cursor:pointer;}
+.seclink:hover{color:var(--ink);background:var(--surface);}
+.seclink.current{background:var(--ink);color:#fff;}
+.voyage-sections{display:flex;flex-direction:column;}
+.voyage-section{padding-top:40px;scroll-margin-top:56px;border-top:1px solid var(--hairline);}
+.voyage-section:first-child{border-top:none;}
+.voyage-section-title{font-size:20px;font-weight:700;margin:0 0 18px;display:flex;align-items:center;gap:9px;letter-spacing:-0.01em;}
+.decision-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-top:10px;}
+
+/* The route — horizontal node chain with an animated "running dots"
+   connector, ported from the prototype's .link/@keyframes flow. */
+.route-chain{display:flex;overflow-x:auto;padding-bottom:10px;align-items:stretch;}
+.route-node{min-width:180px;max-width:210px;padding:14px 16px;background:var(--surface);border:1.5px solid var(--hairline);border-radius:12px;flex-shrink:0;}
+.route-node-id{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:11px;font-weight:700;color:var(--disruption);margin-bottom:4px;}
+.route-node-label{font-size:13.5px;font-weight:600;line-height:1.4;}
+.route-node-desc{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5;}
+.route-link{flex:0 0 44px;align-self:center;height:6px;position:relative;background-image:radial-gradient(circle,var(--ink) 2px,transparent 2.4px);background-size:12px 6px;background-repeat:repeat-x;opacity:.5;animation:routeFlow .9s linear infinite;}
+.route-link::after{content:"";position:absolute;right:-3px;top:50%;width:7px;height:7px;border-top:2px solid var(--ink);border-right:2px solid var(--ink);transform:translateY(-50%) rotate(45deg);}
+@keyframes routeFlow{from{background-position:0 0}to{background-position:12px 0}}
+@media (prefers-reduced-motion:reduce){.route-link{animation:none;}}
 
 /* Bottom case nav */
 .detail-nav{max-width:820px;margin:0 auto;padding:20px 48px 100px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--hairline);}
