@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import { CASES, TIERS, overallKey, isImprovement, natureLabel } from "./data/model.js";
-import { primaryIndustry, industryStyle } from "./data/industries.js";
+import { industryStyle } from "./data/industries.js";
 import Icon from "./components/Icon.jsx";
 import SeaChart from "./components/SeaChart.jsx";
 import Logbook from "./components/Logbook.jsx";
@@ -164,25 +164,6 @@ function usePreload(sources) {
 /* =====================================================================
    Small presentational components
    ===================================================================== */
-function IconCircle({ c, size = 52 }) {
-  const s = industryStyle(c);
-  return (
-    <div className="node-icon" style={{ background: s.bg, width: size, height: size }} title={primaryIndustry(c)}>
-      <Icon name={s.icon} size={Math.round(size / 2)} color={s.fg} />
-    </div>
-  );
-}
-
-function NatureBadge({ c }) {
-  const imp = isImprovement(c);
-  return (
-    <span className={`badge ${imp ? "improvement" : "disruption"}`}>
-      <Icon name={imp ? "trendUp" : "trendDown"} size={12} />
-      {c.nature || natureLabel(c)}
-    </span>
-  );
-}
-
 function Chip({ label, value }) {
   const col = toneColor(ratingTone(value));
   return (
@@ -306,55 +287,75 @@ function ImpactTable({ rows }) {
   );
 }
 
-function IndustryBanner({ c }) {
-  const col = industryStyle(c);
-  const dots = [{ x: 40, y: 30 }, { x: 110, y: 70 }, { x: 70, y: 110 }, { x: 180, y: 40 }, { x: 230, y: 90 }, { x: 300, y: 55 }];
-  const d = `M${dots[0].x},${dots[0].y} L${dots[1].x},${dots[1].y} L${dots[2].x},${dots[2].y} M${dots[1].x},${dots[1].y} L${dots[3].x},${dots[3].y} L${dots[4].x},${dots[4].y} L${dots[5].x},${dots[5].y}`;
+/* =====================================================================
+   Case detail: voyage page (hero + sticky section nav + sections)
+   ===================================================================== */
+/* Hero — sea-gradient band + white card, matching the prototype's compact
+   hero (tags row, title, hook text). No mission/star objectives here —
+   those are gamification, deferred. Brand & group / scale (shown in the
+   old plain header) aren't part of the prototype's hero either, so they're
+   dropped here rather than carried over; Case file is the place for that
+   kind of supporting detail if it's wanted back. */
+function DetailHero({ c, onBack }) {
+  const style = industryStyle(c);
+  const tier = TIERS[c.tier];
+  const improvement = isImprovement(c);
   return (
-    <div className="industry-banner" style={{ background: `linear-gradient(135deg, ${col.bg} 0%, ${col.deep} 100%)` }}>
-      <svg className="banner-nodes" viewBox="0 0 480 160" preserveAspectRatio="none">
-        <path d={d} stroke={col.fg} strokeWidth="1.2" fill="none" opacity="0.25" />
-        {dots.map((p, i) => <circle key={i} cx={p.x} cy={p.y} r="3.5" fill={col.fg} opacity="0.35" />)}
-      </svg>
-      <Icon name={col.icon} className="banner-watermark" color={col.fg} strokeWidth={1.2} />
-      <div className="banner-caption">
-        <IconCircle c={c} size={26} />
-        {primaryIndustry(c)}
+    <div className="hero-sea">
+      <div className="hero-inner">
+        <button className="back-pill" onClick={onBack}>
+          <Icon name="arrowLeft" size={14} /> Back to all cases
+        </button>
+        <div className="hero-card">
+          <div className="hero-badge" style={{ background: style.bg }}>
+            <Icon name={style.icon} size={28} color={style.fg} />
+          </div>
+          <div className="hero-main">
+            <div className="hero-tags">
+              <span className="tag">{c.id}</span>
+              <span className="tag tier" style={{ background: `${tier.hex}26`, color: tier.hex }}>
+                <span className="lb-sig" style={{ color: tier.hex }}>
+                  {[0, 1, 2, 3].map((b) => <i key={b} className={b <= c.tier ? "on" : ""} style={{ height: 3 + b * 3 }} />)}
+                </span>
+                {tier.name}
+              </span>
+              <span className={`tag ${improvement ? "imp" : "dis"}`}>{natureLabel(c)}</span>
+            </div>
+            <h1 className="hero-title">{c.name}</h1>
+            <p className="hero-sub">{hookOf(c)}</p>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
-/* =====================================================================
-   Grid card
-   ===================================================================== */
-/* =====================================================================
-   Case detail: chooser → guided / comic → complete
-   ===================================================================== */
-function DetailHeader({ c, onBack }) {
+/* "This section needs headline-stat content not extracted from the sheet
+   yet" placeholder — same spirit as the comic mode's generated-panel
+   fallback, but Impact has no in-data substitute to generate, so it's a
+   plain message instead. */
+function ComingSoon({ title, text }) {
   return (
-    <>
-      <button className="back-link" onClick={onBack}>
-        <Icon name="arrowLeft" size={14} /> Back to all cases
-      </button>
-      <div className="detail-header">
-        <IconCircle c={c} size={56} />
-        <div>
-          <div className="detail-title-row">
-            <span className="detail-case-id">{c.id}</span>
-            <NatureBadge c={c} />
-          </div>
-          <h1 className="detail-name">{c.name}</h1>
-          <div className="detail-industry">{c.industry}</div>
-          {(c.brand_group || c.scale) && (
-            <div className="detail-meta">
-              {c.brand_group && <span><span className="muted">Brand & group</span> {c.brand_group}</span>}
-              {c.scale && <span><span className="muted">Scale</span> {c.scale}</span>}
-            </div>
-          )}
-        </div>
+    <div className="section-soon">
+      <div className="section-soon-icon"><Icon name="zap" size={24} color="#0E2A3B" /></div>
+      <div>
+        <div className="section-soon-title">{title}</div>
+        <div className="section-soon-text">{text}</div>
       </div>
-    </>
+    </div>
+  );
+}
+
+function ImpactGrid({ items }) {
+  return (
+    <div className="impact-grid">
+      {items.map((it, i) => (
+        <div className={`stat-tile ${it.t || "info"}`} key={i}>
+          <div className="stat-v">{it.v}</div>
+          <div className="stat-l">{it.l}</div>
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -463,7 +464,6 @@ function ComicLightbox({ panels, index, onIndex, onClose }) {
 
 function ComicMode({ c, onFinish }) {
   const comic = useMemo(() => buildComic(c), [c]);
-  const rootRef = useRef(null);
   const [index, setIndex] = useState(0);
   const [view, setView] = useState("panel");   // opens on a single panel; "page" is the 2x2 overview
   const [lightbox, setLightbox] = useState(false);
@@ -478,18 +478,6 @@ function ComicMode({ c, onFinish }) {
   usePreload([panels[index - 1]?.src, panels[index + 1]?.src, panels[index + 2]?.src]);
 
   const go = (d) => setIndex((i) => Math.min(panels.length - 1, Math.max(0, i + d)));
-
-  // A full-height panel would otherwise open below the fold: the detail header
-  // alone eats most of a laptop screen. Deferred a frame so it lands after the
-  // parent's scroll-to-top on mode change.
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (typeof window.requestAnimationFrame !== "function") return;
-    const id = window.requestAnimationFrame(() => {
-      rootRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
-    return () => window.cancelAnimationFrame(id);
-  }, []);
 
   // The overlay owns the keyboard while it's open.
   useEffect(() => {
@@ -511,7 +499,7 @@ function ComicMode({ c, onFinish }) {
   const isLast = index === panels.length - 1;
 
   return (
-    <div className="comic-reader" ref={rootRef}>
+    <div className="comic-reader">
       <div className="comic-toolbar">
         <div className="comic-position">
           <strong>Panel {index + 1}</strong>
@@ -579,12 +567,14 @@ function ComicMode({ c, onFinish }) {
   );
 }
 
-/* Impact is left out deliberately — it needs headline-stat content that
-   doesn't exist in cases.json yet (see CLAUDE.md). The rest match the
-   prototype's voyage-page sections, all always on the page at once instead
-   of behind a pick-a-mode chooser. */
+/* Matches the prototype's voyage-page sections, all always on the page at
+   once instead of behind a pick-a-mode chooser. Impact is scaffolded (nav
+   entry + stat-tile UI) even though no case has `impact` data yet — see
+   CLAUDE.md. It shows a "coming soon" placeholder until that's extracted
+   from the sheet, same as a case with no comic artwork does. */
 const SECTIONS = [
   { id: "sec-comic", label: "Comic", icon: "speech" },
+  { id: "sec-impact", label: "Impact", icon: "zap" },
   { id: "sec-call", label: "Your call", icon: "bulb" },
   { id: "sec-lab", label: "Decision lab", icon: "sliders" },
   { id: "sec-route", label: "The route", icon: "route" },
@@ -638,10 +628,7 @@ function CaseDetail({ c, onBack, onPrev, onNext, note, onNote }) {
 
   return (
     <>
-      <div className="detail">
-        <DetailHeader c={c} onBack={onBack} />
-        <IndustryBanner c={c} />
-      </div>
+      <DetailHero c={c} onBack={onBack} />
 
       <SectionNav active={activeSection} onJump={jump} />
 
@@ -649,6 +636,18 @@ function CaseDetail({ c, onBack, onPrev, onNext, note, onNote }) {
         <section id="sec-comic" ref={setSectionRef("sec-comic")} className="voyage-section">
           <h2 className="voyage-section-title"><Icon name="speech" size={18} /> Comic</h2>
           <ComicMode c={c} onFinish={() => {}} />
+        </section>
+
+        <section id="sec-impact" ref={setSectionRef("sec-impact")} className="voyage-section">
+          <h2 className="voyage-section-title"><Icon name="zap" size={18} /> Impact</h2>
+          {c.impact?.length ? (
+            <ImpactGrid items={c.impact} />
+          ) : (
+            <ComingSoon
+              title="Headline numbers coming soon"
+              text="This case doesn't have extracted headline stats yet — once they're added to the source sheet and re-extracted, they'll show up here automatically."
+            />
+          )}
         </section>
 
         <section id="sec-call" ref={setSectionRef("sec-call")} className="voyage-section">
@@ -934,73 +933,43 @@ const CSS = `
 .pill-sig i.on{opacity:1;}
 .filterbar-label{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9DC0D4;margin-right:4px;}
 
-/* Grid */
-.grid{max-width:1280px;margin:0 auto;padding:28px 48px 80px;display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:20px;}
-.card{position:relative;background:var(--surface);border:1.5px solid var(--hairline);border-radius:14px;padding:18px 20px;cursor:pointer;display:flex;flex-direction:column;gap:14px;text-align:left;color:var(--ink);transition:border-color .15s ease,transform .15s ease,box-shadow .18s ease;box-shadow:0 1px 2px rgba(29,43,46,0.04);}
-.card:hover{border-color:var(--ink);transform:translateY(-3px);box-shadow:0 10px 24px rgba(29,43,46,0.10);}
-.card:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
-.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
-.node-icon{border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1.5px solid rgba(0,0,0,0.04);}
-.card-meta{text-align:right;display:flex;flex-direction:column;gap:2px;padding-top:2px;}
-.case-id{font-family:'Space Grotesk',sans-serif;font-size:12px;color:var(--muted);font-weight:600;}
-.industry-tag{font-size:11px;color:var(--muted);}
-.card-body{display:flex;flex-direction:column;gap:6px;}
-.case-name{font-size:16px;font-weight:600;line-height:1.3;letter-spacing:-0.01em;}
-.case-desc{font-size:13px;color:var(--muted);line-height:1.5;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;}
-.card-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;}
-.badge{font-size:12px;font-weight:700;padding:5px 12px;border-radius:100px;display:inline-flex;align-items:center;gap:5px;}
-.badge.disruption{background:var(--disruption-tint);color:#B8452F;}
-.badge.improvement{background:var(--improvement-tint);color:#1F6E63;}
-.decision-count{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--muted);font-weight:500;}
+/* Hero — sea-gradient band + white card, matching the prototype's compact
+   hero. Sea colors echo the sea chart's own ocean palette (#8EDDE3 ->
+   #4DB8D2 -> #2A8DB5), distinct from the navy top bar. */
+.hero-sea{background:linear-gradient(180deg,#8EDDE3,#4DB8D2 70%,#2A8DB5);padding:20px 0 26px;}
+.hero-inner{max-width:1180px;margin:0 auto;padding:0 48px;display:flex;flex-direction:column;gap:14px;}
+.back-pill{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.78);border:none;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700;color:#0E2A3B;cursor:pointer;}
+.back-pill:hover{background:#fff;}
+.hero-card{background:var(--surface);border-radius:18px;padding:18px 22px;display:flex;align-items:flex-start;gap:18px;box-shadow:0 14px 40px rgba(14,42,59,.18);}
+.hero-badge{width:58px;height:58px;border-radius:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.hero-main{min-width:0;}
+.hero-tags{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px;}
+.tag{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:6px;background:var(--canvas);color:var(--muted);display:inline-flex;align-items:center;gap:6px;}
+.tag.dis{background:var(--disruption-tint);color:#B8452F;}
+.tag.imp{background:var(--improvement-tint);color:#1F6E63;}
+.hero-title{font-size:clamp(20px,2.6vw,28px);line-height:1.2;margin:0;letter-spacing:-0.01em;}
+.hero-sub{font-size:14px;color:var(--muted);margin:6px 0 0;line-height:1.5;max-width:72ch;}
 
-/* Comic bookmark on cards that have a comic.
-   Hangs from the top edge just right of the industry icon, so it never covers
-   the icon or the case ID. Wrapper = position + wiggle; .cb-ribbon = the clipped
-   purple shape; .cb-sparkle sits outside the clip so it can poke over the corner. */
-.comic-bookmark{position:absolute;top:-1.5px;left:86px;z-index:1;display:block;pointer-events:none;
-  transform-origin:50% 0;filter:drop-shadow(0 2px 4px rgba(29,43,46,0.10));}
-.cb-ribbon{display:inline-flex;align-items:center;gap:5px;padding:6px 10px 13px 8px;
-  border-radius:0 0 4px 4px;
-  clip-path:polygon(0 0,100% 0,100% 100%,50% calc(100% - 6px),0 100%);}
-.cb-face{display:block;flex-shrink:0;}
-.cb-text{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.03em;line-height:1;}
-.cb-sparkle{position:absolute;top:-5px;right:-7px;transform-origin:50% 50%;}
-.card.has-comic:hover .comic-bookmark{animation:cbWiggle .7s ease-in-out;}
-.card.has-comic:hover .cb-sparkle{animation:cbTwinkle .9s ease-in-out;}
-@keyframes cbWiggle{
-  0%,100%{transform:rotate(0deg);}
-  20%{transform:rotate(-7deg);}
-  45%{transform:rotate(5deg);}
-  70%{transform:rotate(-3deg);}
-  88%{transform:rotate(1.5deg);}
-}
-@keyframes cbTwinkle{
-  0%,100%{transform:scale(1) rotate(0deg);opacity:1;}
-  40%{transform:scale(1.45) rotate(45deg);opacity:0.85;}
-  70%{transform:scale(0.8) rotate(90deg);opacity:1;}
-}
-@media (prefers-reduced-motion:reduce){
-  .card.has-comic:hover .comic-bookmark,.card.has-comic:hover .cb-sparkle{animation:none;}
-}
+/* "Coming soon" placeholder — for sections (e.g. Impact) that need content
+   not extracted from the sheet yet. */
+.section-soon{display:flex;gap:16px;align-items:center;background:#0E2A3B;color:#E2F0F7;border-radius:16px;padding:20px 22px;}
+.section-soon-icon{width:48px;height:48px;border-radius:50%;background:#FFC83D;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.section-soon-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:15.5px;margin-bottom:4px;}
+.section-soon-text{font-size:13px;color:#9DC0D4;line-height:1.5;}
+
+/* Impact stat tiles — built ahead of real data (see CLAUDE.md); ready for
+   when extract.py starts producing an impact field per case. */
+.impact-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
+.stat-tile{background:var(--surface);border:1.5px solid var(--hairline);border-radius:16px;padding:16px;position:relative;overflow:hidden;}
+.stat-tile::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--disruption);}
+.stat-tile.lift::before{background:var(--improvement);}
+.stat-tile.info::before{background:#4FA8F0;}
+.stat-v{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(22px,2.6vw,30px);letter-spacing:-0.02em;}
+.stat-l{font-size:12.5px;line-height:1.35;color:var(--muted);margin-top:4px;}
+@media (max-width:980px){.impact-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
 
 /* Detail */
 .detail{max-width:820px;margin:0 auto;padding:40px 48px 60px;}
-.back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);background:none;border:none;cursor:pointer;padding:0 0 28px;}
-.back-link:hover{color:var(--ink);}
-.detail-header{display:flex;align-items:flex-start;gap:16px;padding-bottom:24px;border-bottom:1px solid var(--hairline);margin-bottom:28px;}
-.detail-title-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px;}
-.detail-case-id{font-family:'Space Grotesk',sans-serif;font-size:13px;color:var(--muted);font-weight:600;}
-.detail-name{font-size:26px;font-weight:700;letter-spacing:-0.015em;margin:0 0 8px;}
-.detail-industry{font-size:13px;color:var(--muted);}
-.detail-meta{display:flex;flex-wrap:wrap;gap:18px;font-size:13px;margin-top:8px;}
-.detail-meta .muted{margin-right:4px;}
-
-/* Chooser */
-.industry-banner{position:relative;height:160px;border-radius:16px;overflow:hidden;margin-bottom:22px;display:flex;align-items:flex-end;}
-.industry-banner .banner-watermark{position:absolute;right:-10px;top:50%;transform:translateY(-50%);width:170px;height:170px;opacity:0.16;}
-.industry-banner .banner-nodes{position:absolute;inset:0;width:100%;height:100%;}
-.industry-banner .banner-caption{position:relative;margin:16px;display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.82);backdrop-filter:blur(2px);padding:7px 14px 7px 8px;border-radius:100px;font-size:12.5px;font-weight:600;}
-.industry-banner .banner-caption .node-icon{border:none;}
 .flow-label{font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:600;}
 .decision-block{background:var(--surface);border:1.5px solid var(--hairline);border-radius:12px;padding:14px 16px;}
 .decision-block-title{font-weight:600;font-size:14px;margin-bottom:4px;}
